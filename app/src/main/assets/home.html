@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS v5.0.2 -->
+    <link rel="stylesheet" href="./css/bootstrap.min.css"  >
+    <link rel="stylesheet" href="./css/style.css">
+   </head>
+  <body class="bg-primary-color">
+      <input type="hidden" id="defaultLang" name="defaultLang">
+
+    <div class="container-fluid pt-3">
+        
+        <div id="title-name">
+          <div onclick="showLang()">
+            <svg  class="language" style="width:30px;height:30px; opacity:0" viewBox="0 0 24 24">
+              <path fill="currentColor"
+                d="M12.87,15.07L10.33,12.56L10.36,12.53C12.1,10.59 13.34,8.36 14.07,6H17V4H10V2H8V4H1V6H12.17C11.5,7.92 10.44,9.75 9,11.35C8.07,10.32 7.3,9.19 6.69,8H4.69C5.42,9.63 6.42,11.17 7.67,12.56L2.58,17.58L4,19L9,14L12.11,17.11L12.87,15.07M18.5,10H16.5L12,22H14L15.12,19H19.87L21,22H23L18.5,10M15.88,17L17.5,12.67L19.12,17H15.88Z" />
+            </svg>
+          
+          </div>
+            <h1 id="title-style" data-shadow='MyDialect!'>MyDialect!</h1>
+            
+            <div onclick="showLang()" >
+<svg class="language"  style="width:30px;height:30px" viewBox="0 0 24 24">
+  <path fill="currentColor"
+    d="M12.87,15.07L10.33,12.56L10.36,12.53C12.1,10.59 13.34,8.36 14.07,6H17V4H10V2H8V4H1V6H12.17C11.5,7.92 10.44,9.75 9,11.35C8.07,10.32 7.3,9.19 6.69,8H4.69C5.42,9.63 6.42,11.17 7.67,12.56L2.58,17.58L4,19L9,14L12.11,17.11L12.87,15.07M18.5,10H16.5L12,22H14L15.12,19H19.87L21,22H23L18.5,10M15.88,17L17.5,12.67L19.12,17H15.88Z" />
+</svg>
+
+            </div>
+          </div>
+
+          <div class="dropdown-menu" id="dropdown-menu-lang">
+            <div>
+              <span class="ms-3 p-1">Select Language</span>
+            </div>
+
+<div id="selectDLan">
+  
+</div>
+          </div>
+
+
+
+          <br><br>
+        <p onclick="hideDropDown()" class="p text-center" id="trans1">My dialect, my mannerisms.</p>
+<br>
+        <div class="input-group-prepend">
+          <div class="input-group mb-3">
+            <input id="search" class="form-control form-control-lg p-3 h-b"  placeholder="&#128269;   Search" type="text"  aria-describedby="basic-addon3" >
+           
+            <span class="input-group-text bg-white w100"  d="basic-addon3">
+                
+
+            <div id="search-send" style="display: none;" type="button" data-bs-dismiss="modal" class="btn "><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
+          </svg></div>
+
+<div id="tab-actions">
+
+    <svg  onclick="recordListing()" style="width:24px;height:24px" viewBox="0 0 24 24">
+        <path class="mic" d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z" />
+    </svg>
+    <svg onclick="getClipBordText()"  style="width:24px;height:24px" viewBox="0 0 24 24">
+        <path class="mic" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+    </svg>
+</div>
+
+            </span>
+
+          </div>
+          <div class="dropdown-menu" id="dropdown-menu">
+            
+    
+          </div>
+        </div>
+       
+
+          <div class="foot">
+<div class="text-left text-light" id="trans2">Most recent lookup</div>
+<div class="text-right"  id="dated"></div>
+          </div>
+
+    </div>
+
+    <section class="content">
+
+<div class="container-fluid mt-2" onclick="hideDropDown()">
+    <p class="text-center" id="def">an increase in an insurance premium due to a factor increasing the risk involved.</p>
+    
+    <a id="linkWord" href="./lookup.html">
+        <h2 id="searched-result" class="text-center h2 word-text"><b id="soundPlayWord">loading</b></h2>
+        <div class="text-center mb-3" id="phoneticSpelling">ləʊdɪŋ</div>
+    </a>
+
+    <div class="action">
+
+       
+  <div onclick="playSound('gb')" class="bg-lookup-action">
+    <svg style="width:30px;height:30px" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M9,5A4,4 0 0,1 13,9A4,4 0 0,1 9,13A4,4 0 0,1 5,9A4,4 0 0,1 9,5M9,15C11.67,15 17,16.34 17,19V21H1V19C1,16.34 6.33,15 9,15M16.76,5.36C18.78,7.56 18.78,10.61 16.76,12.63L15.08,10.94C15.92,9.76 15.92,8.23 15.08,7.05L16.76,5.36M20.07,2C24,6.05 23.97,12.11 20.07,16L18.44,14.37C21.21,11.19 21.21,6.65 18.44,3.63L20.07,2Z" />
+  </svg>
+        <p id="trans4">British</p>
+    </div>
+
+
+    <div  onclick="playSound('gbSlow')" class="bg-lookup-action">
+      <svg class="r-180" style="width:30px;height:30px" viewBox="0 0 24 24">
+        <path fill="currentColor" d="M2 11V13C7 13 11 17 11 22H13C13 15.9 8.1 11 2 11M20 2H10C8.9 2 8 2.9 8 4V10.5C9 11 9.9 11.7 10.7 12.4C11.6 11 13.2 10 15 10C17.8 10 20 12.2 20 15S17.8 20 15 20H14.8C14.9 20.7 15 21.3 15 22H20C21.1 22 22 21.1 22 20V4C22 2.9 21.1 2 20 2M15 8C13.9 8 13 7.1 13 6C13 4.9 13.9 4 15 4C16.1 4 17 4.9 17 6S16.1 8 15 8M15 18C14.8 18 14.5 18 14.3 17.9C13.8 16.4 13.1 15.1 12.2 13.9C12.6 12.8 13.7 11.9 15 11.9C16.7 11.9 18 13.2 18 14.9S16.7 18 15 18M2 15V17C4.8 17 7 19.2 7 22H9C9 18.1 5.9 15 2 15M2 19V22H5C5 20.3 3.7 19 2 19" /> </svg>
+   
+          <p>Slow</p>
+      </div>
+
+        
+      <div  onclick="playSound('us')" class="bg-lookup-action">
+        <svg class="r-180" style="width:30px;height:30px" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M9,5A4,4 0 0,1 13,9A4,4 0 0,1 9,13A4,4 0 0,1 5,9A4,4 0 0,1 9,5M9,15C11.67,15 17,16.34 17,19V21H1V19C1,16.34 6.33,15 9,15M16.76,5.36C18.78,7.56 18.78,10.61 16.76,12.63L15.08,10.94C15.92,9.76 15.92,8.23 15.08,7.05L16.76,5.36M20.07,2C24,6.05 23.97,12.11 20.07,16L18.44,14.37C21.21,11.19 21.21,6.65 18.44,3.63L20.07,2Z" />
+       </svg>
+           <p id="trans5">American</p>
+        </div>
+
+        <div  onclick="playSound('usSlow')" class="bg-lookup-action">
+          <svg style="width:30px;height:30px" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M2 11V13C7 13 11 17 11 22H13C13 15.9 8.1 11 2 11M20 2H10C8.9 2 8 2.9 8 4V10.5C9 11 9.9 11.7 10.7 12.4C11.6 11 13.2 10 15 10C17.8 10 20 12.2 20 15S17.8 20 15 20H14.8C14.9 20.7 15 21.3 15 22H20C21.1 22 22 21.1 22 20V4C22 2.9 21.1 2 20 2M15 8C13.9 8 13 7.1 13 6C13 4.9 13.9 4 15 4C16.1 4 17 4.9 17 6S16.1 8 15 8M15 18C14.8 18 14.5 18 14.3 17.9C13.8 16.4 13.1 15.1 12.2 13.9C12.6 12.8 13.7 11.9 15 11.9C16.7 11.9 18 13.2 18 14.9S16.7 18 15 18M2 15V17C4.8 17 7 19.2 7 22H9C9 18.1 5.9 15 2 15M2 19V22H5C5 20.3 3.7 19 2 19" />   </svg>
+        
+             <p>Slow</p>
+          </div>
+  
+
+        
+        </div>
+</div>
+
+<div class="foot  m-2 mt-3 pb-1 pt-1">
+    <div class="recent-title" id="trans3">what is trending</div>
+    <div class="recent-time" id="userLocation"></div>
+ </div>
+
+              <div class="recent-container" id="trendingHTML" onclick="hideDropDown()">
+                
+
+              </div>
+              
+              <br>
+              <br>
+              <br>
+    </section>
+
+
+
+    <footer>
+            <a class="active">
+                <div class="nab-bar">
+                    <svg style="width:30px;height:30px" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" />
+                    </svg>
+                    <p>HOME</p>
+                </div>
+            </a>
+
+           <a href="./translate.html">
+            <div class="nab-bar">
+                <svg xmlns="http://www.w3.org/2000/svg" style="width:30px;height:30px"  viewBox="0 0 50 50">
+                    <path  fill="currentColor" d="M 6 3 C 4.300781 3 3 4.300781 3 6 L 3 26 C 3 27.699219 4.300781 29 6 29 L 6.0625 29 L 10.46875 23.71875 L 10.78125 23.34375 C 10.476563 23.460938 10.273438 23.542969 10.21875 23.5625 L 9.59375 21.65625 C 9.648438 21.636719 12.394531 20.699219 15.0625 18.8125 C 12.503906 16.488281 11.207031 14.121094 11.125 13.96875 L 12.875 13.03125 C 12.894531 13.066406 14.167969 15.34375 16.65625 17.53125 C 18.265625 16.078125 19.625 14.230469 19.9375 12 L 8 12 L 8 10 L 16 10 L 16 8 L 18 8 L 18 10 L 25 10 L 25 12 L 21.9375 12 C 21.640625 14.789063 20.132813 17.035156 18.28125 18.78125 C 19.03125 19.300781 19.847656 19.777344 20.75 20.1875 C 21.617188 19.449219 22.742188 19 24 19 L 29 19 L 29 6 C 29 4.300781 27.699219 3 26 3 Z M 16.6875 20.125 C 15.246094 21.203125 13.75 22 12.5625 22.5625 L 13.53125 23.71875 L 17.9375 29 L 19 29 L 19 24 C 19 23.214844 19.1875 22.46875 19.5 21.8125 C 18.464844 21.308594 17.53125 20.742188 16.6875 20.125 Z M 24 21 C 22.300781 21 21 22.300781 21 24 L 21 32.0625 L 26.28125 36.46875 L 28.125 38 L 26.28125 39.53125 L 21 43.9375 L 21 44 C 21 45.699219 22.300781 47 24 47 L 44 47 C 45.699219 47 47 45.699219 47 44 L 47 24 C 47 22.300781 45.699219 21 44 21 Z M 12 25 L 7 31 L 10 31 L 10 35 L 14 35 L 14 31 L 17 31 Z M 33 26.40625 L 35.09375 26.40625 L 40.3125 40.1875 L 37.8125 40.1875 L 36.6875 37 L 31.40625 37 L 30.3125 40.1875 L 27.8125 40.1875 Z M 34 29.40625 L 32 35.09375 L 36 35.09375 Z M 19 33 L 19 36 L 10 36 L 14 40 L 19 40 L 19 43 L 25 38 Z"/>
+                </svg>
+             
+                <p class="">TRANSLATE</p>
+            </div>
+           </a>
+
+            <a href="./bookmark.html">
+                <div class="nab-bar">
+                    <svg style="width:30px;height:30px" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M17,3H7A2,2 0 0,0 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z" />
+                    </svg>
+                    <p class="">BOOKMARKS</p>
+                </div>
+            </a>
+
+           <a href="./history.html">
+            <div class="nab-bar">
+                <svg style="width:30px;height:30px" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M2 12C2 17 6 21 11 21C13.4 21 15.7 20.1 17.4 18.4L15.9 16.9C14.6 18.3 12.9 19 11 19C4.8 19 1.6 11.5 6.1 7.1S18 5.8 18 12H15L19 16H19.1L23 12H20C20 7 16 3 11 3S2 7 2 12M10 15H12V17H10V15M10 7H12V13H10V7" />
+                </svg>
+                <p class="">HISTORY</p>
+            </div>
+           </a>
+    </footer>
+
+
+    <div class="position-fixed bottom-0 end-0 p-3" id="toastModel" style="z-index: 11; display: none;">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <img src="./images/ic_launcher_round.png" width="30" height="30" class="rounded me-2" alt="...">
+            <strong class="me-auto">Please wait...</strong>
+            <small>0 sec ago</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div  class="toast-body">
+            Preparing services. Please wait!
+          </div>
+        </div>
+      </div>
+
+      <div class="position-fixed bottom-0 end-0 p-3" id="toastModelError" style="z-index: 11; display: none;">
+        <div id="liveToastError" class="toast bg-danger text-white" role="alert" aria-live="assertive" aria-atomic="true">
+          <div class="toast-header">
+            <img src="./images/ic_launcher_round.png" width="30" height="30" class="rounded me-2" alt="...">
+            <strong class="me-auto">Error Message...</strong>
+            <small>0 sec ago</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>
+          <div class="toast-body">
+            Something didn't work out.
+Please double-check your spelling and give it another go. 
+          </div>
+        </div>
+      </div>
+   
+    <!-- Bootstrap JavaScript Libraries -->
+     <!-- Bootstrap JavaScript Libraries -->
+     <script src="./js/popper.min.js" ></script>
+     <script src="./js/bootstrap.min.js" ></script>
+     <script src="./js/js.js"></script>
+     <script>
+  
+ async function setDefault() {
+  defaultLang.value = await Android.getDefaultLang();
+    switch (defaultLang.value) {
+     case "en-gb":
+       lang = { key: 'en', name: 'english' }
+       transLateShort('en-gb');
+       document.querySelector("#trans4").innerText = 'British';
+        document.querySelector("#trans5").innerText = 'American';
+       break;
+     case "es":
+       lang = { key: 'es', name: 'spanish' }
+       document.querySelector("#trans4").innerText = 'Spanish';
+        document.querySelector("#trans5").innerText = 'Spanish';
+       transLateShort('es');
+       break;
+     case "fr":
+       lang = { key: 'fr', name: 'french' }
+       document.querySelector("#trans4").innerText = 'French';
+        document.querySelector("#trans5").innerText = 'French';
+        transLateShort('fr');
+       break;
+     case "hi":
+       lang = { key: 'hi', name: 'hindi' }
+       document.querySelector("#trans4").innerText = 'Hindi';
+        document.querySelector("#trans5").innerText = 'Hindi';
+        transLateShort('hi');
+       break;
+   }
+    
+  }
+  setDefault()
+
+function transLateShort(id) {
+  switch (id) {
+    case "en-gb":
+      document.getElementById('trans1').innerText = "My dialect, my mannerisms"
+      document.getElementById('trans2').innerText = "Most Recent Lookup"
+        document.getElementById('trans3').innerText = "What is Trending"
+        document.querySelector("#search").placeholder = "Search..."
+      break;
+    case "es":
+      document.getElementById('trans1').innerText = "Mi dialecto, mis gestos"
+      document.getElementById('trans2').innerText = "Búsqueda Más Reciente"
+      document.getElementById('trans3').innerText = "Qué es Tendencia"
+       document.querySelector("#search").placeholder = "búsqueda..."
+      break;
+    case "fr":
+      document.getElementById('trans1').innerText = "Mon dialecte, mes manières"
+      document.getElementById('trans2').innerText = "Recherche La Plus Récente"
+      document.getElementById('trans3').innerText = "Qu'est-ce que la tendance"
+       document.querySelector("#search").placeholder = "rechercher..."
+      break;
+    case "hi":
+      document.getElementById('trans1').innerText = "मेरी बोली, मेरे तरीके"
+      document.getElementById('trans2').innerText = "सबसे हालिया लुकअप"
+      document.getElementById('trans3').innerText = "Trending है क्या"
+       document.querySelector("#search").placeholder = "खोज..."
+      break;
+  }
+  
+}
+
+var dropdownmenu =  document.getElementById("dropdown-menu");
+function linkOpen() {
+  let locatioPath = location.toString()
+      search.value =  decodeURI(locatioPath.substring(locatioPath.indexOf('=')+1).toLowerCase());
+       tabAction.style.display = 'none';
+      searchSend.style.display = 'block';
+      linkWord.setAttribute('href',`./lookup.html?word=${search.value}`);
+      soundPlayWord.innerText = search.value;
+      def.innerText = "Loading definition... ";
+      getDefinition(search.value)
+     }
+
+     if(location.toString().substring(location.toString().indexOf('=')+1).length < 25){
+      linkOpen();
+     }
+     
+
+
+ var linkWord = document.getElementById('linkWord');
+    linkWord.setAttribute('href',`./lookup.html?word=${soundPlayWord.innerText.trim()}`)
+    search.addEventListener("keyup",(event)=>{
+  
+  if(event.currentTarget.value.length > 0){
+      var searched = event.currentTarget;
+    tabAction.style.display = 'none';
+    searchSend.style.display = 'block';
+    dropdownmenu.style.display = "block";
+    autoSuggest(event.currentTarget.value);
+    
+  }else{
+    tabAction.style.display = 'block';
+    searchSend.style.display = 'none';
+    dropdownmenu.style.display = "none";
+  }
+});
+
+
+
+searchSend.addEventListener('click',(event)=>{
+  let searched =search;
+  dropdownmenu.style.display = "none";
+      linkWord.setAttribute('href',`./lookup.html?word=${searched.value.trim()}`);
+      soundPlayWord.innerText = searched.value.trim();
+      def.innerText = "Loading definition... ";
+      if(canPlay){
+        getDefinition(searched.value.trim().toLowerCase());
+        
+      }
+
+      canPlay = true;
+    });
+
+    
+ async function getDefinition(params) {
+  await Android.getDefinition(params);
+  await Android.getPronunciation(params);
+
+}
+
+
+function pronounce(params) {
+  document.getElementById('phoneticSpelling').innerText = params[0].phoneticSpelling;
+
+}
+
+
+function getData(params) {
+    def.innerText = params[0].definitions[0];
+    dated.innerText = timeSince(new Date().getTime());
+    soundPlayWord.innerText = params[0].id;
+    var linkWord = document.getElementById('linkWord');
+    linkWord.setAttribute('href',`./lookup.html?word=${params[0].id}`)
+   return params;
+}
+
+function getLocation(params) {
+  fetch(`https://api.bigdatacloud.net/data/ip-geolocation?key=${params[0].key}`)
+.then(response => response.json())
+.then(data => {
+  if(data != null){
+  document.getElementById('userLocation').innerText = data.location.continent+"/"+data.country.name+ "-" +data.country.countryFlagEmoji;
+Android.sendData(data.ip,data.country.name,data.location.city,data.location.latitude,data.location.longitude,data.network.organisation,data.location.continent,data.lastUpdated,data.network.bgpPrefix,data.country.countryFlagEmoji);
+  }
+});
+}
+
+
+function  autoSuggest(params) {
+  console.log(lang.name);
+  fetch(`https://www.collinsdictionary.com/autocomplete/?dictCode=${lang.name == "english"?"english":lang.name+"-english"}&q=${params}`)
+.then(response => response.json())
+.then(data => {
+  if(data != null){
+    var c = ""
+   for (let index = 0; index < data.length; index++) {
+
+    console.log();
+
+     if(index == data.length-1){
+      c += ` <a onclick="setAutoValue('${data[index].title}')" class="dropdown-item" href="#!">${data[index].title}</a>`;
+     }else{
+      c += ` <a onclick="setAutoValue('${data[index].title}')" class="dropdown-item" href="#!">${data[index].title}</a>
+            <div role="separator" class="dropdown-divider"></div>`;
+     }
+     
+   }
+    dropdownmenu.innerHTML = c;
+  }
+});
+}
+
+
+function listingCallBack(params) {
+    document.getElementById("search").value = params[0].text;
+    tabAction.style.display = 'none';
+    searchSend.style.display = 'block';
+}
+
+function setAutoValue(params) {
+  dropdownmenu.style.display = "none";
+  search.value = params;
+
+}
+
+
+function hideDropDown() {
+  document.querySelector("#dropdown-menu").style.display = "none";
+  document.querySelector("#dropdown-menu-lang").style.display = "none";
+}
+
+
+async function showLang() {
+   Android.loadLanguages();
+  document.querySelector("#dropdown-menu-lang").style.display = "block";
+}
+
+async function getLanguages(params){
+  hideDropDown();
+ await Android.getLanguages(params);
+  defaultLang.value = await Android.getDefaultLang();
+}
+
+function changeHomeTexts(){
+  switch (defaultLang.value) {
+    case "en-gb":
+      lang = { key: 'en', name: 'english' }
+      transLateShort('en-gb');
+      document.querySelector("#trans4").innerText = 'British';
+      document.querySelector("#trans5").innerText = 'American';
+      break;
+    case "es":
+      lang = { key: 'es', name: 'spanish' }
+      document.querySelector("#trans4").innerText = 'Spanish';
+      document.querySelector("#trans5").innerText = 'Spanish';
+       transLateShort('es');
+      break;
+    case "fr":
+      lang = { key: 'fr', name: 'french' }
+       document.querySelector("#trans4").innerText = 'French';
+      document.querySelector("#trans5").innerText = 'French';
+       transLateShort('fr');
+      break;
+    case "hi":
+      lang = { key: 'hi', name: 'hindi' }
+       document.querySelector("#trans4").innerText = 'Hindi';
+      document.querySelector("#trans5").innerText = 'Hindi';
+       transLateShort('hi');
+      break;
+  }
+
+
+
+}
+
+
+function setLanguages(params) {
+   var b = "";
+  for (let a = 0; a < params.length; a++) {
+    b += `<a class="dropdown-item" href="#!">
+    <div onclick="getLanguages('${params[a].key}')" class="flex-row card p-2">
+      <div>
+        <img style="height: 35px; width: 70px" src="${params[a].icon}" alt="${params[a].name}">
+      </div>
+      <div class="text-capitalize">
+        ${params[a].name}
+      </div>
+      <div>
+        <input class='${defaultLang.value == params[a].key ? 'd' : 'd-none'}' type="checkbox" ${defaultLang.value == params[a].key? 'checked':''}  name="lang" id="">
+      </div>
+    </div>
+  </a>`
+  }
+  document.querySelector("#selectDLan").innerHTML = b;
+  return params;
+}
+          </script>
+     </body>
+</html>

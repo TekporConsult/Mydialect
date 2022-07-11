@@ -1,0 +1,5 @@
+[{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target" : { "namespace": "android_app", "package_name": "gd.rf.tekporconsult.mypronouncer",
+                 "sha256_cert_fingerprints": ["9D:A0:F9:16:62:20:65:8C:CB:DD:A4:22:72:23:58:2D:99:4E:C5:D7:8B:F7:DB:C2:84:9C:63:DC:94:3E:60:D4"] }
+  }]

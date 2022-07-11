@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS v5.0.2 -->
+    <link rel="stylesheet" href="./css/bootstrap.min.css"  >
+    <link rel="stylesheet" href="./css/style.css">
+  </head>
+  <body class="bg-light" id="body">
+     <input type="hidden" id="tovalue" value="0" >
+     <input type="hidden" id="fromvalue" value="3">
+     <input type="hidden" id="transkey" name="transkey">
+
+    <br>
+<br>
+    <div class="trans mt-3" id="transId">
+      
+    </div>
+
+
+    <footer class="btn-nav">
+      <div class="cbtn bgprimary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+               
+        <p ><span class="active-p text-uppercase" id="frombtn">English</span></p>
+    </div>
+            <div class="cmic btn bg-primary-color" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                    <path fill="white" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                </svg>
+            </div>
+
+           
+            <div class="cbtn" class="btn bg-primary-color"  data-bs-toggle="modal" data-bs-target="#staticBackdrop1">
+               
+              <p ><span class="active-e text-uppercase" id="tobtn">Arabic</span></p>
+          </div>
+    </footer>
+
+    <div class="bg-primary-color t-head">
+      <svg onclick="goBack()" class="back" style="width:50px;height:50px" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M21,11H6.83L10.41,7.41L9,6L3,12L9,18L10.41,16.58L6.83,13H21V11Z" />
+      </svg>
+<p class="text-center pt-2 pb-2 h3 transcribe">Tekpor - Transcribe</p>
+<div onclick="cleared()" class="clear"><svg  style="width:40px;height:40px" viewBox="0 0 24 24">
+<path fill="currentColor" d="M5,13H19V11H5M3,17H17V15H3M7,7V9H21V7" />
+</svg></div>    
+</div>
+
+ 
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Translation Editor</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="mb-3">
+               
+                <textarea maxlength="500" placeholder="Enter text" class="form-control" aria-expanded="false" id="textMessege" rows="3"></textarea>
+              </div>
+        </div>
+        <div class="modal-footer">
+          <div type="button" onclick="recordListing()" class="btn btn-secondary">
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z" />
+            </svg>
+          </div>
+          <div type="button" onclick="sendText()" data-bs-dismiss="modal" class="btn bg-primary-color text-white"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
+        </svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalread" tabindex="-1" aria-labelledby="exampleModalread" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabelread">Text Reader Editor <span data-bs-dismiss="modal" onclick="readText(),closeModal()" class="help btn"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7A2,2 0 0,0 10,9H8A4,4 0 0,1 12,5A4,4 0 0,1 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z" />
+      </svg></span></h5>
+        <button type="button" class="btn-close" onclick="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+          <div class="mb-3">
+        
+              <textarea maxlength="500" placeholder="To translate, copy and paste the text into this box." class="form-control" aria-expanded="false" id="textMessegeSpeech" rows="3"></textarea>
+            
+              <p class="pt-2 pb-1">Selected language is: <span id="selectedLanguageTospeak">Arabic</span></p>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <div type="button" onclick="clearText()" class="btn btn-secondary">
+          <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12,18A6,6 0 0,1 6,12C6,11 6.25,10.03 6.7,9.2L5.24,7.74C4.46,8.97 4,10.43 4,12A8,8 0 0,0 12,20V23L16,19L12,15M12,4V1L8,5L12,9V6A6,6 0 0,1 18,12C18,13 17.75,13.97 17.3,14.8L18.76,16.26C19.54,15.03 20,13.57 20,12A8,8 0 0,0 12,4Z" />
+        </svg>
+        </div>
+        <div type="button"  onclick="readTextNow()"  class="btn bg-primary-color text-white">
+          <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M9,5A4,4 0 0,1 13,9A4,4 0 0,1 9,13A4,4 0 0,1 5,9A4,4 0 0,1 9,5M9,15C11.67,15 17,16.34 17,19V21H1V19C1,16.34 6.33,15 9,15M16.76,5.36C18.78,7.56 18.78,10.61 16.76,12.63L15.08,10.94C15.92,9.76 15.92,8.23 15.08,7.05L16.76,5.36M20.07,2C24,6.05 23.97,12.11 20.07,16L18.44,14.37C21.21,11.19 21.21,6.65 18.44,3.63L20.07,2Z" />
+        </svg>
+    </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+ 
+
+  <!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Choose a language</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="lang" class="recent-container">
+
+</div>
+</div>
+           
+                   
+                
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+   <!-- Modal -->
+<div class="modal fade"  id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable ">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel1">Select a target language</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="lang1" class="recent-container">
+             
+                 
+              
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="position-fixed bottom-0 end-0 p-3" id="toastModelError" style="z-index: 11; display: none;">
+  <div id="liveToastError" class="toast bg-danger text-white" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <img src="./images/ic_launcher_round.png" width="30" height="30" class="rounded me-2" alt="...">
+      <strong class="me-auto">Warning Message...</strong>
+      <small>0 sec ago</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      We regret to inform you that the language you have chosen is still in development and may or may not function. 
+    </div>
+  </div>
+</div>
+
+
+
+<div class="position-fixed bottom-0 end-0 p-3" id="toastModel" style="z-index: 11; display: none;">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <img src="./images/ic_launcher_round.png" width="30" height="30" class="rounded me-2" alt="...">
+      <strong class="me-auto">Please wait...</strong>
+      <small>0 sec ago</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      Preparing services. Please wait!
+    </div>
+  </div>
+</div>
+
+
+
+<div class="position-fixed bottom-0 end-0 p-3" id="insBody" style="z-index: 11; display: none;">
+  <div id="insToast" class="toast bg-white" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <img src="./images/ic_launcher_round.png" width="30" height="30" class="rounded me-2" alt="...">
+      <strong class="me-auto">Instructions</strong>
+      <small>Please follow these Instructions to read text.</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+    <ol>
+      <li>
+        Copy the text that you wish to read. 
+      </li>
+      <li>
+       paste the copied text into the input area. 
+      </li>
+      <li>
+        To read, simply click the read button. :)
+      </li>
+    </ol>
+    </div>
+  </div>
+</div>
+
+
+
+    <!-- Bootstrap JavaScript Libraries -->
+    <script src="./js/popper.min.js" ></script>
+    <script src="./js/bootstrap.min.js" ></script>
+    <script src="./js/js.js"></script>
+
+    <script>
+var clickCount = 0;
+  var fromValue = document.getElementById('fromvalue');
+  var tovalue = document.getElementById('tovalue');
+function readText() {
+  toastModelinss();
+}
+var textMessegeSpeech = document.getElementById('textMessegeSpeech');
+function toastModelinss() {
+  insBody.style.display = 'block';
+      new bootstrap.Toast(insToast,{delay:10000}).show()
+    }
+
+  
+
+   function setLanguageHtml() {
+        var c = "";
+     var t = "";
+     for (let index = 0; index < supportedLanguage.length; index++) {
+       c += `
+    <div class="rencent-items flex-row card p-2" data-bs-dismiss="modal" onclick="selectedLanguage(${index})">
+
+  <div>
+    <img style="height: 35px;" src="${supportedLanguage[index].flag}" alt="">
+  </div>
+  <div>
+    ${supportedLanguage[index].language}
+  </div>
+    <div>
+    <input type="checkbox" class="${index == fromValue.value ? "d" : "d-none"}" ${index == fromValue.value ? "checked" : ""} name="lang" id="">  
+    </div>
+  </div>
+       `
+
+       t += `
+
+       <div class="rencent-items flex-row card p-2" data-bs-dismiss="modal" onclick="selectedTarget(${index})">
+
+  <div>
+    <img style="height: 35px;" src="${supportedLanguage[index].flag}" alt="">
+  </div>
+  <div>
+    ${supportedLanguage[index].language}
+  </div>
+    <div>
+    <input type="checkbox" class="${index == tovalue.value ? "d" : "d-none"}" ${index == tovalue.value ? "checked" : ""} name="lang" id="">  
+    </div>
+  </div>
+       `
+
+     }
+
+     document.getElementById("lang").innerHTML = c;
+     document.getElementById("lang1").innerHTML = t;
+   }
+   
+   setLanguageHtml();
+   
+    var textMessage =   document.getElementById('textMessege');
+    
+    function selectedTarget(params) {
+      document.getElementById("tobtn").innerText = supportedLanguage[params].language;
+      tovalue.value = params;
+      setLanguageHtml();
+      if(params == 2 || params == 4 || params == 17){
+        toastError();
+      }
+    }
+    
+
+    function selectedLanguage(params) {
+      document.getElementById("frombtn").innerText = supportedLanguage[params].language;
+      fromvalue.value = params;
+      setLanguageHtml();
+      if(params == 2 || params == 4 || params == 17){
+        toastError();
+      }
+    }
+    
+
+    function toastError() {
+      toastModelError.style.display = 'block';
+      new bootstrap.Toast(toastLiveError).show()
+      canPlay = true;
+    }
+
+  async  function sendText(){
+      let toKey = tovalue.value;
+      let fromKey = fromValue.value;
+      let message = textMessage.value;
+      if(message.length > 0){
+     await Android.sendText(supportedLanguage[fromKey].language, supportedLanguage[fromKey].id,message,supportedLanguage[toKey].language,supportedLanguage[toKey].id);  
+      textMessage.value = "";
+      }
+     
+    }
+
+    function clearText() {
+      textMessegeSpeech.value = "";
+    }
+
+    function getTranscribe(params) {
+      
+      var trs = "";
+      for (let index = 0; index < params.length; index++) {
+      var recape = encodeURIComponent(params[index].message.trim());
+      var port = Math.ceil(Math.random()*29);
+        trs += 
+        `<div class="chat left-chat">
+        <div>
+         <p class="text-bold">  
+          <iframe width="100%" id="test" height="auto" src="https://t${port}.translatedict.com/1.php?p1=${params[index].fromKey}&p2=${params[index].toKey}&p3=${recape}"  frameborder="0">Some thing went very wrong. try again next time.</iframe>
+           <hr>
+           <p class="typedText">${params[index].message}</p>
+           <hr>
+          <hr>
+          <div class="info">
+           <div class="transdiv">
+            ${params[index].fromLang} <span onclick="transread('${recape}','${params[index].fromKey}')" class="transreader" ><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z" />
+          </svg></span>
+           </div>
+           <div>
+            <span class="arrow">&#8658;</span>
+           </div>
+           <div >
+            ${params[index].toLang}  <span  onclick="setParams('${params[index].toLang}','${params[index].toKey}')"   class="transreader" ><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z" />
+          </svg></span>
+           </div>
+        </div>
+
+        </div>
+     </div>`;
+        
+      }
+
+      document.getElementById('transId').innerHTML = trs;
+    
+    }
+
+
+
+    function setParams(params,params1){
+      document.querySelector("#exampleModalread").classList.add("show");
+      document.querySelector("#exampleModalread").style.display = "block";
+
+      document.getElementById("transkey").value = params1;
+      document.getElementById("selectedLanguageTospeak").innerText = params;
+    }
+
+    function closeModal() {
+      document.querySelector("#exampleModalread").classList.add("hide");
+      document.querySelector("#exampleModalread").style.display = "none";
+    }
+
+
+async function cleared() {
+await  Android.deleteFromTranscribe();
+}
+
+
+function listingCallBack(params) {
+  
+  document.getElementById("textMessege").value = params[0].text;
+          
+}
+
+
+
+   async function readTextNow() {
+      if(textMessegeSpeech.value.length > 0){
+        toast();
+        var recape = encodeURIComponent(textMessegeSpeech.value.trim());
+        var va = document.getElementById("transkey").value;
+     
+      await  Android.playAudio(`https://www.translatedict.com/speak.php?word=${recape}&lang=${va=="zh-CN"?"zh-chs":va}`,va);
+
+      }
+    }
+
+   async function transread(params,params1) {
+      toast();
+   await Android.playAudio(`https://www.translatedict.com/speak.php?word=${params}&lang=${params1=="zh-CN"?"zh-chs":params1}`,params1);
+    }
+
+    </script>
+
+  </body>
+</html>

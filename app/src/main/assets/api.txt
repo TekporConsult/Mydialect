@@ -1,0 +1,73 @@
+google : sound api.
+
+
+British pronunciation
+
+https://ssl.gstatic.com/dictionary/static/pronunciation/2022-03-02/audio/go/good_en_gb_1.mp3
+
+slow
+https://ssl.gstatic.com/dictionary/static/pronunciation/2022-03-02/audio/go/good_en_gb_2.mp3
+
+
+American pronunciation
+https://ssl.gstatic.com/dictionary/static/pronunciation/2022-03-02/audio/qu/quality_en_us_1.mp3
+
+slow
+https://ssl.gstatic.com/dictionary/static/pronunciation/2022-03-02/audio/qu/quality_en_gb_2.mp3
+
+
+
+British pronunciation
+https://audio.oxforddictionaries.com/en/mp3/good_gb_1.mp3
+https://audio.oxforddictionaries.com/en/mp3/good_gb_3.mp3
+
+American pronunciation
+https://audio.oxforddictionaries.com/en/mp3/good_us_1.mp3
+
+
+
+
+api key for id address 51676369c72b4023b0b9f4bca4d45cae
+
+translate api yandex
+
+
+encodeURIComponent(str)
+
+
+https://dictionary.yandex.net/dicservice.json/queryCorpus?sid=7dd7f7f1.6271553e.636e8e9a.74722d74657874&ui=en&srv=tr-text&text=hello&type&lang=en-ru&flags=1063&src=hello%20how%20are%20you%20doing&dst&options=0&chunks=1&maxlen=200&v=2&yu=4033165221651584329
+
+https://dictionary.yandex.net/dicservice.json/queryCorpus?sid=53b10f52.627160f4.c2efd914.74722d74657874&ui=en&srv=tr-text&text=hello%20how%20are%20you&type&lang=en-fr&flags=1063&src=hello%20how%20are%20you&dst&options=0&chunks=1&maxlen=200&v=2&yu=4033165221651584329
+
+
+https://translate.yandex.net/api/v1/tr.json/translate?id=6e45a810.62716a7e.f61314dc.74722d74657874-12-0&srv=tr-text&lang=en-fr&reason=paste&format=text&yu=4033165221651584329&sprvk=dD0xNjUxNTk5MjQyO2k9MTg4LjIxNC4xMjIuMTM0O0Q9RUIzOUUyNTk1QTY3NjRGQUU5RjM1MUExMjU1OUQ3OEQ4OUUzM0EyNjlCM0U5NzI5OTM5RTgwNjg3OTUzOEI3MkYwQjMyQkFBO3U9MTY1MTU5OTI0MjEwMTk4MDU1NDtoPTEyZDg4MjNhMDAyZDQzZWMyNDBiNzA5MjY2N2FjZjk2
+
+fetch('https://dictionary.yandex.net/dicservice.json/queryCorpus?sid=7dd7f7f1.6271553e.636e8e9a.74722d74657874&ui=en&srv=tr-text&text=hello&type&lang=en-ru&flags=1063&src=hello%20how%20are%20you%20doing&dst&options=0&chunks=1&maxlen=200&v=2&yu=4033165221651584329')
+  .then(response => response.json())
+  .then(data => console.log(data));
+
+Synonyms
+https://dictionary.yandex.net/dicservice.json/lookupMultiple?sid=dfe788e9.6276af21.6ed95cd6.74722d74657874&ui=en&srv=tr-text&text=good&type=regular%2Csyn%2Cant%2Cderiv&lang=en-fr&flags=15655&dict=en-fr.regular%2Cen.syn%2Cen.ant%2Cen.deriv&yu=1354342421651606342&sprvk=dD0xNjUxNTk5MjQyO2k9MTg4LjIxNC4xMjIuMTM0O0Q9RUIzOUUyNTk1QTY3NjRGQUU5RjM1MUExMjU1OUQ3OEQ4OUUzM0EyNjlCM0U5NzI5OTM5RTgwNjg3OTUzOEI3MkYwQjMyQkFBO3U9MTY1MTU5OTI0MjEwMTk4MDU1NDtoPTEyZDg4MjNhMDAyZDQzZWMyNDBiNzA5MjY2N2FjZjk2
+fetch('https://dictionary.yandex.net/dicservice.json/queryCorpus?sid=7dd7f7f1.6271553e.636e8e9a.74722d74657874&ui=en&srv=tr-text&text=hello&type&lang=en-ru&flags=1063&src=hello%20how%20are%20you%20doing&dst&options=0&chunks=1&maxlen=200&v=2&yu=4033165221651584329')
+  .then(response => response.json())
+  .then(data => console.log(data));
+
+Antonyms
+
+
+
+
+https://t25.translatedict.com/1.php?p1=auto&p2=zh-CHS&p3=hello+world+how+are+you+doing
+
+https://t1.translatedict.com/1.php?p1=auto&p2=zh-CN&p3=hello+world+how+are+you+doing
+
+
+https://dictionary.yandex.net/dicservice.json/lookupMultiple?sid=7dd7f7f1.6271553e.636e8e9a.74722d74657874&ui=en&srv=tr-text&text=hello&type=regular%2Csyn%2Cant%2Cderiv&lang=en-ru&flags=15655&dict=en-ru.regular%2Cen.syn%2Cen.ant%2Cen.deriv&yu=4033165221651584329
+
+
+
+https://www.collinsdictionary.com/autocomplete/?dictCode=english-french&q=Bien
+
+https://www.collinsdictionary.com/autocomplete/?dictCode=english-spanish&q=s
+
+https://www.collinsdictionary.com/autocomplete/?dictCode=english-hindi&q=gd

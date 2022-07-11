@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "122659525360",
+    "project_id": "mypronouncer",
+    "storage_bucket": "mypronouncer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:122659525360:android:28e3936d314f2a1f952835",
+        "android_client_info": {
+          "package_name": "gd.rf.tekporconsult.mypronouncer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "122659525360-osc95bp441db80021fnpkcbt6lalo6d2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgWDn2776fHahbB5-Ic5LWRromL_Au4IE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "122659525360-osc95bp441db80021fnpkcbt6lalo6d2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
