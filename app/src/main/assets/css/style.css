@@ -30,11 +30,11 @@ button{
 
 a{
     text-decoration: none;
-    color: currentColor;
+    color: var(--primary-color) !important;
     padding: 0px;
     margin: 0px;
     font-size: 1em;
-    font-weight: lighter;
+    font-weight: bold;
     font-family: 'Courier New', Courier, monospace;
 }
 
@@ -50,10 +50,6 @@ a:hover{
 .bg-lookup-action{
    
     background-color: white !important;
-}
-
-.bg-lookup-action:hover{
-    
 }
 
 .bg-lookup-action:hover > p{
@@ -91,8 +87,16 @@ body {
        -moz-user-select: text !important;
         -ms-user-select: text !important;
             user-select: text !important;
-            margin-bottom: 100px;
   }
+
+  .list-styl{
+    list-style: upper-latin;
+  }
+
+  b{
+    font-weight: 500 !important;
+  }
+
   body::-webkit-scrollbar {
     display: none;
   }
@@ -548,6 +552,11 @@ svg{
    
 }
 
+p{
+    padding: 0px !important;
+    margin: 0px !important;
+}
+
 .rencent-items p{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 0.8em;
@@ -776,6 +785,13 @@ footer >div:hover>p{
  .back{
      color: white;
      font-size: 60px;
+}
+.text-secondary{
+    color: black !important;
+}
+
+.text-primary{
+    color: var(--primary-color) !important;
 }
 
 .t-head{
@@ -1056,7 +1072,7 @@ ul li {
     font-weight: bold;
 }
 #phoneticSpelling::after{
-    content: '|ps';
+    content: '|PA';
     font-size: 0.65em;
     color: var(--primary-color);
 }
@@ -1218,7 +1234,7 @@ footer > div{
     font-family: 'Courier New', Courier, monospace;
     color: black;
     font-size: 1em;
-    font-weight: lighter;
+    font-weight: bold;
     text-transform: capitalize;
     border: solid var(--primary) 1px;
     border-radius: 50px;
@@ -1273,9 +1289,10 @@ footer > div{
 .hint{
     padding: 0px;
     margin: 0px;
-    font-size: 1.2em !important;
+    font-weight: 600;
+    font-size: 1.3em !important;
     font-style: bold !important;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .playNavigator{
@@ -1351,4 +1368,39 @@ em{
 .dropdown-item{
     font-size: 1.1em;
     font-family: 'Courier New', Courier, monospace;
+}
+
+.title{
+    font-weight: 700 !important;
+    font-size: 1.2em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: italic;
+}
+
+#etymology,
+li{
+    font-size: 1.05em;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 0px;
+    font-weight: 500;
+    margin: 0px;
+}
+#etymology{
+    font-size: 0.9em !important;
+}
+.list-styl-1{
+    list-style: outside;
+}
+
+.list-styl-2 {
+    list-style: lower-alpha;
+}
+.same{
+    font-weight: bolder !important;
+    color: rgb(8, 6, 6) !important;
+}
+
+.ipa{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: bold;
 }

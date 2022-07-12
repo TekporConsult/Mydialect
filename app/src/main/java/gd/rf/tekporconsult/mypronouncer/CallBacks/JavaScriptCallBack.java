@@ -889,7 +889,10 @@ for(int index = 0; index < arrayList.size(); index++ ){
                                                 ArrayList<Map<String,Object>> entries = (ArrayList<Map<String, Object>>) lexicalEntries.get(0).get("entries");
                                                 if(lexicalEntries.get(0).get("entries") != null){
                                                     ArrayList<String> etymologies = (ArrayList<String>) entries.get(0).get("etymologies");
-                                                    etymology.addAll(etymologies);
+                                                    if(entries.get(0).get("etymologies") != null){
+                                                        etymology.addAll(etymologies);
+                                                    }
+
                                                 }
                                             }
                                         }

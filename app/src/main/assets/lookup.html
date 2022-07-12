@@ -81,41 +81,44 @@
 
         <div id="source">
             <div class="active">
-                <h3 class="text-uppercase text-primary">Definitions</h3>
+                <h3 class="text-uppercase text-primary text-bolder">Definitions</h3>
             </div>
             
         </div>   
-
+<div class="ms-4" id="etymologyid">
+    <b class="text-secondary title text-capitalize">etymology:</b>
+    <p class="ps-3">
+        <small id="etymology"></small>
+    </p>
+</div>
+<br>
       <div class="ms-4">
-        <b class="text-secondary text-capitalize text-bold">Pronounciation:</b>
+        <b class="text-secondary title text-capitalize ">Pronounciation:</b>
         <ul id="phonics">
             
         </ul>
       </div>
 
-    <div class="ms-4" id="etymologyid">
-        <b class="text-secondary text-capitalize">etymology:</b>
-        <p class="ps-3">
-        <small id="etymology"></small>
-        </p>
-    </div>
+    
 
     <ol class="mt-3" id="listDe">
-   
+   <div>
+    <img src="./images/throbber.gif" alt="loading">
+   </div>
     </ol>
 
 
 
 <div class="ms-4">
-    <b class="text-secondary text-capitalize">translation:</b>
+    <b class="text-secondary title text-capitalize">translation:</b>
     <ul>
-        <li><small>Spanish: <span id="transes"></span></small> </small> </li>
-        <li><small>French: <span id="transfr"></span></small> </li>
+        <li class="list-styl-1" id="maintranses"><small>Spanish: <span id="transes"></span></small> </small> </li>
+        <li class="list-styl-1" id="maintransfr"><small>French: <span id="transfr"></span></small> </li>
         <!-- <li><small>Hindi: <span id="transhi"></span></small></small> </li> -->
     </ul>
 </div>
     <div class="ms-4 forReader" id="sentencesid">
-        <b class="text-secondary text-capitalize">blog post:</b>
+        <b class="text-secondary title text-capitalize">blog post:</b>
         <ul class="ps-3" id="sentences">
             
         </ul>
@@ -295,9 +298,9 @@ Please double-check your spelling and try again, or switch from this working env
 
        
      async  function startShare() {
-         if(document.getElementById("dictionary")){
+         if(document.getElementById("listDe")){
           toast();
-       await   Android.shareNow(soundPlayWord.innerText,document.getElementById("dictionary").innerText)
+       await   Android.shareNow(soundPlayWord.innerText,document.getElementById("listDe").innerText)
          }
          
        }
@@ -311,8 +314,18 @@ Please double-check your spelling and try again, or switch from this working env
 
 
        function getSentences(params) {
-        document.getElementById("sentences").innerHTML = params[0]["sentences"].map(value=>{
-            return `<li><small>${value}</small></li>`;
+        document.getElementById("sentences").innerHTML = params[0]["sentences"].map(values =>{
+            let a = values.split(" ");
+            return `<li class="list-styl-2"><p>${a.map(value => {
+                if (value.toLowerCase().match(`^${soundPlayWord.innerText.toLowerCase()}[A-Za-z]*`) != null) {
+                    return `<i><b class="same">${value}</b></i>`
+                }
+                else if (value.length > 8 && value.match("^[A-Za-z]+$") != null) {
+                    return `<a class="hint text-primary" href="./home.html?word=${value}"><small>${value}</small></a>`;
+                } else {
+                    return value;
+                }
+            }).join(" ")}</p></li>`;
         }).join("");
            if (params[0]["sentences"].length < 1) {
                document.getElementById("sentencesid").style.display = "none"
@@ -322,12 +335,12 @@ Please double-check your spelling and try again, or switch from this working env
 function pronounce(params) {
     if(params[0]["phonetics"] != null){
         let photnes = params[0]["phonetics"].map(value => {
-            return `<li><small>(Phonetic Alphabet) PA: ${value} </small> </li>`;
+            return `<li class="list-styl-3"><small>(Phonetic Alphabet) PA: <span class="ipa">${value}</span> </small> </li>`;
         }).join("");
         document.getElementById("phonics").innerHTML = photnes;
     }else{
         if(params[0]["phoneticSpelling"] != null){
-            document.getElementById("phonics").innerHTML = `<li><small>(Phonetic Alphabet) PA: ${params[0]["phoneticSpelling"]} </small> </li>`
+            document.getElementById("phonics").innerHTML = `<li><small>(Phonetic Alphabet) PA:  <span class="ipa">${params[0]["phoneticSpelling"]}</span> </small> </li>`
         }
     }
   
@@ -341,12 +354,15 @@ let exam = "";
         if(params[element]["examples"]!= null){
             if(params[element]["examples"].length > 0){
                 exam = ` <div class="ms-4">
-                <i class="text-primary text-capitalize">Examples:</i>
+                <i class="text-primary title text-capitalize">Examples:</i>
                 <ul>
                      ${params[element]["examples"].map(values => {
                     let a = values.split(" ");
                     return `${`<li><small>${a.map(value => {
-                        if (value.length > 8 && value.match("^[A-Za-z]+$") != null) {
+                        if(value.toLowerCase().match(`^${soundPlayWord.innerText.toLowerCase()}[A-Za-z]*`) != null){
+                            return `<i><b class="same">${value}</b></i>`
+                        }
+                        else if (value.length > 8 && value.match("^[A-Za-z]+$") != null) {
                             return `<a class="hint text-primary" href="./home.html?word=${value}"><small>${value}</small></a>`;
                         } else {
                             return value;
@@ -357,13 +373,11 @@ let exam = "";
             </div>`;
             }
         }
-console.log(`${element}injection`,"first");
         parts += ` <li>
         <div class="ms-4 forReader">
-            <b class="text-secondary text-capitalize">${element}:</b>
-            <p id="${element}injection">
-            </p>
-            <ul>
+            <p><b class="text-secondary title text-capitalize text-bolder">${element}:</b>(<small id="${element}injection"></small>)</p>
+            
+            <ol>
                 ${params[element]["definitions"].map(values => {
 
                     let a  = values.split(" ");
@@ -375,7 +389,7 @@ console.log(`${element}injection`,"first");
                         }
                     }).join(" ") }</small> </li>`
                 }).join("")}
-            </ul>
+            </ol>
            ${exam}
             <div class="ms-4" >
                 <div id="synonyms${element}"></div>
@@ -467,7 +481,7 @@ function wordTranslate() {
 
                         if (document.getElementById(`synonyms${value.pos.tooltip}`)) {
                             var a = document.getElementById(`synonyms${value.pos.tooltip}`);
-                            var c = `<small class="text-primary text-capitalize ">synonyms:</small><p>`
+                            var c = `<small class="text-primary title text-capitalize ">synonyms:</small><p>`
 
                             value.tr.forEach((value, index) => {
                                 c += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
@@ -481,7 +495,7 @@ function wordTranslate() {
 
                         if (document.getElementById(`antonyms${value.pos.tooltip}`)) {
                             var ah = document.getElementById(`antonyms${value.pos.tooltip}`);
-                            var an = `<small class="text-primary text-capitalize ">Antonyms:</small><p>`
+                            var an = `<small class="text-primary title text-capitalize ">Antonyms:</small><p>`
 
                             value.tr.forEach((value, index) => {
                                an += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
@@ -506,7 +520,7 @@ function wordTranslate() {
 
                         if (document.getElementById(`synonyms${value.pos.tooltip}`)) {
                             var a = document.getElementById(`synonyms${value.pos.tooltip}`);
-                            var c = `<small class="text-primary text-capitalize ">synonyms:</small><p>`
+                            var c = `<small class="text-primary title text-capitalize ">synonyms:</small><p>`
 
                             value.tr.forEach((value, index) => {
                                 c += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
@@ -520,7 +534,7 @@ function wordTranslate() {
 
                         if (document.getElementById(`antonyms${value.pos.tooltip}`)) {
                             var ah = document.getElementById(`antonyms${value.pos.tooltip}`);
-                            var an = `<small class="text-primary text-capitalize ">Antonyms:</small><p>`
+                            var an = `<small class="text-primary title text-capitalize ">Antonyms:</small><p>`
 
                             value.tr.forEach((value, index) => {
                                 an += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
@@ -545,7 +559,7 @@ function wordTranslate() {
 
                         if (document.getElementById(`synonyms${value.pos.tooltip}`)) {
                             var a = document.getElementById(`synonyms${value.pos.tooltip}`);
-                            var c = `<small class="text-primary text-capitalize ">synonyms:</small><p>`
+                            var c = `<small class="text-primary title text-capitalize ">synonyms:</small><p>`
 
                             value.tr.forEach((value, index) => {
                                 c += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
@@ -559,7 +573,7 @@ function wordTranslate() {
 
                         if (document.getElementById(`antonyms${value.pos.tooltip}`)) {
                             var ah = document.getElementById(`antonyms${value.pos.tooltip}`);
-                            var an = `<small class="text-primary text-capitalize ">Antonyms:</small><p>`
+                            var an = `<small class="text-primary title text-capitalize ">Antonyms:</small><p>`
 
                             value.tr.forEach((value, index) => {
                                 an += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
@@ -585,7 +599,7 @@ function wordTranslate() {
 
                         if (document.getElementById(`synonyms${value.pos.tooltip}`)) {
                             var a = document.getElementById(`synonyms${value.pos.tooltip}`);
-                            var c = `<small class="text-primary text-capitalize ">synonyms:</small><p>`
+                            var c = `<small class="text-primary title text-capitalize ">synonyms:</small><p>`
 
                             value.tr.forEach((value, index) => {
                                 c += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
@@ -599,7 +613,7 @@ function wordTranslate() {
 
                         if (document.getElementById(`antonyms${value.pos.tooltip}`)) {
                             var ah = document.getElementById(`antonyms${value.pos.tooltip}`);
-                            var an = `<small class="text-primary text-capitalize ">Antonyms:</small><p>`
+                            var an = `<small class="text-primary title text-capitalize ">Antonyms:</small><p>`
 
                             value.tr.forEach((value, index) => {
                                 an += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
@@ -629,6 +643,9 @@ function translation(word,lang,location) {
             }
             
          }).join(", ");
+         if(t.length < 5){
+            document.getElementById("main"+location).style.display="none"
+         }
          document.getElementById(location).innerHTML = t;
         });
 }
@@ -636,10 +653,9 @@ function translation(word,lang,location) {
 function getInflections(params) {
    params[0]["inflections"].forEach(value=>{
         let t = Object.keys(value)[0];
-        console.log(`${t}injection`);
         if(document.getElementById(`${t}injection`)){
             document.getElementById(`${t}injection`).innerHTML = value[t].map(valueed => {
-                return `<a class="hint text-primary" href="./home.html?word=${valueed}"><small>${valueed}</small></a>`
+                return `<b><i><a class="hint text-primary" href="./home.html?word=${valueed}"><small>${valueed}</small></a></i></b>`
             }).join(", ");
         }
        

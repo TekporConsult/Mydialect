@@ -331,8 +331,29 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+                handleSendText(intent);
+            }
+        }
 
 
+    }
+
+
+    void handleSendText(Intent intent) {
+        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if (sharedText != null) {
+            if(sharedText.split("[\n ]").length < 4){
+                webView.loadUrl("file:///android_asset/home.html?word="+sharedText.replaceAll("[\n]", " "));
+            }else{
+
+                webView.loadUrl("file:///android_asset/home.html?word="+sharedText.split("[\n ]")[0]);
+            }
+        }
     }
 
     public static void setDefaultLang(String value){
