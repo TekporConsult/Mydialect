@@ -12,3 +12,6 @@ Features:
 7. Obtain History list
 6.etc
  
+ 
+ 
+ GET IT ON GOOGLE PLAY STORE: https://play.google.com/store/apps/details?id=gd.rf.tekporconsult.mypronouncer
