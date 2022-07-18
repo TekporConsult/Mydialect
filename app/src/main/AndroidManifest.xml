@@ -8,10 +8,14 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:name=".service.App"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyPronouncer">
-
+        <service
+            android:name=".service.OfflineService"
+            android:enabled="true"
+            android:exported="true"/>
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/googl_play_store" />
@@ -76,10 +80,13 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
+        <receiver android:name=".service.MyBroadcastReceiver"/>
     </application>
 
 </manifest>

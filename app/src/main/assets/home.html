@@ -299,7 +299,9 @@ function linkOpen() {
       linkWord.setAttribute('href',`./lookup.html?word=${search.value}`);
       soundPlayWord.innerText = search.value;
       def.innerText = "Loading definition... ";
-      getDefinition(search.value)
+      setTimeout(()=>{
+        getDefinition(search.value)
+      },1000);
      }
 
      if(location.toString().substring(location.toString().indexOf('=')+1).length < 25){

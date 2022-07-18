@@ -9,8 +9,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 
+import gd.rf.tekporconsult.mypronouncer.model.Category;
+import gd.rf.tekporconsult.mypronouncer.model.Definition;
+import gd.rf.tekporconsult.mypronouncer.model.Pronunciation;
 import gd.rf.tekporconsult.mypronouncer.model.Transcribe;
 import gd.rf.tekporconsult.mypronouncer.model.Trending;
+import gd.rf.tekporconsult.mypronouncer.model.Word;
 
 
 public class DatabaseAccess {
@@ -62,7 +66,7 @@ public class DatabaseAccess {
      *
      * @return a List of quotes
      */
-//get user
+//get history
     public void setHistory(Trending database1) {
         try {
             contentValues = new ContentValues();
@@ -76,6 +80,149 @@ public class DatabaseAccess {
 
     }
 
+    // set word
+    public void setWord(Word word,String table) {
+        try {
+            contentValues = new ContentValues();
+            contentValues.put("word", word.getWord());
+            database.insert(table, null, contentValues);
+        } catch (SQLiteConstraintException e) {
+            // e.getMessage();
+        }
+    }
+
+    // set category
+    public void setCategory(Category category,String table) {
+        try {
+            contentValues = new ContentValues();
+            contentValues.put("word", category.getWord());
+            contentValues.put("category", category.getCategory());
+            database.insert(table, null, contentValues);
+        } catch (SQLiteConstraintException e) {
+            // e.getMessage();
+        }
+    }
+
+    public void setPronunciation(Pronunciation pronunciation, String table) {
+        try {
+            contentValues = new ContentValues();
+            contentValues.put("word", pronunciation.getWord());
+            contentValues.put("phonics", pronunciation.getPhonics());
+            database.insert(table, null, contentValues);
+        } catch (SQLiteConstraintException e) {
+             e.getMessage();
+        }
+    }
+
+
+    // get pronunciation
+    public Pronunciation getPronunciation(String word,String table) {
+        Pronunciation pronunciation = null;
+        String quarry = "SELECT * FROM "+table+" WHERE word = "+word;
+        try {
+            Cursor cursor = database.rawQuery(quarry, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                pronunciation = new Pronunciation(cursor.getString(1),cursor.getString(2));
+                cursor.moveToNext();
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        }
+        return pronunciation;
+    }
+
+    // set definition
+    public void setDefinition(Definition definition,String table) {
+        try {
+            contentValues = new ContentValues();
+            contentValues.put("word", definition.getWord());
+            contentValues.put("category", definition.getCategory());
+            contentValues.put("definition", definition.getDefinition());
+            database.insert(table, null, contentValues);
+        } catch (SQLiteConstraintException e) {
+            // e.getMessage();
+        }
+    }
+
+
+    //get word
+    public Word getWord(String word,String table) {
+        Word word1 = null;
+        String quarry = "SELECT * FROM "+table+" WHERE word = "+word;
+        try {
+            Cursor cursor = database.rawQuery(quarry, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                word1 = new Word(cursor.getString(1));
+                cursor.moveToNext();
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        }
+        return word1;
+    }
+
+    public ArrayList<Word> getWords(String word,String table) {
+        ArrayList<Word> category1 = null;
+        String quarry = "SELECT * FROM "+table+" WHERE word LIKE '%"+word+"%' LIMIT 10";
+        try {
+            Cursor cursor = database.rawQuery(quarry, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                category1.add(new Word(cursor.getString(1)));
+                cursor.moveToNext();
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        }
+        return category1;
+    }
+
+    public int isOfflineReady(){
+        String quarry = "SELECT name  FROM migrations";
+        Cursor cursor = database.rawQuery(quarry, null);
+       return cursor.getCount();
+    }
+
+    //get getCategories
+    public ArrayList<Category> getCategories(String word,String table) {
+        ArrayList<Category> category1 = null;
+        String quarry = "SELECT * FROM "+table+" WHERE word = "+word;
+        try {
+            Cursor cursor = database.rawQuery(quarry, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                category1.add(new Category(cursor.getString(1),cursor.getString(2)));
+                cursor.moveToNext();
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        }
+        return category1;
+    }
+
+    //get word
+    public ArrayList<Definition> getDefinitions(String word,String table) {
+        ArrayList<Definition> category1 = null;
+        String quarry = "SELECT * FROM "+table+" WHERE word = "+word;
+        try {
+            Cursor cursor = database.rawQuery(quarry, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                category1.add(new Definition(cursor.getString(1),cursor.getString(2),cursor.getString(3)));
+                cursor.moveToNext();
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        }
+        return category1;
+    }
 
     public void bookmark(Trending database1) {
         try {

@@ -1,11 +1,23 @@
 package gd.rf.tekporconsult.mypronouncer;
 
+import static gd.rf.tekporconsult.mypronouncer.service.App.OFFLINE_CHANNEL;
+
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
 import android.speech.RecognizerIntent;
 import android.view.KeyEvent;
 import android.view.View;
@@ -19,6 +31,8 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -37,17 +51,24 @@ import gd.rf.tekporconsult.mypronouncer.CallBacks.JavaScriptCallBack;
 import gd.rf.tekporconsult.mypronouncer.model.Transcribe;
 import gd.rf.tekporconsult.mypronouncer.model.Trending;
 import gd.rf.tekporconsult.mypronouncer.service.DatabaseAccess;
+import gd.rf.tekporconsult.mypronouncer.service.OfflineService;
 
 public class MainActivity extends AppCompatActivity {
 
+    ServiceConnection serviceConnection;
+    OfflineService offlineService;
     protected WebView webView;
     protected int a = 0;
+    boolean isBonded = false;
     FloatingActionButton sharedValueSet;
     protected FirebaseFirestore db;
     protected String key;
     DatabaseAccess databaseAccess;
     final static int REQ_CODE_SPEECH_INPUT = 99;
     public static String defaultLang = "dictionary";
+    public  static  Boolean offline = true;
+   private Intent serviceIntent;
+    NotificationManagerCompat notificationManagerCompat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +76,6 @@ public class MainActivity extends AppCompatActivity {
         Window window = getWindow();
         setContentView(R.layout.activity_main);
         webView = findViewById(R.id.webView);
-
-
-
-
         sharedValueSet = findViewById(R.id.sharedValueSet);
 
 
@@ -116,6 +133,8 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+
+
 
         db.collection("api").document("location")
                 .get()
@@ -252,10 +271,13 @@ public class MainActivity extends AppCompatActivity {
                             }
                     );
 
+                    if(offline && databaseAccess.isOfflineReady()<1){
+                        new Handler().postDelayed(() -> offlineDialog(), 10000);
+
+                    }
 
 
                 } else if (url.contains("bookmark")) {
-
 
                     ArrayList<Trending> bookmark = databaseAccess.getBookmark();
                     ArrayList<Object> arrayList = new ArrayList<>();
@@ -341,8 +363,123 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+
+
     }
 
+    public void offlineDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Dictionary available in offline")
+                .setMessage("Hello there,\nThis dictionary can now be made offline.")
+                .setCancelable(false)
+                .setPositiveButton("Remind me Later", (dialog, id) -> dialog.cancel())
+                .setNegativeButton("Download", (dialog, id) -> {
+                    dialog.cancel();
+                    new Handler().postDelayed(() -> {
+                        offlineDialogConfirm();
+                    },500);
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+        offline = false;
+
+    }
+
+    public void offlineDialogConfirm(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Alert!")
+                .setMessage("This process will take a couple of minutes depending on your network speed.")
+                .setCancelable(false)
+                .setPositiveButton("Cancel", (dialog, id) -> dialog.cancel())
+                .setNegativeButton("Continue", (dialog, id) -> {
+                    dialog.cancel();
+                    serviceIntent = new Intent(getApplicationContext(), OfflineService.class);
+                    startService(serviceIntent);
+                    if(serviceConnection == null){
+                        serviceConnection = new ServiceConnection() {
+                            @Override
+                            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                                OfflineService.MyBinder  myBinder = (OfflineService.MyBinder) iBinder;
+                                offlineService = myBinder.MyNewBinder();
+                                isBonded = true;
+                            }
+
+                            @Override
+                            public void onServiceDisconnected(ComponentName componentName) {
+                                isBonded = false;
+                            }
+                        };
+                    }
+
+                    bindService(serviceIntent,serviceConnection,0);
+                    makeOffline();
+
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+
+    }
+
+    public  void  makeOffline() {
+
+        new Handler().postDelayed(() -> {
+            if(isBonded){
+                getProgress();
+            }
+        },1000);
+    }
+
+    private void getProgress(){
+       new Thread(() -> {
+
+           Intent intent  =new Intent(MainActivity.this, BroadcastReceiver.class);
+           PendingIntent pauseIntent  = PendingIntent.getBroadcast(getApplicationContext(),1,intent,0);
+
+           Intent intent1  =new Intent(MainActivity.this, MainActivity.class);
+           intent1.putExtra("progress","progress");
+           PendingIntent mainIntent  = PendingIntent.getActivity(getApplicationContext(),2,intent1,0);
+
+
+           notificationManagerCompat = NotificationManagerCompat.from(MainActivity.this);
+           NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this,OFFLINE_CHANNEL);
+           builder.setSmallIcon(R.mipmap.ic_launcher_round)
+                   .setProgress(100,0,false)
+                   .setOnlyAlertOnce(true)
+                   .setPriority(NotificationManager.IMPORTANCE_HIGH)
+                   .setOngoing(true)
+                   .setContentTitle("Offline Dictionary")
+                   .setContentText("download in progress")
+                   .setAutoCancel(false)
+                   .addAction(R.mipmap.ic_launcher_round,"Pause",pauseIntent)
+                   .setContentIntent(mainIntent)
+                   .setCategory(DOWNLOAD_SERVICE);
+           notificationManagerCompat.notify(0,builder.build());
+           boolean isNotCompleted = true;
+           while (isNotCompleted){
+               try {
+                   int progress = offlineService.getProgress();
+                   if(progress <= 100){
+                       Thread.sleep(500);
+                       builder.setProgress(100,progress,false);
+                       builder.setPriority(NotificationManager.IMPORTANCE_LOW);
+                       notificationManagerCompat.notify(0,builder.build());
+                   }else{
+                       isNotCompleted = false;
+                   }
+               } catch (InterruptedException e) {
+                   e.printStackTrace();
+               }
+           }
+           builder.setProgress(0,0,false);
+           builder.setContentText("Congratulation!!, you now have MyDialect in offline mode");
+           builder.setOngoing(false);
+           builder.setOnlyAlertOnce(false);
+           builder.setPriority(NotificationManager.IMPORTANCE_HIGH);
+           notificationManagerCompat.notify(0,builder.build());
+           unbindService(serviceConnection);
+       }).start();
+
+    }
 
     void handleSendText(Intent intent) {
         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
@@ -350,7 +487,6 @@ public class MainActivity extends AppCompatActivity {
             if(sharedText.split("[\n ]").length < 4){
                 webView.loadUrl("file:///android_asset/home.html?word="+sharedText.replaceAll("[\n]", " "));
             }else{
-
                 webView.loadUrl("file:///android_asset/home.html?word="+sharedText.split("[\n ]")[0]);
             }
         }
@@ -412,7 +548,6 @@ public class MainActivity extends AppCompatActivity {
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     Toast.makeText(this, result.get(0), Toast.LENGTH_SHORT).show();
-
                     ArrayList<Object> arrayList = new ArrayList<>();
                     Map<String, Object> dataList = new HashMap<>();
                     dataList.put("text", result.get(0));

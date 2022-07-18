@@ -92,7 +92,7 @@
     </p>
 </div>
 <br>
-      <div class="ms-4">
+      <div class="ms-4" id="pronouncId">
         <b class="text-secondary title text-capitalize ">Pronounciation:</b>
         <ul id="phonics">
             
@@ -114,11 +114,11 @@
     <ul>
         <li class="list-styl-1" id="maintranses"><small>Spanish: <span id="transes"></span></small> </small> </li>
         <li class="list-styl-1" id="maintransfr"><small>French: <span id="transfr"></span></small> </li>
-        <!-- <li><small>Hindi: <span id="transhi"></span></small></small> </li> -->
+        <li  class="list-styl-1" id="maintransen"><small>English: <span id="transen"></span></small></small> </li>
     </ul>
 </div>
     <div class="ms-4 forReader" id="sentencesid">
-        <b class="text-secondary title text-capitalize">blog post:</b>
+        <b class="text-secondary title text-capitalize">Use Cases:</b>
         <ul class="ps-3" id="sentences">
             
         </ul>
@@ -201,8 +201,9 @@ Please double-check your spelling and try again, or switch from this working env
    <script>
       
       async function run() {
-        translation(soundPlayWord.innerText.toLowerCase(), "en-fr", "transfr");
-        translation(soundPlayWord.innerText.toLowerCase(), "en-es", "transes");
+        if(lang.key != "fr"){translation(soundPlayWord.innerText.toLowerCase(), `${lang.key}-fr`, "transfr");}else{document.getElementById("maintransfr").style.display="none"}
+        if(lang.key != "es"){translation(soundPlayWord.innerText.toLowerCase(), `${lang.key}-es`, "transes");} else { document.getElementById("maintranses").style.display = "none" }
+        if (lang.key != "en") {translation(soundPlayWord.innerText.toLowerCase(), `${lang.key}-en`, "transen");} else { document.getElementById("maintransen").style.display = "none" }
       Android.getDefinitionMerged(soundPlayWord.innerText.toLowerCase());
       Android.getPronunciation(soundPlayWord.innerText.toLowerCase());
           Android.getSentences(soundPlayWord.innerText.toLowerCase());
@@ -327,7 +328,7 @@ Please double-check your spelling and try again, or switch from this working env
                 }
             }).join(" ")}</p></li>`;
         }).join("");
-           if (params[0]["sentences"].length < 1) {
+           if (params[0]["sentences"].length < 5) {
                document.getElementById("sentencesid").style.display = "none"
            }
        }
@@ -342,6 +343,10 @@ function pronounce(params) {
         if(params[0]["phoneticSpelling"] != null){
             document.getElementById("phonics").innerHTML = `<li><small>(Phonetic Alphabet) PA:  <span class="ipa">${params[0]["phoneticSpelling"]}</span> </small> </li>`
         }
+    }
+
+    if(document.getElementById("pronouncId").innerText.length < 5){
+         document.getElementById("pronouncId").style.display = "none";
     }
   
 }

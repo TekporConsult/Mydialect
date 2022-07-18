@@ -377,11 +377,24 @@ databaseAccess.DeleteTranscribe();
     }
 
     @JavascriptInterface
-    public void sendText(String fromLang,  String fromKey, String message,String toLang,  String toKey ) {
+    public void sendText(String fromLang,  String fromKey, String message,String toLang,  String toKey ) throws IOException {
+
+        double v = (Math.random() * 28.0)+1.0;
+        URL url = new URL("https://t"+Math.round(v)+".translatedict.com/1.php?p1=auto&p2="+toKey+"&p3="+message);
+        HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        String line = null;
+        while ((line = reader.readLine()) != null) {
+            stringBuilder.append(line + "\n");
+        }
 
 
+        String newMessage = message+"="+stringBuilder;
 
-        databaseAccess.transcribe(new Transcribe(0, fromLang, fromKey, message, toLang, toKey));
+        databaseAccess.transcribe(new Transcribe(0, fromLang, fromKey, newMessage, toLang, toKey));
         new Handler().postDelayed(() -> {
 
             ArrayList<Transcribe> bookmark = databaseAccess.getTranscribe();
@@ -432,36 +445,161 @@ databaseAccess.DeleteTranscribe();
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (task.getResult().exists()) {
+                            if(task.getResult().get("examples") != null){
+                                ArrayList<HashMap<Object,Object>> examples = (ArrayList<HashMap<Object, Object>>) task.getResult().get("examples");
+                                for(int index = 0; index < arrayList.size(); index++ ){
+                                    if(partOfSpeech.get(arrayList.get(index))==null){
+                                        ArrayList<Object> arrayList1 = new ArrayList<>();
+                                        arrayList1.add(stringArrayList.get(index));
+                                        HashMap<String,ArrayList<Object>> hashMap1 = new HashMap<>();
+                                        hashMap1.put("definitions",arrayList1);
+                                        for(HashMap<Object,Object> arrayList2 : examples){
 
-ArrayList<HashMap<Object,Object>> examples = (ArrayList<HashMap<Object, Object>>) task.getResult().get("examples");
+                                            if(arrayList2.get(arrayList.get(index)) !=  null){
+                                                hashMap1.put("examples", (ArrayList<Object>) arrayList2.get(arrayList.get(index)));
+                                            }
+                                        }
+                                        partOfSpeech.put(arrayList.get(index), hashMap1);
 
-
-
-for(int index = 0; index < arrayList.size(); index++ ){
-   if(partOfSpeech.get(arrayList.get(index))==null){
-       ArrayList<Object> arrayList1 = new ArrayList<>();
-       arrayList1.add(stringArrayList.get(index));
-       HashMap<String,ArrayList<Object>> hashMap1 = new HashMap<>();
-       hashMap1.put("definitions",arrayList1);
-       for(HashMap<Object,Object> arrayList2 : examples){
-
-           if(arrayList2.get(arrayList.get(index)) !=  null){
-               hashMap1.put("examples", (ArrayList<Object>) arrayList2.get(arrayList.get(index)));
-           }
-       }
-       partOfSpeech.put(arrayList.get(index), hashMap1);
-
-   }else{
-       partOfSpeech.get(arrayList.get(index)).get("definitions").add(stringArrayList.get(index));
-   }
-}
-
-                            String jsonText = JSONValue.toJSONString(partOfSpeech);
-                            webView.evaluateJavascript("javascript:getDataExample(" + jsonText + ")", s ->
-                                    {
-//                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        partOfSpeech.get(arrayList.get(index)).get("definitions").add(stringArrayList.get(index));
                                     }
-                            );
+                                }
+
+                                String jsonText = JSONValue.toJSONString(partOfSpeech);
+                                webView.evaluateJavascript("javascript:getDataExample(" + jsonText + ")", s ->
+                                        {
+//                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+                                        }
+                                );
+
+                            }else {
+                                new Thread(() -> {
+                                    URL url;
+                                    StringBuilder stringBuilder = new StringBuilder();
+                                    try {
+                                        url = new URL(dictionaryEntries(word, "examples"));
+                                        HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+                                        urlConnection.setRequestProperty("Accept", "application/json");
+                                        urlConnection.setRequestProperty("app_id", app_id);
+                                        urlConnection.setRequestProperty("app_key", app_key);
+
+                                        // read the output from the server
+                                        BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+
+
+                                        String line = null;
+                                        while ((line = reader.readLine()) != null) {
+                                            stringBuilder.append(line + "\n");
+                                        }
+                                        Map<Object, Object> parse = (Map<Object, Object>) JSONValue.parse(stringBuilder.toString());
+
+                                        ArrayList<Map<String, ArrayList<String>>> examples = new ArrayList<>();
+
+
+
+                                        ArrayList<Map<Object,Object>> d = new ArrayList<>();
+                                        d.addAll((Collection<? extends Map<Object,Object>>) parse.get("results"));
+
+                                        for (int a = 0; a < d.size(); a++){
+                                            ArrayList<Map<Object, Object>> lexicalEntries = (ArrayList<Map<Object, Object>>) d.get(a).get("lexicalEntries");
+                                            ArrayList<String> example = new ArrayList<>();
+
+                                            for (Map<Object, Object> objectObjectMap: lexicalEntries) {
+
+                                                ArrayList<Object> entries = (ArrayList<Object>) objectObjectMap.get("entries");
+
+                                                Map<Object,Object> lexicalCat = (Map<Object,Object>) objectObjectMap.get("lexicalCategory");
+                                                String lexicalCategory = lexicalCat.get("id").toString();
+
+                                                if(entries != null){
+                                                    Map<Object, Object> o1 = (Map<Object, Object>) entries.get(0);
+
+                                                    if(o1.get("senses") != null){
+                                                        ArrayList<Map<Object, Object>> senses = (ArrayList<Map<Object, Object>>) o1.get("senses");
+                                                        for (Map<Object, Object> objects: senses) {
+                                                            if(objects.get("examples") != null){
+                                                                ArrayList<Map<Object, Object>> definitions1 = (ArrayList<Map<Object, Object>>) objects.get("examples");
+                                                                for (Map<Object, Object> ob: definitions1) {
+                                                                    example.add((String) ob.get("text"));
+                                                                }
+                                                            }
+
+
+                                                            ArrayList<Map<Object, Object>> subsenses = (ArrayList<Map<Object, Object>>) objects.get("subsenses");
+
+                                                            if(subsenses != null){
+                                                                for (Object obj: subsenses) {
+                                                                    Map<Object, Object> obj1 = (Map<Object, Object>) obj;
+                                                                    if(obj1.get("examples") != null){
+                                                                        ArrayList<Map<Object, Object>> definitions2 = (ArrayList<Map<Object, Object>>) obj1.get("examples");
+                                                                        for (Map<Object, Object> e: definitions2) {
+                                                                            example.add((String) e.get("text"));
+                                                                        }
+                                                                    }
+
+                                                                }
+                                                            }
+
+
+                                                        }
+                                                    }
+
+                                                }
+
+
+                                                Map<String, ArrayList<String>> arrayListMap = new HashMap<>();
+                                                arrayListMap.put(lexicalCategory,example);
+                                                examples.add(arrayListMap);
+                                            }
+
+                                        }
+                                        ArrayList<HashMap<String,Object>> arrayListNew = new ArrayList<>();
+                                        HashMap<String, Object> data = new HashMap<>();
+                                        data.put("id", word);
+                                        data.put("examples", examples);
+                                        arrayListNew.add(data);
+
+                                        for(int index = 0; index < arrayList.size(); index++ ){
+                                            if(partOfSpeech.get(arrayList.get(index))==null){
+                                                ArrayList<Object> arrayList1 = new ArrayList<>();
+                                                arrayList1.add(stringArrayList.get(index));
+                                                HashMap<String,ArrayList<Object>> hashMap1 = new HashMap<>();
+                                                hashMap1.put("definitions",arrayList1);
+                                                for(HashMap<String,Object> arrayList2 : arrayListNew){
+                                                    if(arrayList2.get(arrayList.get(index)) !=  null){
+                                                        hashMap1.put("examples", (ArrayList<Object>) arrayList2.get(arrayList.get(index)));
+                                                    }
+                                                }
+                                                partOfSpeech.put(arrayList.get(index), hashMap1);
+
+                                            }else{
+                                                partOfSpeech.get(arrayList.get(index)).get("definitions").add(stringArrayList.get(index));
+                                            }
+                                        }
+
+                                        activity.runOnUiThread(() -> {
+                                            String jsonText = JSONValue.toJSONString(partOfSpeech);
+                                            webView.evaluateJavascript("javascript:getDataExample(" + jsonText + ")", s ->
+                                                    {
+//                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+                                                    }
+                                            );
+                                        });
+
+                                        db.collection("example").document(word)
+                                                .set(data);
+
+//
+
+                                    } catch (MalformedURLException e) {
+                                        e.printStackTrace();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }).start();
+                            }
+
 
                         } else {
                             new Thread(() -> {
@@ -704,26 +842,14 @@ for(int index = 0; index < arrayList.size(); index++ ){
                                         );
                                     });
 
-
-
-
-
-//
-
-                                } catch (MalformedURLException e) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
-                                }catch (FileNotFoundException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-
                                 }
                             }).start();
 
                         }
                     }
                 });
-        endProgress();
     }
 
     @JavascriptInterface
@@ -831,7 +957,6 @@ for(int index = 0; index < arrayList.size(); index++ ){
                         }
                     }
                 });
-        endProgress();
     }
 
 
@@ -922,49 +1047,19 @@ for(int index = 0; index < arrayList.size(); index++ ){
 
 //
 
-                                } catch (MalformedURLException e) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
-                                    activity.runOnUiThread(() -> {
-                                        webView.evaluateJavascript("javascript:toastError()", s ->
-                                                {
-//                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
-                                                }
-                                        );
-                                    });
-                                }catch (FileNotFoundException e) {
-                                    e.printStackTrace();
-                                    activity.runOnUiThread(() -> {
-                                        webView.evaluateJavascript("javascript:toastError()", s ->
-                                                {
-//                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
-                                                }
-                                        );
-                                    });
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-
-
-                                    activity.runOnUiThread(() -> {
-                                        webView.evaluateJavascript("javascript:toastError()", s ->
-                                                {
-//                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
-                                                }
-                                        );
-                                    });
-
                                 }
                             }).start();
 
                         }
                     }
                 });
-        endProgress();
     }
 
 
     @JavascriptInterface
     public void getDefinition(String word) {
-        startProgress("Processing...", "Keep cool while gathering information.", false);
 
         db.collection(defaultLang).document(word.trim().toLowerCase())
                 .get()
@@ -972,35 +1067,191 @@ for(int index = 0; index < arrayList.size(); index++ ){
                     if (task.isSuccessful()) {
                         if (task.getResult().exists()) {
 
-                            Map<String, Object> data = new HashMap<>();
-                            ArrayList<Object> arrayList = new ArrayList<>();
-                            DocumentSnapshot result = task.getResult();
-                            data.put("id", result.get("id"));
-                            data.put("date", result.get("date"));
-                            data.put("view", result.get("view"));
-                            data.put("categories", result.get("categories"));
-                            data.put("definitions", result.get("definitions"));
-                            arrayList.add(data);
-                            if(result.get("definitions") != null){
-                                ArrayList<String> o = (ArrayList<String>) result.get("definitions");
-                                databaseAccess.setHistory(new Trending(word,o.get(0)));
+                            if(task.getResult().get("definitions") == null){
+                                new Thread(() -> {
+                                    URL url;
+                                    StringBuilder stringBuilder = new StringBuilder();
+                                    try {
+                                        url = new URL(dictionaryEntries(word, "definitions"));
+                                        HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
+                                        urlConnection.setRequestProperty("Accept", "application/json");
+                                        urlConnection.setRequestProperty("app_id", app_id);
+                                        urlConnection.setRequestProperty("app_key", app_key);
+
+                                        // read the output from the server
+                                        BufferedReader reader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+
+
+                                        String line = null;
+                                        while ((line = reader.readLine()) != null) {
+                                            stringBuilder.append(line + "\n");
+                                        }
+                                        Map<Object, Object> parse = (Map<Object, Object>) JSONValue.parse(stringBuilder.toString());
+
+                                        ArrayList<String> definitions = new ArrayList<>();
+                                        ArrayList<String> lexicalCategory = new ArrayList<>();
+
+                                        ArrayList<Map<Object,Object>> d = new ArrayList<>();
+                                        d.addAll((Collection<? extends Map<Object,Object>>) parse.get("results"));
+
+                                        if(parse.get("results") != null){
+                                            for (int a = 0; a < d.size(); a++){
+                                                ArrayList<Object> lexicalEntries = (ArrayList<Object>) d.get(a).get("lexicalEntries");
+
+                                                Map<Object, Object> o = (Map<Object, Object>) lexicalEntries.get(0);
+                                                ArrayList<Object> entries = (ArrayList<Object>) o.get("entries");
+
+
+                                                if(o.get("entries") != null){
+                                                    Map<Object,Object> lexicalCat = (Map<Object,Object>) o.get("lexicalCategory");
+                                                    Map<Object, Object> o1 = (Map<Object, Object>) entries.get(0);
+                                                    if(o1.get("senses") != null){
+                                                        ArrayList<Map<Object, Object>> senses = (ArrayList<Map<Object, Object>>) o1.get("senses");
+                                                        for (Map<Object, Object> objects: senses) {
+                                                            if(objects.get("definitions") != null){
+                                                                ArrayList<Object> definitions1 = (ArrayList<Object>) objects.get("definitions");
+                                                                for (Object ob: definitions1) {
+                                                                    definitions.add(ob.toString());
+                                                                    lexicalCategory.add((String) lexicalCat.get("id"));
+                                                                }
+                                                            }
+
+
+                                                            ArrayList<Map<Object, Object>> subsenses = (ArrayList<Map<Object, Object>>) objects.get("subsenses");
+
+                                                            if(subsenses != null){
+                                                                for (Object obj: subsenses) {
+                                                                    Map<Object, Object> obj1 = (Map<Object, Object>) obj;
+                                                                    if(obj1.get("definitions")  == null){
+                                                                        ArrayList<Object> definitions2 = (ArrayList<Object>) obj1.get("definitions");
+                                                                        for (Object e: definitions2) {
+                                                                            definitions.add(e.toString());
+                                                                            lexicalCategory.add((String) lexicalCat.get("id"));
+                                                                        }
+                                                                    }
+
+                                                                }
+                                                            }
+
+
+                                                        }
+                                                    }
+                                                }
+
+
+
+
+
+
+                                            }
+                                        }
+
+                                        ArrayList<String> stringArrayList = new ArrayList<>();
+                                        ArrayList<String> stringArrayList1 = new ArrayList<>();
+
+                                        if(task.getResult().get("definitions") != null && task.getResult().get("categories") != null){
+                                            stringArrayList.addAll((ArrayList<String>) task.getResult().get("definitions"));
+                                            stringArrayList1.addAll((ArrayList<String>) task.getResult().get("categories"));
+                                        }
+
+                                        for(int i =0; i < lexicalCategory.size(); i++){
+                                            if(!stringArrayList.contains(definitions.get(i))){
+                                                stringArrayList.add(definitions.get(i));
+                                                stringArrayList1.add(lexicalCategory.get(i));
+                                            }
+                                        }
+
+                                        ArrayList<HashMap<String,Object>> arrayList = new ArrayList<>();
+                                        HashMap<String,Object> objectHashMap = new HashMap<>();
+                                        objectHashMap.put("definitions",stringArrayList);
+                                        objectHashMap.put("date", new Date().getTime());
+                                        objectHashMap.put("id", word);
+                                        objectHashMap.put("categories",stringArrayList1);
+
+                                        arrayList.add(objectHashMap);
+
+
+                                        if(definitions.size()>0){
+                                            databaseAccess.setHistory(new Trending(word,definitions.get(0)));
+                                        }else{
+                                            definitions.add("Please, we are sorry to let you know that we did not get the definition of your searched word from our database, but other functionality may be available.");
+                                        }
+
+                                        activity.runOnUiThread(() -> {
+                                            String jsonText = JSONValue.toJSONString(arrayList);
+                                            webView.evaluateJavascript("javascript:getData(" + jsonText + ")", s ->
+                                                    {
+//                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+                                                    }
+                                            );
+                                        });
+
+
+
+                                        db.collection(defaultLang).document(word)
+                                                .update(objectHashMap);
+
+
+//
+
+                                    } catch (MalformedURLException e) {
+                                        e.printStackTrace();
+                                        activity.runOnUiThread(() -> {
+                                            webView.evaluateJavascript("javascript:toastError()", s ->
+                                                    {
+//                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+                                                    }
+                                            );
+                                        });
+                                    }catch (FileNotFoundException e) {
+                                        e.printStackTrace();
+                                        activity.runOnUiThread(() -> {
+                                            webView.evaluateJavascript("javascript:toastError()", s ->
+                                                    {
+//                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+                                                    }
+                                            );
+                                        });
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                        activity.runOnUiThread(() -> {
+                                            webView.evaluateJavascript("javascript:toastError()", s ->
+                                                    {
+//                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+                                                    }
+                                            );
+                                        });
+
+                                    }
+                                }).start();
+                            }else{
+
+                                ArrayList<HashMap<String,Object>> arrayList = new ArrayList<>();
+                                HashMap<String,Object> objectHashMap = new HashMap<>();
+                                objectHashMap.put("definitions",task.getResult().get("definitions"));
+                                objectHashMap.put("date", new Date().getTime());
+                                objectHashMap.put("id", word);
+                                objectHashMap.put("categories",task.getResult().get("categories"));
+
+                                arrayList.add(objectHashMap);
+
+                                activity.runOnUiThread(() -> {
+                                    String jsonText = JSONValue.toJSONString(arrayList);
+                                    webView.evaluateJavascript("javascript:getData(" + jsonText + ")", s ->
+                                            {
+//                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+                                            }
+                                    );
+                                });
+                                HashMap<String,Object> updateObject = new HashMap<>();
+                                updateObject.put("date", new Date().getTime());
+                                db.collection(defaultLang).document(word)
+                                        .update(updateObject);
                             }
 
-//                            Toast.makeText(context, JSONValue.toJSONString(arrayList), Toast.LENGTH_SHORT).show();
-                            String jsonText = JSONValue.toJSONString(arrayList);
-                            webView.evaluateJavascript("javascript:getData(" + jsonText + ")", s ->
-                                    {
-//                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
-                                    }
-                            );
 
-                            //update ui
 
-                            Map<String, Object> city = new HashMap<>();
-                            city.put("date", new Date().getTime());
-                            city.put("view", Integer.parseInt(String.valueOf(task.getResult().get("view") == null?0:task.getResult().get("view"))) + 1);
-                            db.collection(defaultLang).document(word)
-                                    .update(city);
+
                         } else {
 
                             new Thread(() -> {
@@ -1154,9 +1405,6 @@ for(int index = 0; index < arrayList.size(); index++ ){
                     }
                 });
 
-
-
-        endProgress();
     }
 
 
@@ -1243,9 +1491,7 @@ for(int index = 0; index < arrayList.size(); index++ ){
                                     db.collection("pronunciation").document(word)
                                             .set(data);
 
-                                } catch (MalformedURLException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
                             }).start();
@@ -1256,24 +1502,15 @@ for(int index = 0; index < arrayList.size(); index++ ){
 
     }
 
-    private String dictionaryEntriesPrimary(String word) {
-        final String word_id = word.toLowerCase();
-        return "https://api.dictionaryapi.dev/api/v2/entries/en/"+word_id;
-    }
+
 
     @JavascriptInterface
     public void getDefinitionMerged(String word) {
-        startProgress("Processing...", "Keep cool while gathering information.", false);
-
         db.collection(defaultLang).document(word.trim().toLowerCase())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (task.getResult().exists()) {
-
-
-
-
 
                             new Thread(() -> {
                                 URL url;
@@ -1356,10 +1593,8 @@ for(int index = 0; index < arrayList.size(); index++ ){
                                     ArrayList<String> stringArrayList = new ArrayList<>();
                                     ArrayList<String> stringArrayList1 = new ArrayList<>();
 
-                                    if(task.getResult().get("definitions") != null){
+                                    if(task.getResult().get("definitions") != null && task.getResult().get("categories") != null){
                                         stringArrayList.addAll((ArrayList<String>) task.getResult().get("definitions"));
-                                    }
-                                    if(task.getResult().get("categories") != null){
                                         stringArrayList1.addAll((ArrayList<String>) task.getResult().get("categories"));
                                     }
 
@@ -1387,36 +1622,29 @@ for(int index = 0; index < arrayList.size(); index++ ){
 
 //
 
-                                } catch (MalformedURLException e) {
-                                    e.printStackTrace();
-                                    activity.runOnUiThread(() -> {
+                                } catch (Exception e) {
+
+                                    if(task.getResult().get("definitions")!= null){
+
+
+                                        HashMap<String,Object> objectHashMap = new HashMap<>();
+                                        objectHashMap.put("definitions",task.getResult().get("definitions"));
+                                        objectHashMap.put("date", new Date().getTime());
+                                        objectHashMap.put("id", word);
+                                        objectHashMap.put("categories",task.getResult().get("categories"));
+                                        getExample(word, objectHashMap);
+                                        db.collection(defaultLang).document(word)
+                                                .update(objectHashMap);
+                                    }else{
+                                        activity.runOnUiThread(() -> {
                                         webView.evaluateJavascript("javascript:toastError()", s ->
                                                 {
 //                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
                                                 }
                                         );
                                     });
-                                }catch (FileNotFoundException e) {
-                                    e.printStackTrace();
-                                    activity.runOnUiThread(() -> {
-                                        webView.evaluateJavascript("javascript:toastError()", s ->
-                                                {
-//                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
-                                                }
-                                        );
-                                    });
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-
-
-                                    activity.runOnUiThread(() -> {
-                                        webView.evaluateJavascript("javascript:toastError()", s ->
-                                                {
-//                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
-                                                }
-                                        );
-                                    });
-
+                                    }
+//
                                 }
                             }).start();
 
@@ -1432,23 +1660,9 @@ for(int index = 0; index < arrayList.size(); index++ ){
                     }
                 });
 
-
-        endProgress();
     }
 
-    public void startProgress(String title, String message, boolean cancel) {
 
-        progressDialog.setTitle(title);
-        progressDialog.setMessage(message);
-        progressDialog.setCancelable(cancel);
-        progressDialog.show();
-
-    }
-
-    public void endProgress() {
-
-        progressDialog.hide();
-    }
 
     @JavascriptInterface
     public void NoNetWork() {
@@ -1471,7 +1685,10 @@ for(int index = 0; index < arrayList.size(); index++ ){
         alert.setTitle("Internet Access");
         alert.show();
     }
-
+    private String dictionaryEntriesPrimary(String word) {
+        final String word_id = word.toLowerCase();
+        return "https://api.dictionaryapi.dev/api/v2/entries/en/"+word_id;
+    }
     private String dictionaryEntries(String word, String fields) {
         final String language = activeLange;
         final String strictMatch = "false";
@@ -1484,7 +1701,8 @@ for(int index = 0; index < arrayList.size(); index++ ){
     }
 
     private String dictionaryInflections(String word) {
+        final String language = activeLange;
         final String word_id = word.toLowerCase();
-        return "https://od-api.oxforddictionaries.com/api/v2/inflections/en-gb/"+word+"?strictMatch=false";
+        return "https://od-api.oxforddictionaries.com/api/v2/inflections/"+language+"/"+word_id+"?strictMatch=false";
     }
 }

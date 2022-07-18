@@ -30,7 +30,7 @@ button{
 
 a{
     text-decoration: none;
-    color: var(--primary-color) !important;
+    color: currentColor !important;
     padding: 0px;
     margin: 0px;
     font-size: 1em;
@@ -80,14 +80,14 @@ body {
             user-select: none; 
     scrollbar-color: var(--primary);
   }
-
-  #listDe{
-    -webkit-user-select: text !important;
-     -khtml-user-select: text !important; 
-       -moz-user-select: text !important;
-        -ms-user-select: text !important;
-            user-select: text !important;
-  }
+ .listDe,
+ #listDe {
+     -webkit-user-select: text !important;
+     -khtml-user-select: text !important;
+     -moz-user-select: text !important;
+     -ms-user-select: text !important;
+     user-select: text !important;
+ }
 
   .list-styl{
     list-style: upper-latin;
@@ -889,11 +889,10 @@ footer >div:hover>p{
 
 .chat{
     height: auto;
-    border: solid rgba(232, 230, 230, 0.296) 2px;
     padding: 0.9em;
-    margin: 1em;
-    box-shadow: 3px 3px rgba(29, 28, 28, 0.201);
-    background-color: rgba(109, 123, 249, 0.065);
+    margin: 0.4em 1em;
+    box-shadow: 3px 3px rgba(64, 59, 59, 0.368);
+    background: linear-gradient(to bottom right, #d2dce59a, #eaecefae);
     border-radius: 0.5em;
     box-shadow: inset;
     -webkit-border-radius: 0.5em;
@@ -923,6 +922,12 @@ footer >div:hover>p{
 .info{
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    overflow: scroll;
+}
+.info div{
+    display:  flex;
+    justify-content: center;
     align-items: center;
 }
 
@@ -1148,13 +1153,15 @@ footer > div{
     align-items: center;
 }
 .typedText{
-    font-size: 1.2em !important;
-    font-family:  'Courier New', Courier, monospace !important;
+    font-size: 1.1em !important;
+    font-family:  'Courier New', Courier, monospace;
     padding: 0px !important;
     line-height: 0.9em !important; 
     margin: 0px !important;
-    font-weight: lighter !important;
-    color: rgb(3, 2, 2);
+    font-weight: normal !important;
+    font-style: oblique;
+    color: var(--primary-color) !important;
+    text-align: right;
 }
 
 .playText{

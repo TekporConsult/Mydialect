@@ -18,7 +18,8 @@
     <br>
 <br>
     <div class="trans mt-3" id="transId">
-      
+
+    
     </div>
 
 
@@ -334,35 +335,42 @@ function toastModelinss() {
       
       var trs = "";
       for (let index = 0; index < params.length; index++) {
-      var recape = encodeURIComponent(params[index].message.trim());
-      var port = Math.ceil(Math.random()*29);
         trs += 
         `<div class="chat left-chat">
-        <div>
-         <p class="text-bold">  
-          <iframe width="100%" id="test" height="auto" src="https://t${port}.translatedict.com/1.php?p1=${params[index].fromKey}&p2=${params[index].toKey}&p3=${recape}"  frameborder="0">Some thing went very wrong. try again next time.</iframe>
-           <hr>
-           <p class="typedText">${params[index].message}</p>
-           <hr>
-          <hr>
-          <div class="info">
-           <div class="transdiv">
-            ${params[index].fromLang} <span onclick="transread('${recape}','${params[index].fromKey}')" class="transreader" ><svg style="width:24px;height:24px" viewBox="0 0 24 24">
-              <path fill="currentColor" d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z" />
-          </svg></span>
-           </div>
-           <div>
+      <div class="listDe">
+    
+        <p class="typedText">
+          ${(params[index].message).split("=")[1]}
+        </p>
+    
+        <p class="text-bold">
+          ${(params[index].message).split("=")[0]}
+        </p>
+       
+        </div>
+        <hr>
+        <div class="info">
+          <div class="transdiv">
+            ${params[index].fromLang} <span onclick="transread('${encodeURIComponent((params[index].message).split("=")[0])}','${params[index].fromKey}')"
+              class="transreader"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                  d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z" />
+              </svg></span>
+          </div>
+          <div>
             <span class="arrow">&#8658;</span>
-           </div>
-           <div >
-            ${params[index].toLang}  <span  onclick="setParams('${params[index].toLang}','${params[index].toKey}')"   class="transreader" ><svg style="width:24px;height:24px" viewBox="0 0 24 24">
-              <path fill="currentColor" d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z" />
-          </svg></span>
-           </div>
+          </div>
+          <div>
+            ${params[index].toLang} <span onclick="transread('${encodeURIComponent((params[index].message).split("=")[1])}','${params[index].toKey}')"
+              class="transreader"><svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                  d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.84 14,18.7V20.77C18,19.86 21,16.28 21,12C21,7.72 18,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16C15.5,15.29 16.5,13.76 16.5,12M3,9V15H7L12,20V4L7,9H3Z" />
+              </svg></span>
+          </div>
         </div>
 
-        </div>
-     </div>`;
+
+    </div>`;
         
       }
 
