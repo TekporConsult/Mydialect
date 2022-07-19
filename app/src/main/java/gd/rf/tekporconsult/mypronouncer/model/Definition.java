@@ -1,16 +1,8 @@
 package gd.rf.tekporconsult.mypronouncer.model;
 
 public class Definition {
-    String category;
     String word;
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
 
     public String getWord() {
         return word;
@@ -28,8 +20,7 @@ public class Definition {
         this.definition = definition;
     }
 
-    public Definition( String word,String category, String definition) {
-        this.category = category;
+    public Definition( String word, String definition) {
         this.word = word;
         this.definition = definition;
     }

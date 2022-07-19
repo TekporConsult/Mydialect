@@ -952,6 +952,22 @@ padding-right: 1px !important;
 font-size: smaller;
 }
 
+.r-20{
+    transform: rotate(-15deg);
+    -webkit-transform: rotate(-15deg);
+    -moz-transform: rotate(-15deg);
+    -ms-transform: rotate(-15deg);
+    -o-transform: rotate(-15deg);
+}
+
+.stat-title{
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.3em;
+    font-size: large;
+}
+.overflow-y{
+    overflow-y: scroll !important;
+}
 
 .info > div > svg:hover{
     padding: 5px;

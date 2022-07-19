@@ -16,11 +16,19 @@
     <div class="container-fluid pt-3">
         
         <div id="title-name">
-          <div onclick="showLang()">
-            <svg  class="language" style="width:30px;height:30px; opacity:0" viewBox="0 0 24 24">
-              <path fill="currentColor"
-                d="M12.87,15.07L10.33,12.56L10.36,12.53C12.1,10.59 13.34,8.36 14.07,6H17V4H10V2H8V4H1V6H12.17C11.5,7.92 10.44,9.75 9,11.35C8.07,10.32 7.3,9.19 6.69,8H4.69C5.42,9.63 6.42,11.17 7.67,12.56L2.58,17.58L4,19L9,14L12.11,17.11L12.87,15.07M18.5,10H16.5L12,22H14L15.12,19H19.87L21,22H23L18.5,10M15.88,17L17.5,12.67L19.12,17H15.88Z" />
-            </svg>
+          <div class="r-20" id="notification"  style="opacity: 0;" onclick="notification()">
+          <svg style="color: white" width="24" height="24" stroke-width="1.5" viewBox="0 0 24 24" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M18.1336 11C18.7155 16.3755 21 18 21 18H3C3 18 6 15.8667 6 8.4C6 6.70261 6.63214 5.07475 7.75736 3.87452C8.88258 2.67428 10.4087 2 12 2C12.3373 2 12.6717 2.0303 13 2.08949"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="white"></path>
+            <path
+              d="M19 8C20.6569 8 22 6.65685 22 5C22 3.34315 20.6569 2 19 2C17.3431 2 16 3.34315 16 5C16 6.65685 17.3431 8 19 8Z"
+              stroke="red" stroke-linecap="round" stroke-linejoin="round" fill="red"></path>
+            <path
+              d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21"
+              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="white"></path>
+          </svg>
           
           </div>
             <h1 id="title-style" data-shadow='MyDialect!'>MyDialect!</h1>
@@ -486,6 +494,11 @@ function setLanguages(params) {
   }
   document.querySelector("#selectDLan").innerHTML = b;
   return params;
+}
+
+
+function hideNotification() {
+  document.getElementById("notification").style.opacity = 1;
 }
           </script>
      </body>

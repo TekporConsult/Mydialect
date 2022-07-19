@@ -8,9 +8,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import gd.rf.tekporconsult.mypronouncer.model.Category;
 import gd.rf.tekporconsult.mypronouncer.model.Definition;
+import gd.rf.tekporconsult.mypronouncer.model.Example;
+import gd.rf.tekporconsult.mypronouncer.model.MigrationHistory;
+import gd.rf.tekporconsult.mypronouncer.model.Notification;
 import gd.rf.tekporconsult.mypronouncer.model.Pronunciation;
 import gd.rf.tekporconsult.mypronouncer.model.Transcribe;
 import gd.rf.tekporconsult.mypronouncer.model.Trending;
@@ -20,7 +24,6 @@ import gd.rf.tekporconsult.mypronouncer.model.Word;
 public class DatabaseAccess {
     private static DatabaseAccess instance;
     private final SQLiteOpenHelper openHelper;
-    ContentValues contentValues;
     private SQLiteDatabase database;
 
     /**
@@ -68,6 +71,7 @@ public class DatabaseAccess {
      */
 //get history
     public void setHistory(Trending database1) {
+        ContentValues contentValues;
         try {
             contentValues = new ContentValues();
             contentValues.put("word", database1.getWord());
@@ -81,39 +85,166 @@ public class DatabaseAccess {
     }
 
     // set word
-    public void setWord(Word word,String table) {
+    public void setWord(Word word) {
+        ContentValues contentValues;
         try {
             contentValues = new ContentValues();
             contentValues.put("word", word.getWord());
-            database.insert(table, null, contentValues);
+            database.insert("words", null, contentValues);
         } catch (SQLiteConstraintException e) {
             // e.getMessage();
         }
     }
 
     // set category
-    public void setCategory(Category category,String table) {
+    public void setCategory(Category category) {
+        ContentValues contentValues;
         try {
             contentValues = new ContentValues();
             contentValues.put("word", category.getWord());
             contentValues.put("category", category.getCategory());
-            database.insert(table, null, contentValues);
-        } catch (SQLiteConstraintException e) {
-            // e.getMessage();
-        }
-    }
-
-    public void setPronunciation(Pronunciation pronunciation, String table) {
-        try {
-            contentValues = new ContentValues();
-            contentValues.put("word", pronunciation.getWord());
-            contentValues.put("phonics", pronunciation.getPhonics());
-            database.insert(table, null, contentValues);
+            database.insert("categories", null, contentValues);
         } catch (SQLiteConstraintException e) {
              e.getMessage();
         }
     }
 
+    public void setPronunciation(Pronunciation pronunciation) {
+        ContentValues contentValues;
+        try {
+            contentValues = new ContentValues();
+            contentValues.put("word", pronunciation.getWord());
+            contentValues.put("phonic", pronunciation.getPhonics());
+            database.insert("phonics", null, contentValues);
+        } catch (SQLiteConstraintException e) {
+             e.getMessage();
+        }
+    }
+
+    public void setExample(Example example) {
+        ContentValues contentValues;
+        try {
+            contentValues = new ContentValues();
+            contentValues.put("word", example.getWord());
+            contentValues.put("example", example.getExample());
+            database.insert("examples", null, contentValues);
+        } catch (SQLiteConstraintException e) {
+            e.getMessage();
+        }
+    }
+
+    public void setNotification(int i) {
+        ContentValues contentValues;
+        try {
+            contentValues = new ContentValues();
+            contentValues.put("data", new Date().getTime());
+            contentValues.put("remember_me", i);
+            database.insert("notification", null, contentValues);
+        } catch (SQLiteConstraintException e) {
+            e.getMessage();
+        }
+    }
+
+    public void setMigrationHistory(MigrationHistory migrationHistory) {
+        ContentValues contentValues;
+        try {
+            contentValues = new ContentValues();
+            contentValues.put("date", migrationHistory.getDate());
+            contentValues.put("pat", migrationHistory.getAt());
+            contentValues.put("pto", migrationHistory.getTo());
+            contentValues.put("type", migrationHistory.getType());
+            contentValues.put("url", migrationHistory.getUrl());
+            database.insert("migrationHistory", null, contentValues);
+        } catch (SQLiteConstraintException e) {
+            e.getMessage();
+        }
+    }
+
+
+    public void updateMigrationHistory(MigrationHistory migrationHistory) {
+        String where = "url=?";
+        String[] whereArgs = new String[] {String.valueOf(migrationHistory.getUrl())};
+        try {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("date", migrationHistory.getDate());
+            contentValues.put("pat", migrationHistory.getAt());
+            database.update("migrationHistory", contentValues,where,whereArgs);
+        } catch (SQLiteConstraintException e) {
+            e.getMessage();
+        }
+    }
+
+
+
+    // set definition
+    public void setDefinition(Definition definition) {
+        ContentValues contentValues;
+        try {
+
+            contentValues = new ContentValues();
+            contentValues.put("word", definition.getWord());
+            contentValues.put("definition", definition.getDefinition());
+            database.insert("definitions", null, contentValues);
+        } catch (SQLiteConstraintException e) {
+            // e.getMessage();
+        }
+    }
+
+
+    public ArrayList<Word> getWords(String word) {
+        ArrayList<Word> category1 = null;
+        String quarry = "SELECT * FROM words WHERE word LIKE '%"+word+"%' LIMIT 10";
+        try {
+            Cursor cursor = database.rawQuery(quarry, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                category1.add(new Word(cursor.getString(1)));
+                cursor.moveToNext();
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        }
+        return category1;
+    }
+
+
+
+
+    public ArrayList<MigrationHistory> getAllMigrationHistory() {
+        ArrayList<MigrationHistory> migrationHistories = new ArrayList<>();
+        String quarry = "SELECT * FROM migrationHistory WHERE  1";
+        try {
+            Cursor cursor = database.rawQuery(quarry, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                migrationHistories.add(new MigrationHistory(cursor.getString(1),cursor.getInt(2),cursor.getInt(3),cursor.getLong(4),cursor.getString(5)));
+                cursor.moveToNext();
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        }
+        return migrationHistories;
+    }
+
+    // get pronunciation
+    public Notification getNotification() {
+        Notification notification = null;
+        String quarry = "SELECT * FROM notification  WHERE 1  ORDER BY id DESC limit 1";
+        try {
+            Cursor cursor = database.rawQuery(quarry, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                notification = new Notification(cursor.getInt(1),cursor.getInt(2));
+                cursor.moveToNext();
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        }
+        return notification;
+    }
 
     // get pronunciation
     public Pronunciation getPronunciation(String word,String table) {
@@ -133,54 +264,24 @@ public class DatabaseAccess {
         return pronunciation;
     }
 
-    // set definition
-    public void setDefinition(Definition definition,String table) {
-        try {
-            contentValues = new ContentValues();
-            contentValues.put("word", definition.getWord());
-            contentValues.put("category", definition.getCategory());
-            contentValues.put("definition", definition.getDefinition());
-            database.insert(table, null, contentValues);
-        } catch (SQLiteConstraintException e) {
-            // e.getMessage();
-        }
-    }
-
-
-    //get word
-    public Word getWord(String word,String table) {
-        Word word1 = null;
-        String quarry = "SELECT * FROM "+table+" WHERE word = "+word;
+    // get pronunciation
+    public Example getExample(String word) {
+        Example example = null;
+        String quarry = "SELECT * FROM examples WHERE word = "+word;
         try {
             Cursor cursor = database.rawQuery(quarry, null);
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                word1 = new Word(cursor.getString(1));
+                example = new Example(cursor.getString(1),cursor.getString(2));
                 cursor.moveToNext();
             }
             cursor.close();
         } catch (Exception e) {
             e.fillInStackTrace();
         }
-        return word1;
+        return example;
     }
 
-    public ArrayList<Word> getWords(String word,String table) {
-        ArrayList<Word> category1 = null;
-        String quarry = "SELECT * FROM "+table+" WHERE word LIKE '%"+word+"%' LIMIT 10";
-        try {
-            Cursor cursor = database.rawQuery(quarry, null);
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-                category1.add(new Word(cursor.getString(1)));
-                cursor.moveToNext();
-            }
-            cursor.close();
-        } catch (Exception e) {
-            e.fillInStackTrace();
-        }
-        return category1;
-    }
 
     public int isOfflineReady(){
         String quarry = "SELECT name  FROM migrations";
@@ -188,44 +289,10 @@ public class DatabaseAccess {
        return cursor.getCount();
     }
 
-    //get getCategories
-    public ArrayList<Category> getCategories(String word,String table) {
-        ArrayList<Category> category1 = null;
-        String quarry = "SELECT * FROM "+table+" WHERE word = "+word;
-        try {
-            Cursor cursor = database.rawQuery(quarry, null);
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-                category1.add(new Category(cursor.getString(1),cursor.getString(2)));
-                cursor.moveToNext();
-            }
-            cursor.close();
-        } catch (Exception e) {
-            e.fillInStackTrace();
-        }
-        return category1;
-    }
-
-    //get word
-    public ArrayList<Definition> getDefinitions(String word,String table) {
-        ArrayList<Definition> category1 = null;
-        String quarry = "SELECT * FROM "+table+" WHERE word = "+word;
-        try {
-            Cursor cursor = database.rawQuery(quarry, null);
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-                category1.add(new Definition(cursor.getString(1),cursor.getString(2),cursor.getString(3)));
-                cursor.moveToNext();
-            }
-            cursor.close();
-        } catch (Exception e) {
-            e.fillInStackTrace();
-        }
-        return category1;
-    }
-
     public void bookmark(Trending database1) {
+        ContentValues contentValues;
         try {
+
             contentValues = new ContentValues();
             contentValues.put("word", database1.getWord());
             contentValues.put("definition", database1.getDefinition());
@@ -239,6 +306,7 @@ public class DatabaseAccess {
 
     public void transcribe(Transcribe transcribe) {
         try {
+            ContentValues contentValues;
             contentValues = new ContentValues();
             contentValues.put("language", transcribe.getFromLang());
             contentValues.put("key", transcribe.getFromKey());
