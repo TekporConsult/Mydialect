@@ -9,7 +9,4 @@
     <!--    <string name="Interstitial">ca-app-pub-5771348922796908/6817500657</string>-->
 
 <!--    development key-->
-    <string name="admob">ca-app-pub-3940256099942544~3347511713</string>
-    <string name="banner">ca-app-pub-3940256099942544/1033173712</string>
-    <string name="Interstitial">ca-app-pub-3940256099942544/1033173712</string>
 </resources>

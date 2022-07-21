@@ -380,9 +380,9 @@ let exam = "";
         }
         parts += ` <li>
         <div class="ms-4 forReader">
-            <p><b class="text-secondary title text-capitalize text-bolder">${element}:</b>(<small id="${element}injection"></small>)</p>
+            <p><b class="text-secondary title text-capitalize text-bolder">${element}:</b> (<small id="${element}injection"></small>)</p>
             
-            <ol>
+            <ol class="definitions">
                 ${params[element]["definitions"].map(values => {
 
                     let a  = values.split(" ");
@@ -475,184 +475,192 @@ async function prev() {
 }
 
 function wordTranslate() {
-     switch (lang.key) {
-        case "en":
-            fetch(`https://dictionary.yandex.net/dicservice.json/lookupMultiple?sid=b7406431.6289a2dd.41e7a0bb.74722d74657874&ui=en&srv=tr-text&text=${soundPlayWord.innerText.trim().toLowerCase()}&type=syn%2Cant%2Cderiv&lang=en-en&flags=15655&dict=en.syn%2Cen.ant%2Cen.deriv&yu=1354342421651606342&sprvk=dD0xNjUyMjE5NDIwO2k9MTU0LjE2MC4yLjIxMDtEPTBCMTM3NkI2NjE4QjkxMUM1QjI1RDIwRTk2NkEyMjYwNDU0QTUyNjk0Qzg5QUY5OEU2QjAxMzYxM0UzRjQzNDJFNzk0REZDNjt1PTE2NTIyMTk0MjAxNTg2Mjc0OTY7aD1mMGJmOWZjNGQxMTY0NzdiMTljNzYyNWYwZDU3ZjkyOQ%3D%3D`)
-                .then(response => response.json())
-                .then(data => {
-                    var syn = data.en.syn;
-                    var ant = data.en.ant;
-                    syn.forEach(value => {
+    if(navigator.onLine){
+        switch (lang.key) {
+            case "en":
+                fetch(`https://dictionary.yandex.net/dicservice.json/lookupMultiple?sid=b7406431.6289a2dd.41e7a0bb.74722d74657874&ui=en&srv=tr-text&text=${soundPlayWord.innerText.trim().toLowerCase()}&type=syn%2Cant%2Cderiv&lang=en-en&flags=15655&dict=en.syn%2Cen.ant%2Cen.deriv&yu=1354342421651606342&sprvk=dD0xNjUyMjE5NDIwO2k9MTU0LjE2MC4yLjIxMDtEPTBCMTM3NkI2NjE4QjkxMUM1QjI1RDIwRTk2NkEyMjYwNDU0QTUyNjk0Qzg5QUY5OEU2QjAxMzYxM0UzRjQzNDJFNzk0REZDNjt1PTE2NTIyMTk0MjAxNTg2Mjc0OTY7aD1mMGJmOWZjNGQxMTY0NzdiMTljNzYyNWYwZDU3ZjkyOQ%3D%3D`)
+                    .then(response => response.json())
+                    .then(data => {
+                        var syn = data.en.syn;
+                        var ant = data.en.ant;
+                        syn.forEach(value => {
 
-                        if (document.getElementById(`synonyms${value.pos.tooltip}`)) {
-                            var a = document.getElementById(`synonyms${value.pos.tooltip}`);
-                            var c = `<small class="text-primary title text-capitalize ">synonyms:</small><p>`
+                            if (document.getElementById(`synonyms${value.pos.tooltip}`)) {
+                                var a = document.getElementById(`synonyms${value.pos.tooltip}`);
+                                var c = `<small class="text-primary title text-capitalize ">synonyms:</small><p>`
 
-                            value.tr.forEach((value, index) => {
-                                c += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
-                            });
-                            c += "</p>"; 
-                            a.innerHTML += c;
-                        }
+                                value.tr.forEach((value, index) => {
+                                    c += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
+                                });
+                                c += "</p>";
+                                a.innerHTML += c;
+                            }
 
-                    });
-                    ant.forEach(value => {
+                        });
+                        ant.forEach(value => {
 
-                        if (document.getElementById(`antonyms${value.pos.tooltip}`)) {
-                            var ah = document.getElementById(`antonyms${value.pos.tooltip}`);
-                            var an = `<small class="text-primary title text-capitalize ">Antonyms:</small><p>`
+                            if (document.getElementById(`antonyms${value.pos.tooltip}`)) {
+                                var ah = document.getElementById(`antonyms${value.pos.tooltip}`);
+                                var an = `<small class="text-primary title text-capitalize ">Antonyms:</small><p>`
 
-                            value.tr.forEach((value, index) => {
-                               an += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
-                            });
-                            ah.innerHTML = an;
-                        }
+                                value.tr.forEach((value, index) => {
+                                    an += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
+                                });
+                                ah.innerHTML = an;
+                            }
 
-                    });
+                        });
 
 
-
-                });
-
-            break;
-        case "es":
-            fetch(`https://dictionary.yandex.net/dicservice.json/lookupMultiple?sid=b7406431.6289a2dd.41e7a0bb.74722d74657874&ui=en&srv=tr-text&text=${soundPlayWord.innerText.trim().toLowerCase()}&type=syn&lang=es-fr&flags=15399&dict=es.syn&yu=1354342421651606342&sprvk=dD0xNjUyMjE5NDIwO2k9MTU0LjE2MC4yLjIxMDtEPTBCMTM3NkI2NjE4QjkxMUM1QjI1RDIwRTk2NkEyMjYwNDU0QTUyNjk0Qzg5QUY5OEU2QjAxMzYxM0UzRjQzNDJFNzk0REZDNjt1PTE2NTIyMTk0MjAxNTg2Mjc0OTY7aD1mMGJmOWZjNGQxMTY0NzdiMTljNzYyNWYwZDU3ZjkyOQ%3D%3D`)
-                .then(response => response.json())
-                .then(data => {
-                    var syn = data.en.syn;
-                    var ant = data.en.ant;
-                    syn.forEach(value => {
-
-                        if (document.getElementById(`synonyms${value.pos.tooltip}`)) {
-                            var a = document.getElementById(`synonyms${value.pos.tooltip}`);
-                            var c = `<small class="text-primary title text-capitalize ">synonyms:</small><p>`
-
-                            value.tr.forEach((value, index) => {
-                                c += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
-                            });
-                            c += "</p>";
-                            a.innerHTML += c;
-                        }
-
-                    });
-                    ant.forEach(value => {
-
-                        if (document.getElementById(`antonyms${value.pos.tooltip}`)) {
-                            var ah = document.getElementById(`antonyms${value.pos.tooltip}`);
-                            var an = `<small class="text-primary title text-capitalize ">Antonyms:</small><p>`
-
-                            value.tr.forEach((value, index) => {
-                                an += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
-                            });
-                            ah.innerHTML = an;
-                        }
 
                     });
 
-                    
+                break;
+            case "es":
+                fetch(`https://dictionary.yandex.net/dicservice.json/lookupMultiple?sid=b7406431.6289a2dd.41e7a0bb.74722d74657874&ui=en&srv=tr-text&text=${soundPlayWord.innerText.trim().toLowerCase()}&type=syn&lang=es-fr&flags=15399&dict=es.syn&yu=1354342421651606342&sprvk=dD0xNjUyMjE5NDIwO2k9MTU0LjE2MC4yLjIxMDtEPTBCMTM3NkI2NjE4QjkxMUM1QjI1RDIwRTk2NkEyMjYwNDU0QTUyNjk0Qzg5QUY5OEU2QjAxMzYxM0UzRjQzNDJFNzk0REZDNjt1PTE2NTIyMTk0MjAxNTg2Mjc0OTY7aD1mMGJmOWZjNGQxMTY0NzdiMTljNzYyNWYwZDU3ZjkyOQ%3D%3D`)
+                    .then(response => response.json())
+                    .then(data => {
+                        var syn = data.en.syn;
+                        var ant = data.en.ant;
+                        syn.forEach(value => {
 
+                            if (document.getElementById(`synonyms${value.pos.tooltip}`)) {
+                                var a = document.getElementById(`synonyms${value.pos.tooltip}`);
+                                var c = `<small class="text-primary title text-capitalize ">synonyms:</small><p>`
 
-                });
-            break;
-        case "fr":
-            fetch(`https://dictionary.yandex.net/dicservice.json/lookupMultiple?sid=b7406431.6289a2dd.41e7a0bb.74722d74657874&ui=en&srv=tr-text&text=${soundPlayWord.innerText.trim().toLowerCase()}&type=syn&lang=fr-es&flags=15399&dict=fr.syn&yu=1354342421651606342&sprvk=dD0xNjUyMjE5NDIwO2k9MTU0LjE2MC4yLjIxMDtEPTBCMTM3NkI2NjE4QjkxMUM1QjI1RDIwRTk2NkEyMjYwNDU0QTUyNjk0Qzg5QUY5OEU2QjAxMzYxM0UzRjQzNDJFNzk0REZDNjt1PTE2NTIyMTk0MjAxNTg2Mjc0OTY7aD1mMGJmOWZjNGQxMTY0NzdiMTljNzYyNWYwZDU3ZjkyOQ%3D%3D`)
-                .then(response => response.json())
-                .then(data => {
-                   var syn = data.en.syn;
-                    var ant = data.en.ant;
-                    syn.forEach(value => {
+                                value.tr.forEach((value, index) => {
+                                    c += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
+                                });
+                                c += "</p>";
+                                a.innerHTML += c;
+                            }
 
-                        if (document.getElementById(`synonyms${value.pos.tooltip}`)) {
-                            var a = document.getElementById(`synonyms${value.pos.tooltip}`);
-                            var c = `<small class="text-primary title text-capitalize ">synonyms:</small><p>`
+                        });
+                        ant.forEach(value => {
 
-                            value.tr.forEach((value, index) => {
-                                c += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
-                            });
-                            c += "</p>";
-                            a.innerHTML += c;
-                        }
+                            if (document.getElementById(`antonyms${value.pos.tooltip}`)) {
+                                var ah = document.getElementById(`antonyms${value.pos.tooltip}`);
+                                var an = `<small class="text-primary title text-capitalize ">Antonyms:</small><p>`
 
-                    });
-                    ant.forEach(value => {
+                                value.tr.forEach((value, index) => {
+                                    an += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
+                                });
+                                ah.innerHTML = an;
+                            }
 
-                        if (document.getElementById(`antonyms${value.pos.tooltip}`)) {
-                            var ah = document.getElementById(`antonyms${value.pos.tooltip}`);
-                            var an = `<small class="text-primary title text-capitalize ">Antonyms:</small><p>`
-
-                            value.tr.forEach((value, index) => {
-                                an += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
-                            });
-                            ah.innerHTML = an;
-                        }
-
-                    });
-
-                
+                        });
 
 
 
-                });
-            break;
-        case "hi":
-            fetch(`https://dictionary.yandex.net/dicservice.json/lookupMultiple?sid=b7406431.6289a2dd.41e7a0bb.74722d74657874&ui=en&srv=tr-text&text=${soundPlayWord.innerText.trim().toLowerCase()}&type=syn&lang=hi-es&flags=15399&dict=hi.syn&yu=1354342421651606342&sprvk=dD0xNjUyMjE5NDIwO2k9MTU0LjE2MC4yLjIxMDtEPTBCMTM3NkI2NjE4QjkxMUM1QjI1RDIwRTk2NkEyMjYwNDU0QTUyNjk0Qzg5QUY5OEU2QjAxMzYxM0UzRjQzNDJFNzk0REZDNjt1PTE2NTIyMTk0MjAxNTg2Mjc0OTY7aD1mMGJmOWZjNGQxMTY0NzdiMTljNzYyNWYwZDU3ZjkyOQ%3D%3D`)
-                .then(response => response.json())
-                .then(data => {
-                   var syn = data.en.syn;
-                    var ant = data.en.ant;
-                    syn.forEach(value => {
-
-                        if (document.getElementById(`synonyms${value.pos.tooltip}`)) {
-                            var a = document.getElementById(`synonyms${value.pos.tooltip}`);
-                            var c = `<small class="text-primary title text-capitalize ">synonyms:</small><p>`
-
-                            value.tr.forEach((value, index) => {
-                                c += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
-                            });
-                            c += "</p>";
-                            a.innerHTML += c;
-                        }
 
                     });
-                    ant.forEach(value => {
+                break;
+            case "fr":
+                fetch(`https://dictionary.yandex.net/dicservice.json/lookupMultiple?sid=b7406431.6289a2dd.41e7a0bb.74722d74657874&ui=en&srv=tr-text&text=${soundPlayWord.innerText.trim().toLowerCase()}&type=syn&lang=fr-es&flags=15399&dict=fr.syn&yu=1354342421651606342&sprvk=dD0xNjUyMjE5NDIwO2k9MTU0LjE2MC4yLjIxMDtEPTBCMTM3NkI2NjE4QjkxMUM1QjI1RDIwRTk2NkEyMjYwNDU0QTUyNjk0Qzg5QUY5OEU2QjAxMzYxM0UzRjQzNDJFNzk0REZDNjt1PTE2NTIyMTk0MjAxNTg2Mjc0OTY7aD1mMGJmOWZjNGQxMTY0NzdiMTljNzYyNWYwZDU3ZjkyOQ%3D%3D`)
+                    .then(response => response.json())
+                    .then(data => {
+                        var syn = data.en.syn;
+                        var ant = data.en.ant;
+                        syn.forEach(value => {
 
-                        if (document.getElementById(`antonyms${value.pos.tooltip}`)) {
-                            var ah = document.getElementById(`antonyms${value.pos.tooltip}`);
-                            var an = `<small class="text-primary title text-capitalize ">Antonyms:</small><p>`
+                            if (document.getElementById(`synonyms${value.pos.tooltip}`)) {
+                                var a = document.getElementById(`synonyms${value.pos.tooltip}`);
+                                var c = `<small class="text-primary title text-capitalize ">synonyms:</small><p>`
 
-                            value.tr.forEach((value, index) => {
-                                an += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
-                            });
-                            ah.innerHTML = an;
-                        }
+                                value.tr.forEach((value, index) => {
+                                    c += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
+                                });
+                                c += "</p>";
+                                a.innerHTML += c;
+                            }
+
+                        });
+                        ant.forEach(value => {
+
+                            if (document.getElementById(`antonyms${value.pos.tooltip}`)) {
+                                var ah = document.getElementById(`antonyms${value.pos.tooltip}`);
+                                var an = `<small class="text-primary title text-capitalize ">Antonyms:</small><p>`
+
+                                value.tr.forEach((value, index) => {
+                                    an += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
+                                });
+                                ah.innerHTML = an;
+                            }
+
+                        });
+
+
+
+
 
                     });
+                break;
+            case "hi":
+                fetch(`https://dictionary.yandex.net/dicservice.json/lookupMultiple?sid=b7406431.6289a2dd.41e7a0bb.74722d74657874&ui=en&srv=tr-text&text=${soundPlayWord.innerText.trim().toLowerCase()}&type=syn&lang=hi-es&flags=15399&dict=hi.syn&yu=1354342421651606342&sprvk=dD0xNjUyMjE5NDIwO2k9MTU0LjE2MC4yLjIxMDtEPTBCMTM3NkI2NjE4QjkxMUM1QjI1RDIwRTk2NkEyMjYwNDU0QTUyNjk0Qzg5QUY5OEU2QjAxMzYxM0UzRjQzNDJFNzk0REZDNjt1PTE2NTIyMTk0MjAxNTg2Mjc0OTY7aD1mMGJmOWZjNGQxMTY0NzdiMTljNzYyNWYwZDU3ZjkyOQ%3D%3D`)
+                    .then(response => response.json())
+                    .then(data => {
+                        var syn = data.en.syn;
+                        var ant = data.en.ant;
+                        syn.forEach(value => {
 
-                
+                            if (document.getElementById(`synonyms${value.pos.tooltip}`)) {
+                                var a = document.getElementById(`synonyms${value.pos.tooltip}`);
+                                var c = `<small class="text-primary title text-capitalize ">synonyms:</small><p>`
+
+                                value.tr.forEach((value, index) => {
+                                    c += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
+                                });
+                                c += "</p>";
+                                a.innerHTML += c;
+                            }
+
+                        });
+                        ant.forEach(value => {
+
+                            if (document.getElementById(`antonyms${value.pos.tooltip}`)) {
+                                var ah = document.getElementById(`antonyms${value.pos.tooltip}`);
+                                var an = `<small class="text-primary title text-capitalize ">Antonyms:</small><p>`
+
+                                value.tr.forEach((value, index) => {
+                                    an += `<a class="btn tag m-1" href="./home.html?word=${value.text}"><small>${value.text}</small></a>`
+                                });
+                                ah.innerHTML = an;
+                            }
+
+                        });
 
 
-                });
-            break;
+
+
+                    });
+                break;
+        }
     }
+     
 }
 
 
 
 function translation(word,lang,location) {
-    fetch(`https://dictionary.yandex.net/dicservice.json/queryCorpus?sid=7dd7f7f1.6271553e.636e8e9a.74722d74657874&ui=en&srv=tr-text&text=${word}&type&lang=${lang}&flags=1063&src=${word}&dst&options=0&chunks=1&maxlen=200&v=2&yu=4033165221651584329`)
-        .then(response => response.json())
-        .then(data => {
-         let t =   data["result"]["tabs"].map(value=>{
-            if(value["translation"]["text"] != null){
-                return `<a class="hint text-primary" href="./home.html?word=${value["translation"]["text"]}"><small>${value["translation"]["text"]}</small></a>`
-            }
-            
-         }).join(", ");
-         if(t.length < 5){
-            document.getElementById("main"+location).style.display="none"
-         }
-         document.getElementById(location).innerHTML = t;
-        });
+
+    if(navigator.onLine){
+        fetch(`https://dictionary.yandex.net/dicservice.json/queryCorpus?sid=7dd7f7f1.6271553e.636e8e9a.74722d74657874&ui=en&srv=tr-text&text=${word}&type&lang=${lang}&flags=1063&src=${word}&dst&options=0&chunks=1&maxlen=200&v=2&yu=4033165221651584329`)
+            .then(response => response.json())
+            .then(data => {
+                let t = data["result"]["tabs"].map(value => {
+                    if (value["translation"]["text"] != null) {
+                        return `<a class="hint text-primary" href="./home.html?word=${value["translation"]["text"]}"><small>${value["translation"]["text"]}</small></a>`
+                    }
+
+                }).join(", ");
+                if (t.length < 5) {
+                    document.getElementById("main" + location).style.display = "none"
+                }
+                document.getElementById(location).innerHTML = t;
+            });
+    }
+
+   
 }
 
 function getInflections(params) {
@@ -660,7 +668,7 @@ function getInflections(params) {
         let t = Object.keys(value)[0];
         if(document.getElementById(`${t}injection`)){
             document.getElementById(`${t}injection`).innerHTML = value[t].map(valueed => {
-                return `<b><i><a class="hint text-primary" href="./home.html?word=${valueed}"><small>${valueed}</small></a></i></b>`
+                return getTense(valueed);
             }).join(", ");
         }
        
@@ -670,8 +678,17 @@ function getInflections(params) {
 
 async function transread() {
     var params = getDefinitions[selectedIndex].innerText;
-    await Android.startReader(`https://www.translatedict.com/speak.php?word=${params}&lang=${lang.key == "en-gb" ? "en" : lang.key
-}`);
+    if (navigator.onLine) {
+        await Android.startReader(`https://www.translatedict.com/speak.php?word=${params}&lang=${lang.key == "en-gb" ? "en" : lang.key
+            }`);
+    }else{
+        if(lang.key == "en"){
+            Android.textToSpeech(params);
+        }else{
+            Android.toast();
+        }
+    }
+   
  }
 
 
@@ -683,6 +700,28 @@ async function transread() {
  function playStart() {
     playCont.innerHTML = `<svg  height="40px" viewBox="0 0 24 24" width="40px" fill="#000000"><path fill="currentColor" d="M14,19H18V5H14M6,19H10V5H6V19Z" /></svg>`;
  }
+
+
+ function getTense(valueed) {
+let perfect = /[ne]{2}$/i;
+let cont = /ing$/i;
+let past = /ed$/i;
+let pes = /es$/i;
+let ps = /s$/i;
+  if(valueed.match(perfect)!= null){
+    return `<b><i><em> Pertect:</em><a class="hint text-primary" href="./home.html?word=${valueed}"><small>${valueed}</small></a></i></b>`
+  }else if(valueed.match(cont)  != null){
+      return `<b><i><em> Continuous:</em><a class="hint text-primary" href="./home.html?word=${valueed}"><small>${valueed}</small></a></i></b>`
+  }else if(valueed.match(past) != null){
+      return `<b><i><em> Simple past:</em><a class="hint text-primary" href="./home.html?word=${valueed}"><small>${valueed}</small></a></i></b>`
+  } else if(valueed.match(ps) != null || valueed.match(pes) != null){
+      return `<b><i><em> Plural:</em><a class="hint text-primary" href="./home.html?word=${valueed}"><small>${valueed}</small></a></i></b>`
+  } else{
+      return `<b><i><a class="hint text-primary" href="./home.html?word=${valueed}"><small>${valueed}</small></a></i></b>`
+  }
+
+ }
+
 
    </script>
  </body>

@@ -234,6 +234,10 @@
 var clickCount = 0;
   var fromValue = document.getElementById('fromvalue');
   var tovalue = document.getElementById('tovalue');
+
+
+  
+
 function readText() {
   toastModelinss();
 }
@@ -243,7 +247,9 @@ function toastModelinss() {
       new bootstrap.Toast(insToast,{delay:10000}).show()
     }
 
-  
+  if(!navigator.onLine){
+   Android.toast()
+  }
 
    function setLanguageHtml() {
         var c = "";
@@ -317,13 +323,18 @@ function toastModelinss() {
     }
 
   async  function sendText(){
+    if (navigator.onLine) {
       let toKey = tovalue.value;
       let fromKey = fromValue.value;
       let message = textMessage.value;
-      if(message.length > 0){
-     await Android.sendText(supportedLanguage[fromKey].language, supportedLanguage[fromKey].id,message,supportedLanguage[toKey].language,supportedLanguage[toKey].id);  
-      textMessage.value = "";
+      if (message.length > 0) {
+        await Android.sendText(supportedLanguage[fromKey].language, supportedLanguage[fromKey].id, message, supportedLanguage[toKey].language, supportedLanguage[toKey].id);
+        textMessage.value = "";
       }
+    } else {
+      Android.toast()
+    }
+      
      
     }
 
@@ -339,11 +350,11 @@ function toastModelinss() {
         `<div class="chat left-chat">
       <div class="listDe">
     
-        <p class="typedText">
+        <p class="typedText p-2">
           ${(params[index].message).split("=")[1]}
         </p>
     
-        <p class="text-bold">
+        <p class="text-bold p-2">
           ${(params[index].message).split("=")[0]}
         </p>
        
@@ -408,19 +419,29 @@ function listingCallBack(params) {
 
 
    async function readTextNow() {
-      if(textMessegeSpeech.value.length > 0){
+    if (navigator.onLine) {
+      if (textMessegeSpeech.value.length > 0) {
         toast();
         var recape = encodeURIComponent(textMessegeSpeech.value.trim());
         var va = document.getElementById("transkey").value;
-     
-      await  Android.playAudio(`https://www.translatedict.com/speak.php?word=${recape}&lang=${va=="zh-CN"?"zh-chs":va}`,va);
+
+        await Android.playAudio(`https://www.translatedict.com/speak.php?word=${recape}&lang=${va == "zh-CN" ? "zh-chs" : va}`, va);
 
       }
+     } else {
+      Android.toast()
+     }
+     
     }
 
    async function transread(params,params1) {
+    if(navigator.onLine){
       toast();
-   await Android.playAudio(`https://www.translatedict.com/speak.php?word=${params}&lang=${params1=="zh-CN"?"zh-chs":params1}`,params1);
+      await Android.playAudio(`https://www.translatedict.com/speak.php?word=${params}&lang=${params1 == "zh-CN" ? "zh-chs" : params1}`, params1);
+  
+    }else{
+      Android.toast()
+    }
     }
 
     </script>

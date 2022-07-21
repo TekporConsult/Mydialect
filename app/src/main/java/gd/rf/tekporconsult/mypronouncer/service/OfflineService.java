@@ -1,10 +1,13 @@
 package gd.rf.tekporconsult.mypronouncer.service;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Binder;
 import android.os.IBinder;
-import android.text.TextUtils;
 
 import org.json.simple.JSONValue;
 
@@ -12,18 +15,18 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import gd.rf.tekporconsult.mypronouncer.model.Category;
 import gd.rf.tekporconsult.mypronouncer.model.Definition;
 import gd.rf.tekporconsult.mypronouncer.model.Example;
+import gd.rf.tekporconsult.mypronouncer.model.Migration;
 import gd.rf.tekporconsult.mypronouncer.model.MigrationHistory;
 import gd.rf.tekporconsult.mypronouncer.model.Pronunciation;
+import gd.rf.tekporconsult.mypronouncer.model.Summary;
 import gd.rf.tekporconsult.mypronouncer.model.Word;
 
 public class OfflineService extends Service {
@@ -41,7 +44,6 @@ public class OfflineService extends Service {
 
     ArrayList<MigrationHistory> history;
     private MyBinder myBinder =  new MyBinder();
-     private int progress = 0;
      public static boolean continueTread = true;
     DatabaseAccess databaseAccess;
     String[] phonics = {"https://firebasestorage.googleapis.com/v0/b/mypronouncer.appspot.com/o/data%2Fphonic1.json?alt=media&token=0de1d6a0-7b20-4eb2-855e-d78a1e43436e",
@@ -117,13 +119,13 @@ public class OfflineService extends Service {
        new Thread(() ->
        {
 
-           setDict(dict,true);
-//           setDict2(dict2,true);
-//           setPho(pho,true);
+           setDict(dict, true);
+           setDict2(dict2, true);
+           setPho(pho, true);
 //
-           setDict(dictLeft,false);
-//           setDict2(dictLeft2,false);
-//           setPho(phoLeft,false);
+           setDict(dictLeft, false);
+           setDict2(dictLeft2, false);
+           setPho(phoLeft, false);
 
        }
                ).start();
@@ -131,16 +133,25 @@ public class OfflineService extends Service {
     }
 
     public void setDict(int dict,Boolean direction) {
-        setDefinitionsAndExamples(data[dict],direction);
+        if(isNetworkAvailable(this)){
+            setDefinitionsAndExamples(data[dict],direction);
+        }
+
     }
 
     public void setDict2(int dict,Boolean direction) {
-        setDefinitionsAndExamples1(data2[dict],direction);
+        if(isNetworkAvailable(this)){
+            setDefinitionsAndExamples1(data2[dict],direction);
+        }
+
     }
 
 
     public void setPho(int pho,Boolean direction) {
-        setPronunciationsNow(phonics[pho],direction);
+        if(isNetworkAvailable(this)){
+            setPronunciationsNow(phonics[pho],direction);
+        }
+
         }
 
     public void setPronunciationsNow(String something,boolean direction){
@@ -164,6 +175,7 @@ public class OfflineService extends Service {
                 MigrationHistory migrationHistory = getMigration(something);
                if(migrationHistory != null){
                    for(int i = migrationHistory.getAt(); i < parse.size(); i++){
+
                        Map<Object, Object> map  =  parse.get(i);
                        String word = String.valueOf(map.get("word")).toLowerCase();
                        String IPAS = (String) map.get("IPA");
@@ -192,26 +204,28 @@ public class OfflineService extends Service {
                        if(word == null) continue;
                        if(word.contains("/")) continue;
                        if(word.charAt(0) == '-') continue;
-                       Pronunciation pronunciation = new Pronunciation(word,IPAS);
+                       Pronunciation pronunciation = new Pronunciation(word, IPAS);
                        databaseAccess.setPronunciation(pronunciation);
                        migrationHistory1.setAt(i);
                        databaseAccess.updateMigrationHistory(migrationHistory1);
-                       if(!continueTread){
+                       if (!continueTread) {
                            break;
                        }
                    }
 
                }
-               if(continueTread){
-                   if(direction){
-                       pho++;
-                       if(phoLeft > pho){
-                           setPho(pho,true);
-                       }
 
-                   }else {
-                       phoLeft--;
-                       if(phoLeft > pho){
+                databaseAccess.setMigration(new Migration(something, new Date().getTime()));
+                if (continueTread) {
+                    if (direction) {
+                        pho++;
+                        if (phoLeft > pho) {
+                            setPho(pho, true);
+                        }
+
+                    } else {
+                        phoLeft--;
+                        if (phoLeft > pho) {
                            setPho(phoLeft,false);
                        }
 
@@ -252,7 +266,7 @@ public class OfflineService extends Service {
 
                 MigrationHistory migrationHistory = getMigration(something);
                 if(migrationHistory != null){
-                    for(int i = migrationHistory.getAt(); i < parse.size(); i++){
+                    for(int i = migrationHistory.getAt()+50>parse.size()?migrationHistory.getAt():migrationHistory.getAt()+50; i < parse.size(); i++){
                         Map<Object, Object> map  =  parse.get(i);
                         String word = String.valueOf(map.get("id")).toLowerCase();
                         ArrayList<String> definitions = (ArrayList<String>) map.get("definitions");
@@ -304,6 +318,7 @@ public class OfflineService extends Service {
 
                     }
                 }
+                databaseAccess.setMigration(new Migration(something, new Date().getTime()));
                 if(direction){
                     dict++;
                     if(dict < dictLeft){
@@ -314,12 +329,7 @@ public class OfflineService extends Service {
                     if(dict < dictLeft){
                         setDict(dictLeft,false);
                     }
-
                 }
-
-
-
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -351,7 +361,7 @@ public class OfflineService extends Service {
 
                 MigrationHistory migrationHistory = getMigration(something);
                 if(migrationHistory != null){
-                    for(int i = migrationHistory.getAt(); i < parse.size(); i++){
+                    for(int i = migrationHistory.getAt()+50>parse.size()?migrationHistory.getAt():migrationHistory.getAt()+50; i < parse.size(); i++){
                         Map<Object, Object> map  =  parse.get(i);
                         String word = String.valueOf(map.get("id")).toLowerCase();
                         ArrayList<String> definitions = (ArrayList<String>) map.get("definitions");
@@ -403,6 +413,7 @@ public class OfflineService extends Service {
 
                     }
                 }
+                databaseAccess.setMigration(new Migration(something, new Date().getTime()));
                 if(direction){
                     dict2++;
                     if(dict2 < dictLeft2){
@@ -416,9 +427,6 @@ public class OfflineService extends Service {
 
                 }
 
-
-
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -429,7 +437,7 @@ public class OfflineService extends Service {
     private MigrationHistory getMigration(String url){
         MigrationHistory re = null;
         for(MigrationHistory migrationHistory : history){
-            if(url.equals(migrationHistory.getUrl())){
+            if (url.equals(migrationHistory.getUrl())) {
                 re = migrationHistory;
                 break;
             }
@@ -438,9 +446,30 @@ public class OfflineService extends Service {
     }
 
 
-    public  int getProgress(){
-        return  progress;
-    };
+    public Summary Statistics() {
+        Summary summary = new Summary(0, 0, 0);
+        ArrayList<MigrationHistory> allMigrationHistory = history;
+        long dictionary = 0, phonics = 0;
 
-
+        for (MigrationHistory migrationHistory : allMigrationHistory) {
+            if (migrationHistory.getType().equals("dictionary")) {
+                phonics += migrationHistory.getAt();
+            } else {
+                dictionary += migrationHistory.getAt();
+            }
+        }
+        double d = (double) dictionary / 150000.0;
+        double p = (double) phonics / 150000.0;
+        double t = (double) dictionary + phonics;
+        summary.setPhonicsProgress(Math.round(p * 100));
+        summary.setDictionaryProgress(Math.round(d * 100));
+        summary.setTotalProgress(Math.round((t / (150000 * 2)) * 100));
+        return summary;
+    }
+    public boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        @SuppressLint("MissingPermission") NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 }

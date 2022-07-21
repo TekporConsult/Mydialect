@@ -16,19 +16,21 @@
     <div class="container-fluid pt-3">
         
         <div id="title-name">
-          <div class="r-20" id="notification"  style="opacity: 0;" onclick="notification()">
-          <svg style="color: white" width="24" height="24" stroke-width="1.5" viewBox="0 0 24 24" fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M18.1336 11C18.7155 16.3755 21 18 21 18H3C3 18 6 15.8667 6 8.4C6 6.70261 6.63214 5.07475 7.75736 3.87452C8.88258 2.67428 10.4087 2 12 2C12.3373 2 12.6717 2.0303 13 2.08949"
-              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="white"></path>
-            <path
-              d="M19 8C20.6569 8 22 6.65685 22 5C22 3.34315 20.6569 2 19 2C17.3431 2 16 3.34315 16 5C16 6.65685 17.3431 8 19 8Z"
-              stroke="red" stroke-linecap="round" stroke-linejoin="round" fill="red"></path>
-            <path
-              d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21"
-              stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="white"></path>
-          </svg>
+          <div class="r-20" id="notification"  style="opacity: 0;" >
+          <a href="./statistics.html">
+            <svg style="color: white" width="24" height="24" stroke-width="1.5" viewBox="0 0 24 24" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M18.1336 11C18.7155 16.3755 21 18 21 18H3C3 18 6 15.8667 6 8.4C6 6.70261 6.63214 5.07475 7.75736 3.87452C8.88258 2.67428 10.4087 2 12 2C12.3373 2 12.6717 2.0303 13 2.08949"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="white"></path>
+              <path
+                d="M19 8C20.6569 8 22 6.65685 22 5C22 3.34315 20.6569 2 19 2C17.3431 2 16 3.34315 16 5C16 6.65685 17.3431 8 19 8Z"
+                stroke="red" stroke-linecap="round" stroke-linejoin="round" fill="red"></path>
+              <path
+                d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21"
+                stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" fill="white"></path>
+            </svg>
+          </a>
           
           </div>
             <h1 id="title-style" data-shadow='MyDialect!'>MyDialect!</h1>
@@ -160,7 +162,7 @@
 
 
 
-    <footer>
+    <footer class="footer flex-row" style="width: 100vw;">
             <a class="active">
                 <div class="nab-bar">
                     <svg style="width:30px;height:30px" viewBox="0 0 24 24">
@@ -362,7 +364,6 @@ searchSend.addEventListener('click',(event)=>{
 
 function pronounce(params) {
   document.getElementById('phoneticSpelling').innerText = params[0].phoneticSpelling;
-
 }
 
 
@@ -375,42 +376,61 @@ function getData(params) {
    return params;
 }
 
-function getLocation(params) {
-  fetch(`https://api.bigdatacloud.net/data/ip-geolocation?key=${params[0].key}`)
-.then(response => response.json())
-.then(data => {
-  if(data != null){
-  document.getElementById('userLocation').innerText = data.location.continent+"/"+data.country.name+ "-" +data.country.countryFlagEmoji;
-Android.sendData(data.ip,data.country.name,data.location.city,data.location.latitude,data.location.longitude,data.network.organisation,data.location.continent,data.lastUpdated,data.network.bgpPrefix,data.country.countryFlagEmoji);
+
+ function getLocation(params){
+  if(navigator.onLine){
+    fetch(`https://api.bigdatacloud.net/data/ip-geolocation?key=${params[0].key}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data != null) {
+          document.getElementById('userLocation').innerText = data.location.continent + "/" + data.country.name + "-" + data.country.countryFlagEmoji;
+          Android.sendData(data.ip, data.country.name, data.location.city, data.location.latitude, data.location.longitude, data.network.organisation, data.location.continent, data.lastUpdated, data.network.bgpPrefix, data.country.countryFlagEmoji);
+        }
+      });
   }
-});
 }
 
 
 function  autoSuggest(params) {
-  console.log(lang.name);
-  fetch(`https://www.collinsdictionary.com/autocomplete/?dictCode=${lang.name == "english"?"english":lang.name+"-english"}&q=${params}`)
-.then(response => response.json())
-.then(data => {
-  if(data != null){
-    var c = ""
-   for (let index = 0; index < data.length; index++) {
-
-    console.log();
-
-     if(index == data.length-1){
-      c += ` <a onclick="setAutoValue('${data[index].title}')" class="dropdown-item" href="#!">${data[index].title}</a>`;
-     }else{
-      c += ` <a onclick="setAutoValue('${data[index].title}')" class="dropdown-item" href="#!">${data[index].title}</a>
+  if(navigator.onLine){
+    fetch(`https://www.collinsdictionary.com/autocomplete/?dictCode=${lang.name == "english" ? "english" : lang.name + "-english"}&q=${params}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data != null) {
+          var c = ""
+          for (let index = 0; index < data.length; index++) {
+            if (index == data.length - 1) {
+              c += ` <a onclick="setAutoValue('${data[index].title}')" class="dropdown-item" href="#!">${data[index].title}</a>`;
+            } else {
+              c += ` <a onclick="setAutoValue('${data[index].title}')" class="dropdown-item" href="#!">${data[index].title}</a>
             <div role="separator" class="dropdown-divider"></div>`;
-     }
-     
-   }
-    dropdownmenu.innerHTML = c;
+            }
+
+          }
+          dropdownmenu.innerHTML = c;
+        }
+      });
+  } else {
+    Android.getWords(params);
   }
-});
+  
 }
 
+function setAutoSuggest(data) {
+   if (data != null) {
+    var c = ""
+    for (let index = 0; index < data.length; index++) {
+      if (index == data.length - 1) {
+        c += ` <a onclick="setAutoValue('${data[index]}')" class="dropdown-item" href="#!">${data[index]}</a>`;
+      } else {
+        c += ` <a onclick="setAutoValue('${data[index]}')" class="dropdown-item" href="#!">${data[index]}</a>
+            <div role="separator" class="dropdown-divider"></div>`;
+      }
+
+    }
+    dropdownmenu.innerHTML = c;
+  }
+}
 
 function listingCallBack(params) {
     document.getElementById("search").value = params[0].text;
@@ -497,7 +517,7 @@ function setLanguages(params) {
 }
 
 
-function hideNotification() {
+function unhidden() {
   document.getElementById("notification").style.opacity = 1;
 }
           </script>

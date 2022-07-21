@@ -566,6 +566,7 @@ p{
     font-weight: 500;
     color: rgb(106, 103, 103);
 }
+.footer,
 footer{
     background-color: white;
     position: fixed;
@@ -1231,15 +1232,15 @@ footer > div{
 
 .transreader{
     color: var(--primary);
-    padding: 8px;
+    padding: 1px;
     margin: 2px;
     text-align: center;
     align-items: center;
 }
 
 .transreader:hover{
-    background-color: var(--primary);
     border-radius: 50%;
+    border: solid var(--primary) 2px;
     color: brown;
     transition: all ease-in 0.7s;
     -webkit-transition: all ease-in 0.7s;

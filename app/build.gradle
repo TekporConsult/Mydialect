@@ -10,8 +10,8 @@ android {
         applicationId "gd.rf.tekporconsult.mypronouncer"
         minSdk 19
         targetSdk 32
-        versionCode 10
-        versionName "Cheetah 1.1.0"
+        versionCode 11
+        versionName "Lion 2.0.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

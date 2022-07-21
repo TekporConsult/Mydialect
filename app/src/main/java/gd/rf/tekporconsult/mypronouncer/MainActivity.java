@@ -2,15 +2,18 @@ package gd.rf.tekporconsult.mypronouncer;
 
 import static gd.rf.tekporconsult.mypronouncer.service.App.OFFLINE_CHANNEL;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,6 +35,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -48,7 +52,11 @@ import java.util.Map;
 
 import gd.rf.tekporconsult.mypronouncer.CallBacks.BroadCastReceiver;
 import gd.rf.tekporconsult.mypronouncer.CallBacks.JavaScriptCallBack;
+import gd.rf.tekporconsult.mypronouncer.model.Definition;
+import gd.rf.tekporconsult.mypronouncer.model.MigrationHistory;
 import gd.rf.tekporconsult.mypronouncer.model.Notification;
+import gd.rf.tekporconsult.mypronouncer.model.Pronunciation;
+import gd.rf.tekporconsult.mypronouncer.model.Summary;
 import gd.rf.tekporconsult.mypronouncer.model.Transcribe;
 import gd.rf.tekporconsult.mypronouncer.model.Trending;
 import gd.rf.tekporconsult.mypronouncer.service.DatabaseAccess;
@@ -64,14 +72,17 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton sharedValueSet;
     protected FirebaseFirestore db;
     protected String key;
+    boolean sent = true;
    public  DatabaseAccess databaseAccess;
     final static int REQ_CODE_SPEECH_INPUT = 99;
     public static String defaultLang = "dictionary";
-    public  static  Boolean offline = true;
     public static boolean isNotCompleted = true;
-    public  static  boolean isNotCanceled = true;
-   private Intent serviceIntent;
+    public static boolean isNotCanceled = true;
+    boolean isDownloading = false;
+    int wordOfTheDay = Math.toIntExact(Math.round(Math.random() * 10000 + 1));
+    Notification notification;
     NotificationManagerCompat notificationManagerCompat;
+    private Intent serviceIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,38 +136,38 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent1 = getIntent();
         String getProgress = intent1.getStringExtra("progress");
-        String unbind = intent1.getStringExtra("unbind");
-
-
-        if(getProgress != null && getProgress.equals("progress")){
+        if (getProgress != null && getProgress.equals("progress")) {
             webView.loadUrl("file:///android_asset/statistics.html");
-        }else{
+        } else {
             webView.loadUrl("file:///android_asset/index.html");
         }
 
-        db.collection("api").document("dictionary")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot result = task.getResult();
+        if (isNetworkAvailable(this)) {
+            db.collection("api").document("dictionary")
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot result = task.getResult();
 
-                        webView.addJavascriptInterface(new JavaScriptCallBack(MainActivity.this, webView, db, databaseAccess,String.valueOf(result.get("app_id")),String.valueOf(result.get("app_key"))), "Android");
-
-
-                    }
-                });
+                            webView.addJavascriptInterface(new JavaScriptCallBack(MainActivity.this, webView, db, databaseAccess, String.valueOf(result.get("app_id")), String.valueOf(result.get("app_key"))), "Android");
 
 
+                        }
+                    });
 
-        db.collection("api").document("location")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot result = task.getResult();
-                        key = String.valueOf(result.get("key"));
 
-                    }
-                });
+            db.collection("api").document("location")
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot result = task.getResult();
+                            key = String.valueOf(result.get("key"));
+
+                        }
+                    });
+        } else {
+            webView.addJavascriptInterface(new JavaScriptCallBack(MainActivity.this, webView, db, databaseAccess, null, null), "Android");
+        }
 
 
         webView.setWebViewClient(new WebViewClient() {
@@ -191,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-
+                notification = databaseAccess.getNotification();
 
                 if(url.contains("lookup")){
                     sharedValueSet.setVisibility(View.VISIBLE);
@@ -200,79 +211,156 @@ public class MainActivity extends AppCompatActivity {
                 }
 
 
+                if (url.contains("statistics")) {
+                    getStatistics();
 
+                    if (notification.getRememberMe() == 3) {
+                        webView.evaluateJavascript("javascript:unhidden()", s ->
+                                {
+//                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+                                }
+                        );
+                    }
 
-                if (url.contains("home")) {
+                } else if (url.contains("home")) {
                     view.clearHistory();
 
-                    db.collection(defaultLang).orderBy("date", Query.Direction.DESCENDING).limit(1)
-                            .get()
-                            .addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                    ArrayList<Object> arrayList = new ArrayList<>();
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        Map<String, Object> data = document.getData();
-                                        arrayList.add(data);
+                    if (isNetworkAvailable(MainActivity.this)) {
+                        db.collection(defaultLang).orderBy("date", Query.Direction.DESCENDING).limit(1)
+                                .get()
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        ArrayList<Object> arrayList = new ArrayList<>();
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            Map<String, Object> data = document.getData();
+                                            arrayList.add(data);
 
-                                        db.collection("pronunciation").document(document.getId())
-                                                .get()
-                                                .addOnCompleteListener(task1 -> {
-                                                    if (task1.isSuccessful()) {
-                                                        ArrayList<Object> arrayList1 = new ArrayList<>();
-                                                        DocumentSnapshot result = task1.getResult();
-                                                        Map<String, Object> objectMap = new HashMap<>();
-                                                        objectMap.put("id", result.getId());
-                                                        objectMap.put("phoneticSpelling", result.get("phoneticSpelling"));
+                                            db.collection("pronunciation").document(document.getId())
+                                                    .get()
+                                                    .addOnCompleteListener(task1 -> {
+                                                        if (task1.isSuccessful()) {
+                                                            ArrayList<Object> arrayList1 = new ArrayList<>();
+                                                            DocumentSnapshot result = task1.getResult();
+                                                            Map<String, Object> objectMap = new HashMap<>();
+                                                            objectMap.put("id", result.getId());
+                                                            objectMap.put("phoneticSpelling", result.get("phoneticSpelling"));
 
-                                                        arrayList1.add(objectMap);
+                                                            arrayList1.add(objectMap);
 
-                                                        String jsonText1 = JSONValue.toJSONString(arrayList1);
-                                                        webView.evaluateJavascript("javascript:pronounce(" + jsonText1 + ")", s ->
-                                                                {
+                                                            String jsonText1 = JSONValue.toJSONString(arrayList1);
+                                                            webView.evaluateJavascript("javascript:pronounce(" + jsonText1 + ")", s ->
+                                                                    {
 //                                                    Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
-                                                                }
-                                                        );
+                                                                    }
+                                                            );
 
-                                                    }
-                                                });
+                                                        }
+                                                    });
+                                        }
+
+
+                                        String jsonText = JSONValue.toJSONString(arrayList);
+                                        webView.evaluateJavascript("javascript:recent(" + jsonText + ")", s ->
+                                                {
+//                                                    Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
+                                                }
+                                        );
+
+
                                     }
+                                });
 
 
-                                    String jsonText = JSONValue.toJSONString(arrayList);
-                                    webView.evaluateJavascript("javascript:recent(" + jsonText + ")", s ->
-                                            {
+                        db.collection(defaultLang).orderBy("view", Query.Direction.DESCENDING).limit(15)
+                                .get()
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        ArrayList<Object> arrayList = new ArrayList<>();
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            Map<String, Object> data = new HashMap<>();
+                                            ArrayList<String> arrayList1 = (ArrayList<String>) document.get("definitions");
+                                            data.put("id", document.getId());
+                                            data.put("definitions", arrayList1.get(0));
+                                            arrayList.add(data);
+                                        }
+
+                                        String jsonText = JSONValue.toJSONString(arrayList);
+                                        webView.evaluateJavascript("javascript:trending(" + jsonText + ")", s ->
+                                                {
 //                                                    Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
-                                            }
-                                    );
+                                                }
+                                        );
 
-
-                                }
-                            });
-
-
-                    db.collection(defaultLang).orderBy("view", Query.Direction.DESCENDING).limit(15)
-                            .get()
-                            .addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                    ArrayList<Object> arrayList = new ArrayList<>();
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        Map<String, Object> data = document.getData();
-                                        arrayList.add(data);
                                     }
+                                });
+                    } else {
+                        //offline
+                      int  migration = databaseAccess.getMigration();
+                        if(migration>5){
+                            final Definition wordOfTheDay1 = databaseAccess.getWordOfTheDay(wordOfTheDay);
+                            final Pronunciation pronunciationOfTheDay = databaseAccess.getPronunciation(wordOfTheDay1.getWord());
 
-                                    String jsonText = JSONValue.toJSONString(arrayList);
-                                    webView.evaluateJavascript("javascript:trending(" + jsonText + ")", s ->
-                                            {
+                            ArrayList<Object> arrayList1 = new ArrayList<>();
+                            Map<String, Object> objectMap = new HashMap<>();
+                            if (pronunciationOfTheDay != null) {
+                                objectMap.put("id", pronunciationOfTheDay.getWord());
+                                objectMap.put("phoneticSpelling", pronunciationOfTheDay.getPhonics().split("_")[0]);
+                            } else {
+                                objectMap.put("id", wordOfTheDay1.getWord());
+                                objectMap.put("phoneticSpelling", null);
+                            }
+                            arrayList1.add(objectMap);
+                            String jsonText1 = JSONValue.toJSONString(arrayList1);
+                            webView.evaluateJavascript("javascript:pronounce(" + jsonText1 + ")", s ->
+                                    {
 //                                                    Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
-                                            }
-                                    );
+                                    }
+                            );
 
-                                }
-                            });
+
+                            ArrayList<Object> arrayList = new ArrayList<>();
+                            ArrayList<String> arrayList2 = (ArrayList<String>) JSONValue.parse(wordOfTheDay1.getDefinition());
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("definitions", arrayList2);
+                            map.put("id", wordOfTheDay1.getWord());
+                            map.put("date", new Date().getTime() - (Math.random() * 1000 * 60 * 60 * 24));
+                            arrayList.add(map);
+
+                            String jsonText = JSONValue.toJSONString(arrayList);
+
+                            webView.evaluateJavascript("javascript:recent(" + jsonText + ")", s ->
+                                    {
+//                                                    Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
+                                    }
+                            );
+
+
+                            ArrayList<Trending> bookmark = databaseAccess.getHistoryLimit();
+                            ArrayList<Object> arrayListAll = new ArrayList<>();
+                            for (Trending trending : bookmark) {
+                                Map<String, Object> data = new HashMap<>();
+                                data.put("id", trending.getDefinition());
+                                data.put("definitions", trending.getWord());
+                                arrayListAll.add(data);
+                            }
+
+                            String jsonTextAll = JSONValue.toJSONString(arrayListAll);
+//                        System.out.println(jsonTextAll);
+                            webView.evaluateJavascript("javascript:trending(" + jsonTextAll + ")", s ->
+                                    {
+//                                                    Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
+                                    }
+                            );
+                        }
+
+
+
+                    }
+
 
                     ArrayList<Map<String, String>> arrayList = new ArrayList<>();
-                    Map<String,String> stringStringMap = new HashMap<>();
-                    stringStringMap.put("key",key);
+                    Map<String, String> stringStringMap = new HashMap<>();
+                    stringStringMap.put("key", key);
                     arrayList.add(stringStringMap);
 
                     String jsonText = JSONValue.toJSONString(arrayList);
@@ -282,18 +370,32 @@ public class MainActivity extends AppCompatActivity {
 //                                                    Toast.makeText(MainActivity.this, s, Toast.LENGTH_SHORT).show();
                             }
                     );
-//                 Notification notification  =  databaseAccess.getNotification();
-//                    if(offline && notification == null){
-//                        new Handler().postDelayed(() -> offlineDialog(), 3000);
-//
-//                    }
-                    new Handler().postDelayed(() -> offlineDialog(), 3000);
-//                    if(notification != null){
-//                        if(notification.getRememberMe() == 1 && notification.getData()*60*60*24*7 <= new Date().getTime()){
-//                            new Handler().postDelayed(() -> offlineDialog(), 3000);
-//                        }
-//                    }
 
+
+                    if (notification == null && sent) {
+                        new Handler().postDelayed(() -> offlineDialog(), 1000*60*3 );
+                        sent = false;
+                    } else if (notification != null && notification.getRememberMe() == 1 && notification.getData()+1000*60*60*24*5 <= new Date().getTime()) {
+                            new Handler().postDelayed(() -> offlineDialog(), 1000*60*3);
+                        } else if (notification != null && notification.getRememberMe() == 4 && notification.getData() + 1000 * 60 * 60 * 24 <= new Date().getTime()) {
+                            offlineReminderConfirm();
+                        } else if (notification != null && notification.getRememberMe() == 0) {
+                                int migration = databaseAccess.getMigration();
+                                    if (migration < 31 && isNetworkAvailable(MainActivity.this)) {
+                                        startServices();
+                                    }
+                            }
+
+
+                    if (notification != null) {
+                        if (isDownloading || notification.getRememberMe() == 3 || notification.getRememberMe() == 0) {
+                            webView.evaluateJavascript("javascript:unhidden(" + jsonText + ")", s ->
+                                    {
+//                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+                                    }
+                            );
+                        }
+                    }
 
                 } else if (url.contains("bookmark")) {
 
@@ -385,57 +487,47 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void offlineDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Dictionary available in offline")
-                .setMessage("Hello there,\nThis dictionary can now be made offline.")
-                .setCancelable(false)
-                .setPositiveButton("Remind me Later", (dialog, id) -> {
-                    dialog.cancel();
-                    databaseAccess.setNotification(1);
-                })
-                .setNegativeButton("Download", (dialog, id) -> {
-                    dialog.cancel();
-                    new Handler().postDelayed(() -> {
-                        offlineDialogConfirm();
-                    },500);
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-        offline = false;
+    public void offlineDialog() {
+        if (isNetworkAvailable(this)) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Dictionary available in offline")
+                    .setMessage("Hello there,\nThis dictionary can now be made offline.")
+                    .setCancelable(false)
+                    .setOnCancelListener(dialogInterface -> {
+                        databaseAccess.setNotification(1);
+                    })
+                    .setPositiveButton("Ignore", (dialog, id) -> {
+                        dialog.cancel();
+                        databaseAccess.setNotification(1);
+                    })
+                    .setNegativeButton("Download", (dialog, id) -> {
+                        dialog.cancel();
+                        new Handler().postDelayed(() -> {
+                            offlineDialogConfirm();
+                        }, 500);
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
 
     }
 
     public void offlineDialogConfirm(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Alert!")
-                .setMessage("This process will take a couple of minutes depending on your network speed.")
+                .setMessage("Depending on the speed of your network, this process should take a few minutes.\nAt any time, you can stop and start again.")
                 .setCancelable(false)
-                .setPositiveButton("Cancel", (dialog, id) -> dialog.cancel())
+                .setPositiveButton("Cancel", (dialog, id) -> {
+                            databaseAccess.setNotification(4);
+                            dialog.cancel();
+                        }
+                )
                 .setNegativeButton("Continue", (dialog, id) -> {
-                    databaseAccess.setNotification(0);
                     dialog.cancel();
-                    serviceIntent = new Intent(getApplicationContext(), OfflineService.class);
-                    startService(serviceIntent);
-                    if(serviceConnection == null){
-                        serviceConnection = new ServiceConnection() {
-                            @Override
-                            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-                                OfflineService.MyBinder  myBinder = (OfflineService.MyBinder) iBinder;
-                                offlineService = myBinder.MyNewBinder();
-                                isBonded = true;
-                            }
-
-                            @Override
-                            public void onServiceDisconnected(ComponentName componentName) {
-                                isBonded = false;
-                            }
-                        };
+                    if (isNetworkAvailable(MainActivity.this)) {
+                        startServices();
                     }
-
-                    bindService(serviceIntent,serviceConnection,0);
-                    makeOffline();
-
                 });
         AlertDialog alert = builder.create();
         alert.show();
@@ -443,53 +535,103 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public  void  makeOffline() {
+    public void offlineReminderConfirm() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Reminder!")
+                .setMessage("Hello there, You forgot to continue your download.")
+                .setCancelable(false)
+                .setPositiveButton("ignore", (dialog, id) -> {
+                            databaseAccess.setNotification(1);
+                            dialog.cancel();
+                        }
+                )
+                .setNegativeButton("Continue", (dialog, id) -> {
+                    databaseAccess.setNotification(0);
+                    dialog.cancel();
+                    if (isNetworkAvailable(MainActivity.this)) {
+                        startServices();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
 
-        new Handler().postDelayed(() -> {
-            if(isBonded){
-                getProgress();
-            }
-        },1000);
     }
 
-    private void getProgress(){
+    public void startServices() {
+        if (isNetworkAvailable(this)) {
+            serviceIntent = new Intent(getApplicationContext(), OfflineService.class);
+            startService(serviceIntent);
+            if (serviceConnection == null) {
+                serviceConnection = new ServiceConnection() {
+                    @Override
+                    public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                        OfflineService.MyBinder myBinder = (OfflineService.MyBinder) iBinder;
+                        offlineService = myBinder.MyNewBinder();
+                        isBonded = true;
+                        databaseAccess.setNotification(0);
+                    }
+
+                    @Override
+                    public void onServiceDisconnected(ComponentName componentName) {
+                        isBonded = false;
+                    }
+                };
+            }
+
+            bindService(serviceIntent, serviceConnection, 0);
+            makeOffline();
+            isDownloading = true;
+        }
+    }
+
+    public void makeOffline() {
+
+        new Handler().postDelayed(() -> {
+            if (isBonded) {
+                getProgress();
+            }
+        }, 1000);
+    }
+
+    private void getProgress() {
        new Thread(() -> {
 
            Intent intent  =new Intent(MainActivity.this, BroadCastReceiver.class);
            intent.putExtra("unbind","unbind");
-           PendingIntent pauseIntent  = PendingIntent.getBroadcast(getApplicationContext(),1,intent,0);
+           PendingIntent pauseIntent  = PendingIntent.getBroadcast(getApplicationContext(),1,intent,PendingIntent.FLAG_IMMUTABLE);
 
            Intent intent1  =new Intent(MainActivity.this, MainActivity.class);
            intent1.putExtra("progress","progress");
-           PendingIntent mainIntent  = PendingIntent.getActivity(getApplicationContext(),2,intent1,0);
+           PendingIntent mainIntent  = PendingIntent.getActivity(getApplicationContext(),2,intent1,PendingIntent.FLAG_IMMUTABLE);
 
 
            notificationManagerCompat = NotificationManagerCompat.from(MainActivity.this);
            NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this,OFFLINE_CHANNEL);
            builder.setSmallIcon(R.mipmap.ic_launcher_round)
-                   .setProgress(100,0,false)
+                   .setProgress(100, 0, false)
                    .setOnlyAlertOnce(true)
                    .setPriority(NotificationManager.IMPORTANCE_HIGH)
                    .setOngoing(true)
-                   .setContentTitle("Offline Dictionary")
+                   .setContentTitle("Offline Dictionary download")
                    .setContentText("download in progress")
                    .setAutoCancel(false)
-                   .addAction(R.mipmap.ic_launcher_round,"Pause",pauseIntent)
+                   .addAction(R.mipmap.ic_launcher_round, "Pause", pauseIntent)
                    .setContentIntent(mainIntent)
                    .setCategory(DOWNLOAD_SERVICE);
            notificationManagerCompat.notify(0,builder.build());
 
            while (isNotCompleted){
                try {
-                   int progress = offlineService.getProgress();
-                   if(progress <= 100){
-                       Thread.sleep(500);
-                       builder.setProgress(100,progress,false);
+                   Summary progress = offlineService.Statistics();
+                   if (progress.getTotalProgress() <= 100) {
+                       builder.setProgress(100, (int) progress.getTotalProgress(), false);
+                       builder.setContentText((int) progress.getTotalProgress()+"%");
                        builder.setPriority(NotificationManager.IMPORTANCE_LOW);
-                       notificationManagerCompat.notify(0,builder.build());
-                   }else{
+                       notificationManagerCompat.notify(0, builder.build());
+                   } else {
                        isNotCompleted = false;
                    }
+                   Thread.sleep(20000);
                } catch (InterruptedException e) {
                    e.printStackTrace();
                }
@@ -588,12 +730,55 @@ public class MainActivity extends AppCompatActivity {
                             }
                     );
                 }
-                break; }
-        } }
+                break;
+            }
+        }
+    }
+
+
+    public void getStatistics() {
+        Summary summary = new Summary(0, 0, 0);
+        ArrayList<MigrationHistory> allMigrationHistory = databaseAccess.getAllMigrationHistory();
+        long dictionary = 0, phonics = 0;
+
+        for (MigrationHistory migrationHistory : allMigrationHistory) {
+            if (migrationHistory.getType().equals("dictionary")) {
+                phonics += migrationHistory.getAt();
+            } else {
+                dictionary += migrationHistory.getAt();
+            }
+        }
+        double d = (double) dictionary / 150000.0;
+        double p = (double) phonics / 150000.0;
+        double t = (double) dictionary + phonics;
+        summary.setPhonicsProgress(Math.round(p * 100));
+        summary.setDictionaryProgress(Math.round(d * 100));
+        summary.setTotalProgress(Math.round((t / (150000 * 2)) * 100));
+        ArrayList<Map<String, Long>> arrayList = new ArrayList<>();
+        Map<String, Long> map = new HashMap<>();
+        map.put("total", summary.getTotalProgress());
+        map.put("phonics", summary.getPhonicsProgress());
+        map.put("definition", summary.getDictionaryProgress());
+
+        arrayList.add(map);
+        String jsonText = JSONValue.toJSONString(arrayList);
+        webView.evaluateJavascript("javascript:getStatistics(" + jsonText + ")", s ->
+                {
+//                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+                }
+        );
+    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         databaseAccess.close();
+    }
+
+    public boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        @SuppressLint("MissingPermission") NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

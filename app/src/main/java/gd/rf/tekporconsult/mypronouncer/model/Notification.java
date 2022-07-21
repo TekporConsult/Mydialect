@@ -1,9 +1,9 @@
 package gd.rf.tekporconsult.mypronouncer.model;
 
 public class Notification {
-    Integer data;
+    long data;
 
-    public Integer getData() {
+    public long getData() {
         return data;
     }
 
@@ -19,7 +19,7 @@ public class Notification {
         this.rememberMe = rememberMe;
     }
 
-    public Notification(Integer data, Integer rememberMe) {
+    public Notification(long data, Integer rememberMe) {
         this.data = data;
         this.rememberMe = rememberMe;
     }

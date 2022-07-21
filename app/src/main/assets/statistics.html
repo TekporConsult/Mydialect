@@ -37,58 +37,22 @@
        
        
 
-        <section class="container  mt-5">
+        <section class="container  mt-5 mb-5" id="stat">
 
-          <div>
-            <h1 class="text-center m-3 text-bolder stat-title text-uppercase">Download Statitics</h1>
-          </div>
-          <div class="">
-            <label class="text-lighter p-2 text-primary">
-              Overall progress: <small class="text-danger">Speed: 2mb/s</small><br>
-              <small class="text-danger">53 minutes left</small>
-            </label>
-            <div class="progress">
-              <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 25%;"
-                aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-            </div>
-            
-            <br>
-            <label class="text-lighter p-2 text-primary">
-              Dictinary progress: <small class="text-danger">Speed: 1.3mb/s</small><br>
-              <small class="text-danger">20 minutes left</small>
-            </label>
-            <div class="progress">
-              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 50%;"
-                aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50%</div>
-            </div>
-            <br>
-            <label class="text-lighter p-2 text-primary">
-              Example progress: <small class="text-danger">Speed: 4mb/s</small><br>
-              <small class="text-danger">10 minutes left</small>
-            </label>
-            <div class="progress">
-              <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" style="width: 75%;"
-                aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">75%</div>
-            </div>
-            <br>
-            <label class="text-lighter p-2 text-primary">
-              Phonetic progress: <small class="text-danger">Speed: 5mb/s</small><br>
-              <small class="text-danger">5 minutes left</small>
-            </label>
-            <div class="progress">
-              <div class="progress-bar progress-bar-striped  progress-bar-animated bg-success" role="progressbar" style="width: 100%;"
-                aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">100%</div>
-            </div>
-          </div>
+         <h3 class="text-center">loading...</h3>
 
         </section>
+
+        <div class="text-center mt-5" style="display: none;" id="resume">
+          <div type="button" onclick="resumed()" class="btn btn-primary bg-primary-color btn-block">Resume</div>
+        </div>
 
         <br>
         <br>
 <br>
 <br>
     <footer>
-            <a class="active">
+            <a href="./home.html">
                 <div class="nab-bar">
                     <svg style="width:30px;height:30px" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" />
@@ -126,6 +90,113 @@
            </a>
     </footer>
 
+    <script>
+    
+
+    function timeLeft(date) {
+
+        var seconds = Math.abs(Math.floor((new Date() - date) / 1000));
+
+        var interval = seconds / 31536000;
+
+        if (interval > 1) {
+          return Math.floor(interval) + " year(s) left";
+        }
+        interval = seconds / 2592000;
+        if (interval > 1) {
+          return Math.floor(interval) + " month(s) ago";
+        }
+        interval = seconds / 86400;
+        if (interval > 1) {
+          return Math.floor(interval) + " day(s) ago";
+        }
+        interval = seconds / 3600;
+        if (interval > 1) {
+          return Math.floor(interval) + " hour(s) ago";
+        }
+        interval = seconds / 60;
+        if (interval > 1) {
+          return Math.floor(interval) + " minute(s) ago";
+        }
+        return Math.floor(seconds) + " second(s) ago";
+
+      }
+
+      function resumed(){
+       document.getElementById("resume").style.display = "none";
+       Android.resumeDownload();
+      }
+
+    function unhidden() {
+      document.getElementById("resume").style.display = "block";
+    }
+
+      function getStatistics(params) {
+        
+        let phone  = (Math.random()* 5)+1;
+        let dic = (Math.random() * 5) + 1;
+
+    
+        let phoneTime = (Math.random()  * 1000*60*5) + Date.now();
+        let dicTime = (Math.random()  * 1000 * 60 * 5) + Date.now();
+        
+
+        let t  = document.getElementById("stat");
+        t.innerHTML = 
+        `
+         <div>
+            <h1 class="text-center m-3 text-bolder stat-title text-uppercase">Download Statitics</h1>
+          </div>
+          <div class="">
+            <label class="text-lighter p-2 text-primary">
+              Overall progress: <small class="text-danger">Speed: ${String(phone + dic).substring(0,4)}mb/s</small><br>
+              <small class="text-danger">${timeLeft(phoneTime*1.00000015)} minutes left</small>
+            </label>
+            <div class="progress">
+              <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: ${params[0]["total"]}%;"
+                aria-valuenow="${params[0]["total"]}" aria-valuemin="0" aria-valuemax="100">${params[0]["total"]}%</div>
+            </div>
+            
+            <br>
+            <label class="text-lighter p-2 text-primary">
+              Dictinary progress: <small class="text-danger">Speed: ${String( dic).substring(0, 4) }mb/s</small><br>
+              <small class="text-danger">${timeLeft(dicTime)} minutes left</small>
+            </label>
+            <div class="progress">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: ${params[0]["definition"]}%;"
+                aria-valuenow="${params[0]["definition"]}" aria-valuemin="0" aria-valuemax="100">${params[0]["definition"]}%</div>
+            </div>
+            <br>
+            <label class="text-lighter p-2 text-primary">
+              Example progress: <small class="text-danger">Speed: ${String(dic).substring(0, 4) }mb/s</small><br>
+              <small class="text-danger">${timeLeft(dicTime) } minutes left</small>
+            </label>
+            <div class="progress">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: ${params[0]["definition"]}%;"
+                aria-valuenow="${params[0]["definition"]}" aria-valuemin="0" aria-valuemax="100">${params[0]["definition"]}%</div>
+            </div>
+            <br>
+            <label class="text-lighter p-2 text-primary">
+              Phonetic progress: <small class="text-danger">Speed: ${String(phone).substring(0, 4) }mb/s</small><br>
+              <small class="text-danger">${timeLeft(phoneTime)} minutes left</small>
+            </label>
+            <div class="progress">
+              <div class="progress-bar progress-bar-striped  progress-bar-animated bg-info" role="progressbar" style="width: ${params[0]["phonics"]}%;"
+                aria-valuenow="${params[0]["phonics"]}" aria-valuemin="0" aria-valuemax="100">${params[0]["phonics"]}%</div>
+            </div>
+          </div>
+        `;
+        
+      };
+
+      // let a = [{
+      //   "total":0.32*100,
+      //   "phonics": 0.89*100,
+      //   "definition": 0.632*100
+      // }]
+
+      // getStatistics(a)
+    </script>
 
      </body>
 </html>

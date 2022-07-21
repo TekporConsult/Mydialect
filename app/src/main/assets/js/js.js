@@ -47,9 +47,10 @@ window.addEventListener("offline", (event) => {
      var lang = { key: 'en', name: 'english' };
     
 
-    async function  playSound(params)  {
-    let soundPlayWord = document.getElementById('soundPlayWord');
+ function playSound(params) {
+   let soundPlayWord = document.getElementById('soundPlayWord');
     var word =   soundPlayWord.innerText.trim().toLowerCase()
+  if (navigator.onLine) {
       if(canPlay){
          toast();
         if(navigator.onLine){
@@ -222,6 +223,10 @@ window.addEventListener("offline", (event) => {
        
         
       }
+  } else {
+    Android.textToSpeech(word);
+    }
+   
       
     }
 
@@ -250,8 +255,8 @@ window.addEventListener("offline", (event) => {
       canPlay = true;
     }
 
-   async function setClip() {
-    await  Android.setClipBordText(soundPlayWord.innerText.trim());
+    function setClip() {
+      Android.setClipBordText(soundPlayWord.innerText.trim());
     }
 
     async function getClipBordText() {
@@ -283,19 +288,21 @@ async function onRun() {
 
   onRun();
 
-    function BookMarks() {
-     var a =  document.querySelector('ol > li > p').innerText;
-      Android.BookMarks(soundPlayWord.innerText.trim(),a.trim())
+function BookMarks() {
+  var a = document.querySelector('.definitions');
+  if (a) {
+       Android.BookMarks(soundPlayWord.innerText.trim(),a.innerText.trim())
+    }
     }
 
 
     function trending(params) {
       var b = "";
       for(let a  =0; a < params.length; a++){
-b += `<a href="./lookup.html?word=${params[a].id}" class="rencent-items card flex-row">
+b += `<a href="./lookup.html?word=${params[a]["id"]}" class="rencent-items card flex-row">
 <div>
-    <h2 class="fs-1">${params[a].id}</h2>
-    <p class="read-more">${params[a].definitions[0]}</p>
+    <h2 class="fs-1">${params[a]["id"]}</h2>
+    <p class="read-more">${params[a]["definitions"]}</p>
 </div>
 
 <div>
@@ -305,7 +312,7 @@ b += `<a href="./lookup.html?word=${params[a].id}" class="rencent-items card fle
     </div>
 </div>
 </a>`
-      }
+      };
       trendingHTML.innerHTML = b;
       return params;
       
@@ -423,10 +430,9 @@ b += `<a href="./lookup.html?word=${params[a].id}" class="rencent-items card fle
 
         ]
 
-        async function recordListing() {
+        function recordListing() {
           toast();
-          await Android.recordSound();
-
+           Android.recordSound();
          }
        
 

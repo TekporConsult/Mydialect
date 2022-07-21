@@ -13,6 +13,7 @@ import java.util.Date;
 import gd.rf.tekporconsult.mypronouncer.model.Category;
 import gd.rf.tekporconsult.mypronouncer.model.Definition;
 import gd.rf.tekporconsult.mypronouncer.model.Example;
+import gd.rf.tekporconsult.mypronouncer.model.Migration;
 import gd.rf.tekporconsult.mypronouncer.model.MigrationHistory;
 import gd.rf.tekporconsult.mypronouncer.model.Notification;
 import gd.rf.tekporconsult.mypronouncer.model.Pronunciation;
@@ -190,10 +191,34 @@ public class DatabaseAccess {
         }
     }
 
+    public int getMigration() {
+        String quarry = "SELECT name FROM migrations WHERE 1";
+        int value = 0;
+        try {
+            Cursor cursor = database.rawQuery(quarry, null);
+            value = cursor.getCount();
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        }
+        return value;
+    }
+
+    // set definition
+    public void setMigration(Migration migration) {
+        ContentValues contentValues;
+        try {
+            contentValues = new ContentValues();
+            contentValues.put("name", migration.getName());
+            contentValues.put("date", migration.getDate());
+            database.insert("migrations", null, contentValues);
+        } catch (SQLiteConstraintException e) {
+            // e.getMessage();
+        }
+    }
 
     public ArrayList<Word> getWords(String word) {
-        ArrayList<Word> category1 = null;
-        String quarry = "SELECT * FROM words WHERE word LIKE '%"+word+"%' LIMIT 10";
+        ArrayList<Word> category1 = new ArrayList<>();
+        String quarry = "SELECT * FROM words WHERE word LIKE '%" + word + "%' LIMIT 10";
         try {
             Cursor cursor = database.rawQuery(quarry, null);
             cursor.moveToFirst();
@@ -236,7 +261,7 @@ public class DatabaseAccess {
             Cursor cursor = database.rawQuery(quarry, null);
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                notification = new Notification(cursor.getInt(1),cursor.getInt(2));
+                notification = new Notification(cursor.getLong(1),cursor.getInt(2));
                 cursor.moveToNext();
             }
             cursor.close();
@@ -247,14 +272,14 @@ public class DatabaseAccess {
     }
 
     // get pronunciation
-    public Pronunciation getPronunciation(String word,String table) {
+    public Pronunciation getPronunciation(String word) {
         Pronunciation pronunciation = null;
-        String quarry = "SELECT * FROM "+table+" WHERE word = "+word;
+        String quarry = "SELECT * FROM phonics WHERE word = '" + word + "'";
         try {
             Cursor cursor = database.rawQuery(quarry, null);
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                pronunciation = new Pronunciation(cursor.getString(1),cursor.getString(2));
+                pronunciation = new Pronunciation(cursor.getString(1), cursor.getString(2));
                 cursor.moveToNext();
             }
             cursor.close();
@@ -264,15 +289,34 @@ public class DatabaseAccess {
         return pronunciation;
     }
 
-    // get pronunciation
-    public Example getExample(String word) {
-        Example example = null;
-        String quarry = "SELECT * FROM examples WHERE word = "+word;
+
+    public Definition getWordOfTheDay(int id) {
+        Definition definition = null;
+        String quarry = "SELECT * FROM definitions WHERE id = '" + id + "'";
         try {
             Cursor cursor = database.rawQuery(quarry, null);
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                example = new Example(cursor.getString(1),cursor.getString(2));
+                definition = new Definition(cursor.getString(1), cursor.getString(2));
+                cursor.moveToNext();
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        }
+        return definition;
+    }
+
+
+    // get Example
+    public Example getExample(String word) {
+        Example example = null;
+        String quarry = "SELECT * FROM examples WHERE word = '" + word + "'";
+        try {
+            Cursor cursor = database.rawQuery(quarry, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                example = new Example(cursor.getString(1), cursor.getString(2));
                 cursor.moveToNext();
             }
             cursor.close();
@@ -282,11 +326,48 @@ public class DatabaseAccess {
         return example;
     }
 
+    // get Definition
+    public Definition getDefinition(String word) {
+        Definition definition = null;
+        String quarry = "SELECT * FROM definitions WHERE word = '" + word + "'";
+        try {
+            Cursor cursor = database.rawQuery(quarry, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                definition = new Definition(cursor.getString(1), cursor.getString(2));
+                cursor.moveToNext();
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        }
+        return definition;
+    }
 
-    public int isOfflineReady(){
+    // get Categories
+
+    public Category getCategory(String word) {
+        Category category = null;
+        String quarry = "SELECT * FROM categories WHERE word = '" + word + "'";
+        try {
+            Cursor cursor = database.rawQuery(quarry, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                category = new Category(cursor.getString(1), cursor.getString(2));
+                cursor.moveToNext();
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        }
+        return category;
+    }
+
+
+    public int isOfflineReady() {
         String quarry = "SELECT name  FROM migrations";
         Cursor cursor = database.rawQuery(quarry, null);
-       return cursor.getCount();
+        return cursor.getCount();
     }
 
     public void bookmark(Trending database1) {
@@ -348,7 +429,26 @@ public class DatabaseAccess {
             Cursor cursor = database.rawQuery(quarry, null);
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                trending.add(new Trending(cursor.getString(1),cursor.getString(2)));
+                trending.add(new Trending(cursor.getString(1), cursor.getString(2)));
+                cursor.moveToNext();
+            }
+            cursor.close();
+        } catch (Exception e) {
+            e.fillInStackTrace();
+        }
+        return trending;
+    }
+
+
+    public ArrayList<Trending> getHistoryLimit() {
+        ArrayList<Trending> trending = new ArrayList<>();
+        String quarry = "SELECT * FROM history WHERE 1 ORDER BY id DESC LIMIT 15";
+
+        try {
+            Cursor cursor = database.rawQuery(quarry, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                trending.add(new Trending(cursor.getString(1), cursor.getString(2)));
                 cursor.moveToNext();
             }
             cursor.close();
