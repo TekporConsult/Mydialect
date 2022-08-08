@@ -84,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
     NotificationManagerCompat notificationManagerCompat;
     private Intent serviceIntent;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

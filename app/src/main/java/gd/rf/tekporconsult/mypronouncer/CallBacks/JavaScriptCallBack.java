@@ -204,9 +204,6 @@ public class JavaScriptCallBack {
     @JavascriptInterface
     public void startReader(String url) throws IOException {
 
-
-        if(isNotPlaying){
-            isNotPlaying = false;
             if(mediaPlayerTextReader == null){
 
                 activity.runOnUiThread(() -> webView.evaluateJavascript("javascript:toast()", s ->
@@ -218,7 +215,6 @@ public class JavaScriptCallBack {
                 mediaPlayerTextReader = new MediaPlayer();
 
                 mediaPlayerTextReader.setOnCompletionListener(mediaPlayer -> {
-                    isNotPlaying = true;
                     activity.runOnUiThread(() -> webView.evaluateJavascript("javascript:playEnd()", s ->
                             {
 //                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
@@ -229,7 +225,11 @@ public class JavaScriptCallBack {
                mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                    @Override
                    public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
-                       isNotPlaying = true;
+                       activity.runOnUiThread(() -> webView.evaluateJavascript("javascript:playEnd()", s ->
+                               {
+//                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
+                               }
+                       ));
                        return false;
                    }
                });
@@ -271,7 +271,7 @@ public class JavaScriptCallBack {
                     ));
                 }
             }
-        }
+
 
 
 
@@ -282,7 +282,6 @@ public class JavaScriptCallBack {
 
         if (mediaPlayerTextReader != null) {
             mediaPlayerTextReader.pause();
-            isNotPlaying = true;
             activity.runOnUiThread(() -> webView.evaluateJavascript("javascript:playEnd()", s ->
                     {
 //                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
@@ -314,13 +313,11 @@ public class JavaScriptCallBack {
     public void cleanMediaPlayer() {
         if (mediaPlayerTextReader != null){
             mediaPlayerTextReader.stop();
-            isNotPlaying = true;
             mediaPlayerTextReader = null;
 
         }
         if(mediaPlayer != null){
             mediaPlayer.stop();
-            isNotPlaying = true;
             mediaPlayer = null;
         }
     }
@@ -331,15 +328,8 @@ public class JavaScriptCallBack {
     public void playAudio(String url, String name) throws IOException {
 
 
-        if(isNotPlaying){
-            isNotPlaying = false;
             mediaPlayer = new MediaPlayer();
 
-
-            mediaPlayer.setOnCompletionListener(mediaPlayer -> {
-
-                isNotPlaying = true;
-            });
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mediaPlayer.setAudioAttributes(
@@ -351,19 +341,10 @@ public class JavaScriptCallBack {
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             }
 
-            mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-                @Override
-                public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
-                    isNotPlaying = true;
-                    return false;
-                }
-            });
-
             mediaPlayer.setDataSource(url);
             mediaPlayer.prepare();
             mediaPlayer.start();
 
-        }
 
     }
 
