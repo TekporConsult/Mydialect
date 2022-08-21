@@ -11,15 +11,16 @@
 </head>
 <body>
 
-    <nav class="fixed top-0 p-1 bg-primary">
+    <nav class="fixed top-0 p-1">
       <div class="game-footer">
         <div class="game-footer">
             <div class="ps-1">
                 <a class="text-white" href="../game/index.html">Home</a>
             </div>
+           
         </div>
 <div class="text-white title">
-    Antonyms
+    Oral English
 </div>
        <div class="game-footer">
         <div class="text-white ps-3">
@@ -37,57 +38,45 @@
 
     </nav>
 
-    <main class="container content mt-6 mb-6">
-        <section class="question">
-<p class="text-justify border-primary p-3 mt-3">
-    Preaching about <span>mundane</span> things in the pulpit is the unacceptable, but ..........
-    matters are welcome in the pulpit.
-</p>
+    <main class="container content mt-6 mb-6 ">
+        <section class="question" id="question">
+<div class="text-justify border-primary text-center mt-3" id="board">
+</div>
+<div class="selected text-center"><small id="correct" style="display: none;">hello</small></div>
         </section>
-        <section class="answers mt-5">
 
-            <div class="options" onclick="animated(this,'spiritual')">
-                <p class="option card p-3  text-black text-bold btn">
-heavenly
-                </p>
-                <p class="explanation" style="display: none;">
-                    Preaching about <span>mundane</span> things in the pulpit is the unacceptable, but <span>spiritual</span> 
-                    matters are welcome in the pulpit.
-                </p>
-            </div>
+        <section class="answers mt-5 row">
+<div class="p-1 col-2 btn" onclick="puzzelDic(this)">
+    <div class="card letter"> 
+        h
+    </div>
+</div>
+<div class="p-1 col-2 btn" onclick="puzzelDic(this)">
+    <div class="card letter">
+        E
+    </div>
+</div>
+<div class="p-1 col-2 btn" onclick="puzzelDic(this)">
+    <div class="card letter">
+        o
+    </div>
+</div>
+<div class="p-1 col-2 btn" onclick="puzzelDic(this)">
+    <div class="card letter">
+        L
+    </div>
+</div>
+<div class="p-1 col-2 btn" onclick="puzzelDic(this)">
+    <div class="card letter">
+        L
+    </div>
+</div>
 
-            <div class="options" onclick="animated(this,'spiritual')">
-                <p class="option card p-3  text-black text-bold btn">
-spiritual
-                </p>
-                <p class="explanation" style="display: none;">
-                Preaching about <span>mundane</span> things in the pulpit is the unacceptable, but <span>spiritual</span>
-                 matters are welcome in the pulpit.
-                </p>
-            </div>
-            <div class="options" onclick="animated(this,'spiritual')">
-                <p class="option card p-3 text-black text-bold btn">
-                    gentle
-                </p>
-                <p class="explanation" style="display: none;">
-                    Preaching about <span>mundane</span> things in the pulpit is the unacceptable, but <span>spiritual</span>
-                    matters are welcome in the pulpit.
-                </p>
-            </div>
-            <div class="options"  onclick="animated(this,'spiritual')">
-                <p class="option card p-3 text-black text-bold btn">
-                    holy
-                </p>
-                <p class="explanation" style="display: none;">
-                Preaching about <span>mundane</span> things in the pulpit is the unacceptable, but <span>spiritual</span>
-                matters are welcome in the pulpit.
-                </p>
-            </div>
         </section>
      
     </main>
    
-    <footer class="nav fixed bg-primary buttom-0 game-footer p-2">
+    <footer class="nav fixed buttom-0 game-footer p-2">
             <div class="game-footer flex-1">
                 <div class="text-white">
                     1/10

@@ -54,3 +54,31 @@ function detailed(param) {
     }
     
 }
+var board = document.getElementById("board");
+var correct = document.getElementById("correct");
+var question = document.getElementById("question");
+function puzzelDic(param) {
+    param.classList.add('animate__animated', 'animate__pulse');
+        param.addEventListener('animationend', () => {
+            board.innerHTML += `<span class="selected animate__animated animate__fadeIn">${param.innerText}</span>`;
+            param.style.display = "none";
+            if (board.innerText.length == 5) {
+                document.getElementById('next').style.display = "block";
+                correct.style.display = "block";
+                question.classList.add('animate__heartBeat','animate__animated','complete');
+                if (board.innerText.trim().toLowerCase() == "hello") {
+                    correct.classList.add("text-success");
+                } else {
+                    correct.classList.add("text-danger");
+                    question.style.border = "solid red 2px";
+                }
+            }
+        });
+}
+
+function authAnimation(param,url,action) {
+         param.classList.add('animate__animated', 'animate__headShake');
+        param.addEventListener('animationend', () => {
+            window.location.href = url;
+        });
+}

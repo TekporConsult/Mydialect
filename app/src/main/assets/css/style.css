@@ -663,7 +663,49 @@ footer >div:hover>p{
     background-color: var(--primary);
 }
 
+.google{
+    padding-right: 12px;
+    font-size: 20px;
+    font-weight: 600;
+    
+}
+.opacity-06{
+    opacity: 0.6;
+}
+.form-control, .input-group-text{
+    border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    -ms-border-radius: 0px;
+    -o-border-radius: 0px;
+    height: 40px;
+    background-color: white;
+    border: solid 1px white;
+}
+.h-1{
+    height: 5px;
+}
 
+.text-center{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.card-click{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: inset;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
 @import url(https://fonts.googleapis.com/css?family=Righteous);
 
 *, *:before, *:after {

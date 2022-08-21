@@ -39,7 +39,7 @@ body {
     position: fixed;
     width: 100%;
     z-index: 2;
-    background-color: var(--look-up-action);
+    background-color: var(--look-up-action) !important;
 }
 
 .top-0{
@@ -51,9 +51,6 @@ bottom: 0px;
 
 .mt-6{
     margin-top: 60px !important;
-}
-.mb-6{
-    margin-bottom: 60px !important;
 }
 .game-footer{
     display: flex;
@@ -90,4 +87,35 @@ a{
 
 .row{
     justify-content: space-around !important;
+}
+.letter{
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary);
+    color: var(--text-color);
+    font-family: monospace;
+    text-transform: capitalize;
+    font-weight: bolder;
+    font-size: 3em;
+}
+
+.selected{
+    font-size: 40px;
+    color: var(--primary);
+    padding: 2px;
+}
+
+.answers{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.complete{
+    display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 80vh;
 }

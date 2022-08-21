@@ -378,3 +378,11 @@ justify-content: space-between;
     -ms-border-radius: 50px;
     -o-border-radius: 50px;
 }
+.fixed{
+    position: fixed;
+    width: 100%;
+    z-index: 6;
+    display: flex;
+    justify-content: center;
+    background-color: var(--look-up-action);
+}
