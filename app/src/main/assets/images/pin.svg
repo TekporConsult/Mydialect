@@ -1,0 +1,11 @@
+<svg width="52" height="64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="a">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+  </defs>
+  <g fill="none" fill-rule="evenodd">
+    <path d="M6.26 28.28c0 5.7 1.8 10.22 5.13 14.35 2.3 2.96 9.9 9.45 12.8 12.8 1 .97 2.3.97 3.3 0 2.9-3.16 9.2-8.35 11.9-11.7 3.3-4.12 6.03-9.75 6.03-15.45C45.73 17.65 36.93 9 26 9S6.26 17.65 6.26 28.28z" fill="#686868" opacity=".54" filter="url(#a)"/>
+    <path d="M6.26 28.28c0 5.7 1.8 10.22 5.13 14.35 2.3 2.96 9.9 9.45 12.8 12.8 1 .97 2.3.97 3.3 0 2.9-3.16 9.2-8.35 11.9-11.7 3.3-4.12 6.03-9.75 6.03-15.45C45.73 17.65 36.93 9 26 9S6.26 17.65 6.26 28.28z" fill="#FAFBFB"/>
+  </g>
+</svg>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/game.css">
+</head>
+<body>
+
+    <nav class="fixed top-0">
+      <div class="game-footer">
+        <div class="game-footer">
+            <a href="../home.html"><img class="btn" src="../images/ic_launcher_round.png" height="48px" alt="My Dialet"></a>
+            <div class="ps-1">
+                <a class="text-white" href="../game/index.html">Home</a>
+            </div>
+            <div class="text-white ps-3 btn">
+                Path
+            </div>
+        </div>
+<div class="text-white title">
+    Antonyms
+</div>
+       <div class="game-footer">
+        <div class="text-white ps-3">
+            45:00
+        </div>
+        <div class="text-white ps-3 btn">
+            Unstuck
+        </div>
+        <div class="text-white ps-3 pe-3 btn" title="help"  data-bs-target="#help" data-bs-toggle="modal">
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                <path fill="currentColor"
+                    d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+            </svg>
+        </div>
+       </div>
+
+      </div>
+
+    </nav>
+
+    <main class="container content mt-6 mb-6">
+        <section class="question">
+<p class="text-justify border-primary p-3 mt-3">
+    Preaching about <span>mundane</span> things in the pulpit is the unacceptable, but ..........
+    matters are welcome in the pulpit.
+</p>
+        </section>
+        <section class="answers mt-5">
+
+            <div class="options" onclick="animated(this,'spiritual')">
+                <p class="option card p-3  text-black text-bold btn">
+heavenly
+                </p>
+                <p class="explanation" style="display: none;">
+                    Preaching about <span>mundane</span> things in the pulpit is the unacceptable, but <span>spiritual</span> 
+                    matters are welcome in the pulpit.
+                </p>
+            </div>
+
+            <div class="options" onclick="animated(this,'spiritual')">
+                <p class="option card p-3  text-black text-bold btn">
+spiritual
+                </p>
+                <p class="explanation" style="display: none;">
+                Preaching about <span>mundane</span> things in the pulpit is the unacceptable, but <span>spiritual</span>
+                 matters are welcome in the pulpit.
+                </p>
+            </div>
+            <div class="options" onclick="animated(this,'spiritual')">
+                <p class="option card p-3 text-black text-bold btn">
+                    gentle
+                </p>
+                <p class="explanation" style="display: none;">
+                    Preaching about <span>mundane</span> things in the pulpit is the unacceptable, but <span>spiritual</span>
+                    matters are welcome in the pulpit.
+                </p>
+            </div>
+            <div class="options"  onclick="animated(this,'spiritual')">
+                <p class="option card p-3 text-black text-bold btn">
+                    holy
+                </p>
+                <p class="explanation" style="display: none;">
+                Preaching about <span>mundane</span> things in the pulpit is the unacceptable, but <span>spiritual</span>
+                matters are welcome in the pulpit.
+                </p>
+            </div>
+        </section>
+     
+    </main>
+   
+    <footer class="nav fixed buttom-0 game-footer p-2">
+            <div class="game-footer flex-1">
+                <div class="text-white">
+                    1/10
+                </div>
+                <div class="progress m-2"  style="width: 200px; height: 5px">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0"
+                        aria-valuemax="100"></div>
+                </div>
+            </div>
+            <div>
+                <div class="btn btn-warning ps-3 pe-3" id="next" style="display: none;">
+                    Next
+                </div>
+            </div>
+    </footer>
+
+<div class="modal fade" id="help" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
+    tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalToggleLabel2">Help me</h5>
+                <div type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></div>
+            </div>
+            <div class="modal-body text-justify">
+                In each of the following sentences, there is one word underlined and one gap. Form the list of words, Choose the one that is most nearly opposite in meaning to the underlined word and that will, at the same time, correctly fill the gap in the sentence.
+            </div>
+        
+        </div>
+    </div>
+</div>
+
+
+
+<script src="../js/popper.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+    <script src="../js/game.js"></script>
+</body>
+</html>

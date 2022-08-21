@@ -4,129 +4,120 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game</title>
+    <title>Dashboard</title>
     <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/anim.css">
+    <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/game.css">
+   
 </head>
 <body>
-
-    <nav class="fixed top-0">
-      <div class="game-footer">
-        <div class="game-footer">
-            <a href="../home.html"><img class="btn" src="../images/ic_launcher_round.png" height="48px" alt="My Dialet"></a>
-            <div class="ps-1">
-                <a class="text-white" href="../game/index.html">Home</a>
-            </div>
-            <div class="text-white ps-3 btn">
-                Path
-            </div>
-        </div>
-<div class="text-white title">
-    Antonyms
+<div class="bg-primary-color text-center fixed flex-row">
+    <p class="text-center pt-3 pb-3 h3 transcribe">My Games</p>
+    <div>
+        <svg style="width:30px;height:30px" viewBox="0 0 24 24">
+            <path fill="white"
+                d="M7.97,16L5,19C4.67,19.3 4.23,19.5 3.75,19.5A1.75,1.75 0 0,1 2,17.75V17.5L3,10.12C3.21,7.81 5.14,6 7.5,6H16.5C18.86,6 20.79,7.81 21,10.12L22,17.5V17.75A1.75,1.75 0 0,1 20.25,19.5C19.77,19.5 19.33,19.3 19,19L16.03,16H7.97M7,8V10H5V11H7V13H8V11H10V10H8V8H7M16.5,8A0.75,0.75 0 0,0 15.75,8.75A0.75,0.75 0 0,0 16.5,9.5A0.75,0.75 0 0,0 17.25,8.75A0.75,0.75 0 0,0 16.5,8M14.75,9.75A0.75,0.75 0 0,0 14,10.5A0.75,0.75 0 0,0 14.75,11.25A0.75,0.75 0 0,0 15.5,10.5A0.75,0.75 0 0,0 14.75,9.75M18.25,9.75A0.75,0.75 0 0,0 17.5,10.5A0.75,0.75 0 0,0 18.25,11.25A0.75,0.75 0 0,0 19,10.5A0.75,0.75 0 0,0 18.25,9.75M16.5,11.5A0.75,0.75 0 0,0 15.75,12.25A0.75,0.75 0 0,0 16.5,13A0.75,0.75 0 0,0 17.25,12.25A0.75,0.75 0 0,0 16.5,11.5Z" />
+        </svg>
+    </div>
 </div>
-       <div class="game-footer">
-        <div class="text-white ps-3">
-            45:00
+<br>
+<br><br>
+ 
+
+    <main class="container-fluid">
+        <div class="top-card card-bg container-fluid btn" onclick="animatedElement(this,'levels.html')">
+<p class="text-center card-title" >Continue last question</p>
+<p class="card-message text-center">You were last working on this problem click to continue</p>
+<div class="last-left mt-3 p-2">
+<p class="text-left">commonCharacterCount</p>
+<p class="text">Recommended time: <b class="text-bold">5 mins</b> Difficulty: <span class="-bold -capitalize">easy</span></p>
+</div>
         </div>
-        <div class="text-white ps-3 btn">
-            Unstuck
-        </div>
-        <div class="text-white ps-3 pe-3 btn" title="help"  data-bs-target="#help" data-bs-toggle="modal">
-            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-                <path fill="currentColor"
-                    d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
-            </svg>
-        </div>
-       </div>
-
-      </div>
-
-    </nav>
-
-    <main class="container content mt-6 mb-6">
-        <section class="question">
-<p class="text-justify border-primary p-3 mt-3">
-    Preaching about <span>mundane</span> things in the pulpit is the unacceptable, but ..........
-    matters are welcome in the pulpit.
-</p>
-        </section>
-        <section class="answers mt-5">
-
-            <div class="options" onclick="animated(this,'spiritual')">
-                <p class="option card p-3  text-black text-bold btn">
-heavenly
-                </p>
-                <p class="explanation" style="display: none;">
-                    Preaching about <span>mundane</span> things in the pulpit is the unacceptable, but <span>spiritual</span> 
-                    matters are welcome in the pulpit.
-                </p>
-            </div>
-
-            <div class="options" onclick="animated(this,'spiritual')">
-                <p class="option card p-3  text-black text-bold btn">
-spiritual
-                </p>
-                <p class="explanation" style="display: none;">
-                Preaching about <span>mundane</span> things in the pulpit is the unacceptable, but <span>spiritual</span>
-                 matters are welcome in the pulpit.
-                </p>
-            </div>
-            <div class="options" onclick="animated(this,'spiritual')">
-                <p class="option card p-3 text-black text-bold btn">
-                    gentle
-                </p>
-                <p class="explanation" style="display: none;">
-                    Preaching about <span>mundane</span> things in the pulpit is the unacceptable, but <span>spiritual</span>
-                    matters are welcome in the pulpit.
-                </p>
-            </div>
-            <div class="options"  onclick="animated(this,'spiritual')">
-                <p class="option card p-3 text-black text-bold btn">
-                    holy
-                </p>
-                <p class="explanation" style="display: none;">
-                Preaching about <span>mundane</span> things in the pulpit is the unacceptable, but <span>spiritual</span>
-                matters are welcome in the pulpit.
-                </p>
-            </div>
-        </section>
-     
-    </main>
-   
-    <footer class="nav fixed buttom-0 game-footer p-2">
-            <div class="game-footer flex-1">
-                <div class="text-white">
-                    1/10
-                </div>
-                <div class="progress m-2"  style="width: 200px; height: 5px">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0"
+        <div class="row mt-3">
+           
+            <div class="col-6 p-1 ">
+            <div class="card-bg m-1 p-2 card btn" onclick="animatedElement(this,'levels.html')">
+                <p class="text-center card-title text-bold pb-3">Antonym</p>
+                <img src="https://app.codesignal.com/img/arcade/arcade.svg" alt="" height="100">
+                <small class="text-center card-message">Practice your coding skills while unlocking the arcade map</small>
+                <small class="text-uppercas text-center pt-2"><span class="bold">4/464</span> <span>questions
+                        solved</span></small>
+                <div class="progress m-2" style="width: 90%; height: 5px;">
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: 10%" aria-valuenow="25" aria-valuemin="0"
                         aria-valuemax="100"></div>
                 </div>
             </div>
-            <div>
-                <div class="btn btn-warning ps-3 pe-3" id="next" style="display: none;">
-                    Next
+            </div>
+            <div class="col-6 p-1 ">
+                <div class="card-bg m-1 p-2 card btn" onclick="animatedElement(this,'levels.html')">
+                    <p class="text-center card-title text-bold pb-3">Synonyms</p>
+                    <img src="https://app.codesignal.com/img/arcade/arcade.svg" alt="" height="100">
+                    <small class="text-center card-message">Practice your coding skills while unlocking the arcade map</small>
+                    <small class="text-uppercas text-center pt-2"><span class="bold">0/464</span> <span>questions
+                            solved</span></small>
+                    <div class="progress m-2" style="width: 90%; height: 5px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 0%" aria-valuenow="25" aria-valuemin="0"
+                            aria-valuemax="100"></div>
+                    </div>
                 </div>
             </div>
-    </footer>
+            
 
-<div class="modal fade" id="help" aria-hidden="true" aria-labelledby="exampleModalToggleLabel2"
-    tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalToggleLabel2">Help me</h5>
-                <div type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></div>
-            </div>
-            <div class="modal-body text-justify">
-                In each of the following sentences, there is one word underlined and one gap. Form the list of words, Choose the one that is most nearly opposite in meaning to the underlined word and that will, at the same time, correctly fill the gap in the sentence.
-            </div>
-        
         </div>
-    </div>
-</div>
+        <div class="top-card card-bg container-fluid btn" onclick="animatedElement(this,'levels.html')">
+            <p class="text-center card-title">General Challenges</p>
+            <p class="card-message text-center">Solve interesting questions modeled after real-world problems.</p>
+        <small class="text-uppercas text-center pt-2"><span class="bold">90/200</span> <span>questions
+                solved</span></small>
+        <div class="progress m-2" style="width: 90%; height: 5px;">
+            <div class="progress-bar bg-primary" role="progressbar" style="width: 40%" aria-valuenow="25" aria-valuemin="0"
+                aria-valuemax="100"></div>
+        </div>
+        </div>
+    </main>
 
-
+    <br><br><br>
+    <footer class="footer flex-row" style="width: 100vw;">
+        <a href="../home.html">
+            <div class="nab-bar">
+                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" />
+                </svg>
+                <p>HOME</p>
+            </div>
+        </a>
+    
+        <a href="../translate.html">
+            <div class="nab-bar">
+                <svg xmlns="http://www.w3.org/2000/svg" style="width:24px;height:24px" viewBox="0 0 50 50">
+                    <path fill="currentColor"
+                        d="M 6 3 C 4.300781 3 3 4.300781 3 6 L 3 26 C 3 27.699219 4.300781 29 6 29 L 6.0625 29 L 10.46875 23.71875 L 10.78125 23.34375 C 10.476563 23.460938 10.273438 23.542969 10.21875 23.5625 L 9.59375 21.65625 C 9.648438 21.636719 12.394531 20.699219 15.0625 18.8125 C 12.503906 16.488281 11.207031 14.121094 11.125 13.96875 L 12.875 13.03125 C 12.894531 13.066406 14.167969 15.34375 16.65625 17.53125 C 18.265625 16.078125 19.625 14.230469 19.9375 12 L 8 12 L 8 10 L 16 10 L 16 8 L 18 8 L 18 10 L 25 10 L 25 12 L 21.9375 12 C 21.640625 14.789063 20.132813 17.035156 18.28125 18.78125 C 19.03125 19.300781 19.847656 19.777344 20.75 20.1875 C 21.617188 19.449219 22.742188 19 24 19 L 29 19 L 29 6 C 29 4.300781 27.699219 3 26 3 Z M 16.6875 20.125 C 15.246094 21.203125 13.75 22 12.5625 22.5625 L 13.53125 23.71875 L 17.9375 29 L 19 29 L 19 24 C 19 23.214844 19.1875 22.46875 19.5 21.8125 C 18.464844 21.308594 17.53125 20.742188 16.6875 20.125 Z M 24 21 C 22.300781 21 21 22.300781 21 24 L 21 32.0625 L 26.28125 36.46875 L 28.125 38 L 26.28125 39.53125 L 21 43.9375 L 21 44 C 21 45.699219 22.300781 47 24 47 L 44 47 C 45.699219 47 47 45.699219 47 44 L 47 24 C 47 22.300781 45.699219 21 44 21 Z M 12 25 L 7 31 L 10 31 L 10 35 L 14 35 L 14 31 L 17 31 Z M 33 26.40625 L 35.09375 26.40625 L 40.3125 40.1875 L 37.8125 40.1875 L 36.6875 37 L 31.40625 37 L 30.3125 40.1875 L 27.8125 40.1875 Z M 34 29.40625 L 32 35.09375 L 36 35.09375 Z M 19 33 L 19 36 L 10 36 L 14 40 L 19 40 L 19 43 L 25 38 Z" />
+                </svg>
+    
+                <p class="">TRANSLATE</p>
+            </div>
+        </a>
+    
+        <a href="../bookmark.html">
+            <div class="nab-bar">
+                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M17,3H7A2,2 0 0,0 5,5V21L12,18L19,21V5C19,3.89 18.1,3 17,3Z" />
+                </svg>
+                <p class="">BOOKMARKS</p>
+            </div>
+        </a>
+    
+        <a class="active">
+            <div class="nab-bar">
+                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M7.97,16L5,19C4.67,19.3 4.23,19.5 3.75,19.5A1.75,1.75 0 0,1 2,17.75V17.5L3,10.12C3.21,7.81 5.14,6 7.5,6H16.5C18.86,6 20.79,7.81 21,10.12L22,17.5V17.75A1.75,1.75 0 0,1 20.25,19.5C19.77,19.5 19.33,19.3 19,19L16.03,16H7.97M7,8V10H5V11H7V13H8V11H10V10H8V8H7M16.5,8A0.75,0.75 0 0,0 15.75,8.75A0.75,0.75 0 0,0 16.5,9.5A0.75,0.75 0 0,0 17.25,8.75A0.75,0.75 0 0,0 16.5,8M14.75,9.75A0.75,0.75 0 0,0 14,10.5A0.75,0.75 0 0,0 14.75,11.25A0.75,0.75 0 0,0 15.5,10.5A0.75,0.75 0 0,0 14.75,9.75M18.25,9.75A0.75,0.75 0 0,0 17.5,10.5A0.75,0.75 0 0,0 18.25,11.25A0.75,0.75 0 0,0 19,10.5A0.75,0.75 0 0,0 18.25,9.75M16.5,11.5A0.75,0.75 0 0,0 15.75,12.25A0.75,0.75 0 0,0 16.5,13A0.75,0.75 0 0,0 17.25,12.25A0.75,0.75 0 0,0 16.5,11.5Z" />
+                </svg>
+                <p class="">GAME</p>
+            </div>
+        </a>
+    </footer>
 
 <script src="../js/popper.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>

@@ -1428,3 +1428,36 @@ li{
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-weight: bold;
 }
+.card-title{
+    font-weight: 700;
+    font-family: Gotham A, Gotham B, sans-serif;
+    letter-spacing: 0;
+    font-size: 20px;
+}
+.card-message{
+    margin-top: 8px;
+    line-height: 18px;
+    font-size: 14px;
+    letter-spacing: .1px;
+    font-family: Gotham A, Gotham B, sans-serif;
+    color: #666;
+}
+
+.card-bg{
+    background-color: rgb(236, 243, 252);
+}
+.last-left{
+    height: 70px;
+    text-align: left;
+    justify-content: start;
+    align-items: center;;
+    background-color: white;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+}
+.text-bold{
+    font-weight: bold;
+}
