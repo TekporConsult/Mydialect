@@ -277,7 +277,9 @@ svg {
             font-size: 15px;
         }
 }
-
+a{
+    text-decoration: none;
+}
 .levels-number{
     display: flex;
     justify-content: center;
@@ -294,7 +296,9 @@ svg {
     width: 2px;
     border-right-color: rgb(186, 176, 176);
 }
-
+.text-black{
+    color: #2b3b52 !important;
+}
 .stages-container{
     display: flex;
     justify-content: center;
