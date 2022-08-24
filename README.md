@@ -10,7 +10,8 @@ Features:
 5. Text-to-speech
 6. Bookmark your favorite
 7. Obtain History list
-6.etc
+8. good to have you
+9.etc
  
  
  
