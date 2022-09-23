@@ -13,15 +13,39 @@
 
 body{
   overflow: hidden;
+  height: 100vh;
 }
 
+      .main{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: stretch;
+      }
+
+
+  
+
+      @media only screen and (min-height: 1000px) {
+        .model{
+          
+          height: 75vh;
+        }
+        
+      }
+      @media only screen and (min-height: 700px) {
+        .model{
+          height: 80vh;
+        }
+        
+      }
       @media only screen and (min-height: 480px) {
         .model{
-          height: 400px;
+          height: 100vh;
         }
       }
 
-@media only screen and (min-device-width: 470px) {
+      @media only screen and (min-device-width: 470px) {
     .h3{
       font-size: 1.3em !important;
     }
@@ -29,21 +53,6 @@ body{
       font-size: 0.9em !important;
     }
 }
-  
-@media only screen and (min-height: 700px) {
-        .model{
-          height: 800px;
-        }
-        
-      }
-      @media only screen and (min-height: 1000px) {
-        .model{
-          
-          height: 750px;
-        }
-        
-      }
-
     </style>
 
   </head>

@@ -1,9 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;700&display=swap');
+
 :root{
     --primary: #2e8fdf;
     --primary-color: #08359d;
     --secondary: rgb(206, 214, 214);
     --text-color: rgb(253, 245, 245);
     --look-up-action:#1773c3;
+}
+
+*{
+font-family: 'Poppins', sans-serif !important;
 }
 
 #search-send{
@@ -236,9 +242,8 @@ font-weight: bold;
 
 .p{
     color: var(--text-color) !important;
-    font-size: 1.2em !important;
-    font-weight: bold;
-    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 1em;
+    font-weight: normal;
 }
 
 svg{
@@ -280,7 +285,7 @@ svg{
 }
 
 .nab-bar > p{
-    font-size: smaller;
+    font-size: 0.8em;
     margin-bottom: 0%;
 }
 
