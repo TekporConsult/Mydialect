@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
                 if (url.contains("statistics")) {
                     getStatistics();
 
-                    if (notification.getRememberMe() == 3) {
+                    if (notification != null && notification.getRememberMe() == 3) {
                         webView.evaluateJavascript("javascript:unhidden()", s ->
                                 {
 //                                                    Toast.makeText(context, s, Toast.LENGTH_SHORT).show();

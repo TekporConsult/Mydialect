@@ -12,62 +12,38 @@
     <style>
 
 body{
-  overflow: hidden;
-  height: 100vh;
+  overflow-y: hidden;
 }
 
       .main{
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: stretch;
+        display: grid;
+        justify-content: stretch;
+        grid-template-columns: 1fr, 2fr;
+        height: 100vh;
+        align-items: stretch;
       }
 
-
+      .model{
+          align-items: center;
+        }
   
-
-      @media only screen and (min-height: 1000px) {
-        .model{
-          
-          height: 75vh;
-        }
-        
-      }
-      @media only screen and (min-height: 700px) {
-        .model{
-          height: 80vh;
-        }
-        
-      }
-      @media only screen and (min-height: 480px) {
-        .model{
-          height: 100vh;
-        }
-      }
-
-      @media only screen and (min-device-width: 470px) {
-    .h3{
-      font-size: 1.3em !important;
-    }
-    .p{
-      font-size: 0.9em !important;
-    }
-}
     </style>
 
   </head>
   <body class="bg-primary-color">
       
 
-    <a href="home.html">
-        <h6 class="next">SKIP</h6>
-    </a>
+    <div class="next" >
+        <a href="home.html">
+          <b>SKIP</b>
+        </a>
+    </div>
 
 
-    <div class="main mian-fix">
+    <div class="main">
 
         <div class="log">
-<img class="image" src="./images/Lovepik_com-401395120-learning-couple.png" alt="">
+<img class="image" height="100%" src="./images/Lovepik_com-401395120-learning-couple.png" alt="">
         </div>
 
         <div class="model">
@@ -79,20 +55,20 @@ body{
               </ol>
               <div class="carousel-inner" role="listbox">
                   <div class="carousel-item active">
-                        <h3 class="h3 text-center">Oxford Dictionary</h3>
+                        <h4 class="h4 text-center text-white">Oxford Dictionary</h4>
                         <p class="p text-center">
                           With 600,000 words, 3 million natural sound pronunciations, examples, synonyms, and antonyms, and over 1000 years of English, the OED is the most complete record of English language.
                         </p>
                   </div>
                   <div class="carousel-item">
-                    <h3 class="h3 text-center">Tekpor Transcribe</h3>
+                    <h4 class="h4 text-center text-white">Tekpor Transcribe</h4>
                     <p class="p text-center">
                       With an easy-to-use mechanism, a strong user interface, and caching, you can translate into 20 popular languages with audios.
 To get started, all you have to do is type or record.
                     </p>
                   </div>
                   <div class="carousel-item">
-                    <h3 class="h3 text-center">Help & Support</h3>
+                    <h4 class="h4 text-center text-white">Help & Support</h4>
                     <p class="p text-center">
                       Please assist our advertising agency by promoting the initiative on social media. Please tell a relative or friend about us. Assist in the spread of information about the initiative.
                     </p>
@@ -100,10 +76,6 @@ To get started, all you have to do is type or record.
               </div>
              
           </div>
-          <br>
-          <br>
-          <br>
-          <br>
         </div>
 
     </div>

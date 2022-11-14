@@ -137,7 +137,7 @@
 
             var a = window.location.search;
 
-            document.write(`<b class="mono" ><a href="https://en.wiktionary.org/wiki/${decodeURI(a.substr(a.indexOf('=') + 1)) }">Source: ${decodeURI(a.substr(a.indexOf('=') + 1)) }</a></b>`)
+            document.write(`<b  ><a href="https://en.wiktionary.org/wiki/${decodeURI(a.substr(a.indexOf('=') + 1)) }">Source: <span class="mono"> ${decodeURI(a.substr(a.indexOf('=') + 1)) }</span></a></b>`)
 
         </script>
         
@@ -368,7 +368,7 @@ let exam = "";
                             return `<i><b class="same">${value}</b></i>`
                         }
                         else if (value.length > 8 && value.match("^[A-Za-z]+$") != null) {
-                            return `<a class="hint text-primary" href="./home.html?word=${value}"><small>${value}</small></a>`;
+                            return `<a class="hint text-primary text" href="./home.html?word=${value}"><small>${value}</small></a>`;
                         } else {
                             return value;
                         }

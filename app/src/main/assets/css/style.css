@@ -40,9 +40,8 @@ a{
     padding: 0px;
     margin: 0px;
     font-size: 1em;
-    font-weight: bold;
-    font-family: 'Courier New', Courier, monospace;
-}
+    font-weight: normal;
+   }
 
 a:hover{
     color: var(--primary);
@@ -69,8 +68,7 @@ a:hover{
 
 body {
     margin: 0;
-    font-family: "Montserrat", sans-serif;
-    font-size: 1rem;
+     font-size: 1rem;
     font-weight: 400;
     color: var(--gray);
     text-align: left;
@@ -112,18 +110,18 @@ body {
   }
 
 .next{
-    color: whitesmoke;
+    color: whitesmoke !important;
     padding: 20px;
-    font-size: 1.2em;
+    font-size: 1.5em;
+    right: 0;
+    z-index: 2;
     text-align: right;
-    font-family: Georgia, 'Times New Roman', Times, serif;
     font-weight: bolder;
 }
 
 .next::after{
     content: ">";
-    font-family: 'Courier New', Courier, monospace;
-    font-weight: bolder;
+     font-weight: bolder;
     font-size: 1.2em;
 }
 
@@ -187,7 +185,6 @@ body {
 .text-right{
 color: rgb(218, 192, 192);
 font-size: 0.8em !important;
-font-family: 'Courier New', Courier, monospace;
 font-weight: bold;
 }
 .text-left{
@@ -196,14 +193,9 @@ font-weight: bold;
     text-transform: capitalize;
 }
 #source  p{
-    font-family: Georgia, 'Times New Roman', Times, serif;
     font-weight: bold;
     font-size: 1em;
     margin-bottom: 3px;
-}
-
-.content > div:nth-child(1)>p ,.content > div:nth-child(1)>h2{
-    font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 
@@ -223,15 +215,12 @@ font-weight: bold;
 
 .h3{
     color: var(--secondary);
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-weight: bolder;
     font-size: 2em;
-    text-align: center;
 }
 
 .h2{
     font-weight: bolder;
-    font-family: 'Courier New', Courier, monospace;
     font-size: 2em;
 }
 .carousel-item > p{
@@ -242,8 +231,8 @@ font-weight: bold;
 
 .p{
     color: var(--text-color) !important;
-    font-size: 1em;
-    font-weight: normal;
+    font-size: 1.2em;
+    font-weight: 600;
 }
 
 svg{
@@ -276,7 +265,9 @@ svg{
 .action{
     display: flex;
     justify-content: space-evenly;
+    align-items: center;
 }
+
 .nab-bar{
     line-height: 0.5px;
     padding: 0px;
@@ -296,14 +287,13 @@ svg{
 .action > div{
     text-align: center;
     background-color: white;
-    padding:5px;
     border-radius: 0.9999em;
     -webkit-border-radius: 0.9999em;
     -moz-border-radius: 0.9999em;
     -ms-border-radius: 0.9999em;
     -o-border-radius: 0.9999em;
-    width: 100px;
-    height: 80px;
+    min-width: 80px;
+    height: 70px;
     margin: 2px;
     border: solid var(--primary) 2px;
 }
@@ -406,14 +396,13 @@ svg{
     color: rgb(99, 58, 58);
     font-weight: 500;
     font-size: 0.8em;
-    font-family: 'Courier New', Courier, monospace;
-}
+   }
 
 .recent-container{
     display: flex;
     flex-direction: column;
-    min-height: 100%;
-    background-color: white;
+    min-height: 50vh;
+    padding-bottom: 70px;
 }
 
 .rencent-items{
@@ -552,8 +541,7 @@ svg{
 
 .rencent-items h2{
     color: rgb(18, 17, 17);
-    font-family:Georgia, 'Times New Roman', Times, serif;
-    font-size: large !important;
+      font-size: large !important;
    
 }
 
@@ -563,8 +551,7 @@ p{
 }
 
 .rencent-items p{
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 0.8em;
+     font-size: 0.8em;
     flex: 3;
     max-lines: 4 !important;
     text-align: inherit;
@@ -585,6 +572,7 @@ footer{
     padding-bottom: 5px;
     border-top-left-radius: 35px;
     border-top-right-radius: 35px;
+    border-top: var(--primary) 0.5px solid;
 }
 
 .btn-nav{
@@ -605,8 +593,7 @@ footer{
 
 footer >div>p{
 
-    font-family: 'Courier New', Courier, monospace;
-    font-style: normal;
+     font-style: normal;
     padding-bottom: 0%;
     text-decoration: solid;
     padding: 2px;
@@ -647,6 +634,10 @@ footer >div:hover>p{
     -o-transition: all ease-out 1s;
 }
 
+.mono{
+    color: var(--primary-color);
+}
+
 .active path{
     fill: var(--primary);
 }
@@ -654,7 +645,7 @@ footer >div:hover>p{
 
 .active  p{
   color: var(--primary);
-  font-weight: bold;
+  font-weight: normal;
 }
 .mian-fix{
     position: absolute;
@@ -683,7 +674,6 @@ footer >div:hover>p{
     -moz-border-radius: 0px;
     -ms-border-radius: 0px;
     -o-border-radius: 0px;
-    height: 40px;
     background-color: white;
     border: solid 1px white;
 }
@@ -704,10 +694,8 @@ footer >div:hover>p{
     color: white;
     cursor: pointer;
     border-radius: 5px;
-    height: 50px;
     box-shadow: inset;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    -webkit-border-radius: 5px;
+     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
@@ -786,7 +774,6 @@ footer >div:hover>p{
 #title-style {
   display: inline-block;
   color: white;
-  font-family: Georgia, 'Times New Roman', Times, serif;
   font-size: 2em; 
   text-shadow: .05em .05em 0 --text-color;
   }
@@ -809,23 +796,17 @@ footer >div:hover>p{
     -webkit-text-fill-color: transparent;
     }
 
- ol > li>p{
-     font-family: Georgia, 'Times New Roman', Times, serif;
- }
 
  ol > li>p>span{
-     font-family: 'Courier New', Courier, monospace;
-     font-weight: bolder;
+      font-weight: bolder;
  }
 
  .example{
-     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-     padding-left: 20px;
+      padding-left: 20px;
      font-weight: lighter;
  }
 
  .transcribe{
-     font-family: 'Courier New', Courier, monospace;
      font-size: 1.3em;
      color: white;
      z-index: 5;
@@ -882,7 +863,6 @@ footer >div:hover>p{
 
 
 .cbtn > p{
-   font-family: 'Courier New', Courier, monospace;
    font-weight: lighter;
    margin-bottom: 0px;
    font-size: 1.1em;
@@ -953,7 +933,6 @@ footer >div:hover>p{
 .chat p{
     font-size: 0.9em;
     text-overflow: clip;
-    font-family: inherit;
     margin: 0px;
     padding: 0px;
     
@@ -963,7 +942,6 @@ footer >div:hover>p{
 .chat body{
     font-size: 0.9em;
     text-overflow: clip;
-    font-family: inherit;
     margin: 0px;
     padding: 0px;
    
@@ -981,7 +959,6 @@ footer >div:hover>p{
 }
 
 .info>p{
-    font-family: Georgia, 'Times New Roman', Times, serif;
     color: rgba(63, 60, 60, 0.962);
     font-size: 1em !important;
     padding: 0px;
@@ -1010,7 +987,6 @@ font-size: smaller;
 }
 
 .stat-title{
-    font-family: 'Courier New', Courier, monospace;
     font-size: 1.3em;
     font-size: large;
 }
@@ -1063,7 +1039,6 @@ font-size: smaller;
   font-stretch: inherit;
   font-size: inherit;
   line-height: inherit;
-  font-family: inherit;
   font-size-adjust: inherit;
   font-kerning: inherit;
   font-optical-sizing: inherit;
@@ -1077,7 +1052,6 @@ font-size: smaller;
   font-variation-settings: inherit;
 }
 #searched-result > b{
-    font-family: Georgia, 'Times New Roman', Times, serif;
     font-weight: bolder !important;
     font-size: 1.2em;
     text-transform: capitalize;
@@ -1087,12 +1061,10 @@ font-size: smaller;
     content: " ...MORE";
     font-size: 0.32em;
     color: var(--primary-color);
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-weight: bolder !important;
+     font-weight: bolder !important;
 }
 
 #soundPlayWord{
-    font-family: 'Courier New', Courier, monospace;
 text-transform: capitalize;
 font-weight: bold;
 align-items: center;
@@ -1100,7 +1072,6 @@ font-size: 0.7em !important;
 }
 
 .policyRight{
-   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
    font-size: small;
    position: relative;
    bottom: 0px;
@@ -1116,10 +1087,9 @@ ol > li > p{
 .read-more::after{
 content: "...MORE";
 color: var(--primary);
-font-size: medium;
+font-size: smaller;
 margin-bottom: 0px !important;
 font-style: italic;
-font-family: 'Courier New', Courier, monospace;
 }
 
 .read-more{
@@ -1138,7 +1108,6 @@ ul li {
 
 #phoneticSpelling{
     font-size: large;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-weight: bold;
 }
 #phoneticSpelling::after{
@@ -1219,7 +1188,6 @@ footer > div{
 }
 .typedText{
     font-size: 1.1em !important;
-    font-family:  'Courier New', Courier, monospace;
     padding: 0px !important;
     line-height: 0.9em !important; 
     margin: 0px !important;
@@ -1303,17 +1271,11 @@ footer > div{
 
 .tag{
     padding: 0.5px 10px;
-    font-family: 'Courier New', Courier, monospace;
-    color: black;
     font-size: 1em;
-    font-weight: bold;
+    font-weight: normal;
     text-transform: capitalize;
     border: solid var(--primary) 1px;
-    border-radius: 50px;
-    -webkit-border-radius: 50px;
-    -moz-border-radius: 50px;
-    -ms-border-radius: 50px;
-    -o-border-radius: 50px;
+    border-radius: 10px;
 }
 
 .tag:hover{
@@ -1327,7 +1289,6 @@ footer > div{
     -o-transition: all ease-in 0.7s;
 }
 .synonyms{
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     margin-bottom: 3px;
     font-size: 1.2em;
     font-weight: bolder;
@@ -1335,7 +1296,6 @@ footer > div{
 
 
 .antonyms {
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     margin-bottom: 3px;
     font-size: 1.2em;
     font-weight: bolder;
@@ -1361,11 +1321,10 @@ footer > div{
 .hint{
     padding: 0px;
     margin: 0px;
-    font-weight: 600;
+    font-weight: 400;
     font-size: 1.3em !important;
-    font-style: bold !important;
-    font-family: 'Courier New', Courier, monospace;
-}
+    font-style: normal !important;
+    }
 
 .playNavigator{
     z-index: 2;
@@ -1439,20 +1398,17 @@ em{
 }
 .dropdown-item{
     font-size: 1.1em;
-    font-family: 'Courier New', Courier, monospace;
-}
+   }
 
 .title{
     font-weight: 700 !important;
     font-size: 1.2em;
-    font-family: Arial, Helvetica, sans-serif;
     font-style: italic;
 }
 
 #etymology,
 li{
     font-size: 1.05em;
-    font-family: Arial, Helvetica, sans-serif;
     padding: 0px;
     font-weight: 500;
     margin: 0px;
@@ -1473,12 +1429,10 @@ li{
 }
 
 .ipa{
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-weight: bold;
 }
 .card-title{
     font-weight: 700;
-    font-family: Gotham A, Gotham B, sans-serif;
     letter-spacing: 0;
     font-size: 20px;
 }
@@ -1487,7 +1441,6 @@ li{
     line-height: 18px;
     font-size: 14px;
     letter-spacing: .1px;
-    font-family: Gotham A, Gotham B, sans-serif;
     color: #666;
 }
 

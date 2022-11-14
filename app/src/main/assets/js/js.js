@@ -301,8 +301,8 @@ function BookMarks() {
       for(let a  =0; a < params.length; a++){
 b += `<a href="./lookup.html?word=${params[a]["id"]}" class="rencent-items card flex-row">
 <div>
-    <h2 class="fs-1">${params[a]["id"]}</h2>
-    <p class="read-more">${params[a]["definitions"]}</p>
+    <h2 class="fs-1 text">${params[a]["id"]}</h2>
+    <p class="read-more text">${params[a]["definitions"]}</p>
 </div>
 
 <div>
