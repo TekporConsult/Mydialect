@@ -127,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             webSettings.setOffscreenPreRaster(true);
         }
-        webSettings.setAppCacheEnabled(true);
         webSettings.setUseWideViewPort(true);
         webSettings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

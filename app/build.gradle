@@ -4,14 +4,14 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "gd.rf.tekporconsult.mypronouncer"
         minSdk 19
-        targetSdk 32
-        versionCode 12
-        versionName "Lion 2.0.0"
+        targetSdk 33
+        versionCode 14
+        versionName "Lion 2.1.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
